@@ -1,3 +1,5 @@
+
+// static keyword -> create a ref of all the static functions in stack
 public class linkedlist {
 
     private class Node {
@@ -21,6 +23,10 @@ public class linkedlist {
         return this.size == 0;
     }
 
+
+    /********************************************************/
+
+
     private void addFirstNode(Node node) {
         if (this.size == 0) {
             this.head = this.tail = node;
@@ -39,6 +45,8 @@ public class linkedlist {
     }
 
 
+    /********************************************************/
+
     private void addLastNode(Node node) {
         if (this.size == 0) {
             this.head = this.tail = node;
@@ -48,11 +56,79 @@ public class linkedlist {
         }
 
         this.size++;
-
     }
 
     public void addLast(int data) {
         Node node = new Node(data);
         addLastNode(node);
     }
+
+    /********************************************************/
+
+    private Node removeFirstNode()
+    {
+        Node node  = this.head;
+        if(this.size == 1) this.head = this.tail = null;
+        else{
+           this.head = this.head.next;
+           node.next = null;
+        }
+ 
+        this.size--;
+        return node;
+    }
+
+    public int removeFirst(){
+       if(this.size==0)
+           return -1;
+      
+        Node node =  removeFirstNode();
+       return node.data;
+    }
+
+    /********************************************************/
+
+    private Node getFirstNode()
+    {
+        return this.head;
+    }
+
+    public int getFirst()
+    {
+        if(this.size == 0) return -1;
+
+        return getFirstNode().data;
+    }
+
+    /********************************************************/
+
+    private Node getLastNode()
+    {
+        return this.tail;
+    }
+
+    public int getLast()
+    {
+        if(this.size == 0) return -1;
+
+        return getLastNode().data;
+    }
+
+    /********************************************************/
+
+    public int getAt(int idx)
+    {
+       if(idx >= this.size) return -1;
+
+       Node temp = head;
+
+       for(int i = 0 ; i <this.size ;i++)
+       {
+           if(i == idx) return temp.data;
+
+           temp = temp.next;
+       }
+       return -1;
+    }
+
 }
