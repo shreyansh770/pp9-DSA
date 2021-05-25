@@ -18,7 +18,7 @@ public class classAndObj {
         }
 
         // constructor overloading
-        @Override // -> this will tell the program our intentions ->this will reduce the
+        //@Override // -> this will tell the program our intentions ->this will reduce the
                   // probablity of mistake in constructor overriding
         phone(String brand, String model, String color, int storage, int battery) {
             this.brand = brand;

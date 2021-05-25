@@ -116,19 +116,93 @@ public class linkedlist {
 
     /********************************************************/
 
-    public int getAt(int idx)
+    private Node getNodeAt(int idx)
     {
-       if(idx >= this.size) return -1;
+        Node temp = this.head;
 
-       Node temp = head;
-
-       for(int i = 0 ; i <this.size ;i++)
-       {
-           if(i == idx) return temp.data;
-
-           temp = temp.next;
+       while(idx-- > 0){
+         temp = temp.next;
        }
-       return -1;
+
+       return temp;
     }
 
+    public int getAt(int idx)
+    {
+       if(idx >= this.size || idx < 0) return -1;
+
+       return getNodeAt(idx).data;
+    }
+
+    /********************************************************/
+
+    private Node removeLastNode()
+    {
+        Node node = this.tail;
+        if(this.size == 1) this.head = this.tail = null;
+        else{
+            Node secondLast = getNodeAt(this.size-2);
+            secondLast.next = null;
+            this.tail = secondLast;
+        }
+
+        this.size --;
+        return node;
+    }
+
+    public int removeLast(){
+        if(this.size == 0) return -1;
+        
+        Node node = removeLastNode();
+        return node.data;
+    }
+
+    /*******************************************************/
+
+    private Node removeNodeAt(int idx){
+        
+        if(idx==0) return removeFirstNode();
+        else if(idx == this.size-1) return removeLastNode();
+        else{
+            Node prevNode = getNodeAt(idx-1);
+            Node node  = getNodeAt(idx);
+
+            prevNode.next = node.next;
+            node.next = null;
+            
+            this.size -- ;
+
+            return node;
+        }
+       
+    }
+
+    public int removeAt(int idx){
+        if(idx<0 || idx>=this.size) return -1;
+
+        return removeNodeAt(idx).data;
+    }
+
+    /*******************************************************/
+
+    private void addNodeAt(Node node ,int idx)
+    {
+       if(idx==0) addFirstNode(node);
+       else if (idx == this.size) addLastNode(node);
+       else{
+          Node prevNode = getNodeAt(idx-1);
+          Node fwdNode = prevNode.next;
+          prevNode.next = node;
+          node.next = fwdNode;
+          this.size ++;
+       }
+    }
+
+    public void addAt(int idx , int data){
+
+           if(idx < 0 || idx > this.size) return ;
+        
+           Node node  = new Node(data);
+           addNodeAt(node, idx);
+    }
 }
