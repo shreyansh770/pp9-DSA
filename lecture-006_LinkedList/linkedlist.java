@@ -239,4 +239,62 @@ public class linkedlist {
     }
 
 
+    /******************************************************/
+
+    public void oddEvenList()
+    {
+         Node even  = new Node(-1);//dummy Node
+         Node ep = even;
+
+         Node odd  = new Node(-1);
+         Node op = odd;
+
+         Node curr = this.head;
+
+         while(curr!=null)
+         {
+             if(curr.data % 2 == 0)
+             {
+                 ep.next = curr;
+                 ep = ep.next;
+             }else{
+                op.next = curr;
+                op = op.next;
+             }
+
+             curr = curr.next;
+         }
+
+         op.next = even.next;
+
+         ep.next = null;
+         this.head = odd.next;
+         
+         if(even.next != null){
+             this.tail = op;
+         }else{
+            this.tail = ep;
+         }
+    }
+
+    /****************************************************/
+
+    public void removeDuplicates(){
+        Node temp1 = head;
+        Node temp2 = head;
+        
+        while(temp2!=null)
+        {
+            if(temp1.data == temp2.data)
+            {
+                temp2 = temp2.next;
+            }else{
+                temp1.next = temp2;
+                temp1 = temp2;
+            }
+        }
+        
+        temp1.next = temp2;
+      }
+
 }

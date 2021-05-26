@@ -19,6 +19,25 @@ public class anyBaseToAnyBase {
      
     }
 
+    public static String negativeBase(int n , int base){
+        if(n==0) return "";
+
+        String ans = "";
+        while(n!=0){
+            int rem = n% base;
+            n/=base;
+
+            if(rem<0){
+                rem+=(-base);
+                n+=1;
+            }
+
+            ans = String.valueOf(rem) + ans;
+        }
+
+        return ans;
+    }
+
     public static int binaryToDecimal(int n,int b) {
         int num = n;
         int dec_value = 0;
