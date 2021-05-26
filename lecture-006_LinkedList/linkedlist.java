@@ -23,6 +23,24 @@ public class linkedlist {
         return this.size == 0;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node curr = this.head;
+        while(curr!=null){
+            sb.append(curr.data);
+            if(curr.next!=null){
+                sb.append(", ");
+            }
+            curr = curr.next;
+        }
+
+        sb.append("]");
+        return sb.toString();
+    }
+
+
 
     /********************************************************/
 
@@ -47,6 +65,7 @@ public class linkedlist {
 
     /********************************************************/
 
+    
     private void addLastNode(Node node) {
         if (this.size == 0) {
             this.head = this.tail = node;
@@ -63,7 +82,9 @@ public class linkedlist {
         addLastNode(node);
     }
 
+
     /********************************************************/
+
 
     private Node removeFirstNode()
     {
@@ -86,7 +107,9 @@ public class linkedlist {
        return node.data;
     }
 
+
     /********************************************************/
+
 
     private Node getFirstNode()
     {
@@ -100,7 +123,9 @@ public class linkedlist {
         return getFirstNode().data;
     }
 
+
     /********************************************************/
+
 
     private Node getLastNode()
     {
@@ -114,7 +139,9 @@ public class linkedlist {
         return getLastNode().data;
     }
 
+
     /********************************************************/
+
 
     private Node getNodeAt(int idx)
     {
@@ -134,7 +161,9 @@ public class linkedlist {
        return getNodeAt(idx).data;
     }
 
+
     /********************************************************/
+
 
     private Node removeLastNode()
     {
@@ -157,7 +186,9 @@ public class linkedlist {
         return node.data;
     }
 
+
     /*******************************************************/
+
 
     private Node removeNodeAt(int idx){
         
@@ -169,7 +200,7 @@ public class linkedlist {
 
             prevNode.next = node.next;
             node.next = null;
-            
+
             this.size -- ;
 
             return node;
@@ -182,6 +213,7 @@ public class linkedlist {
 
         return removeNodeAt(idx).data;
     }
+
 
     /*******************************************************/
 
@@ -197,7 +229,7 @@ public class linkedlist {
           this.size ++;
        }
     }
-
+    
     public void addAt(int idx , int data){
 
            if(idx < 0 || idx > this.size) return ;
@@ -205,4 +237,6 @@ public class linkedlist {
            Node node  = new Node(data);
            addNodeAt(node, idx);
     }
+
+
 }
