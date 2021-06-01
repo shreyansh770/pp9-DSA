@@ -40,14 +40,14 @@ public class recursion3{
        ArrayList<String> myAns = new ArrayList<>();
        ArrayList<String> rec1LenAns = decodeWaysRec(str.substring(1));
        for(String s : rec1LenAns) {
-           myAns.add((char)('a' + ch1 - 1 ) + s);
+           myAns.add((char)('a' + ch1 - '1' ) + s);
        }
 
        if(str.length() > 1)
        {
-           int num = (ch1 - '0')*10+(str.charAt(1) - '0');
+           int num = (ch1 - '0') * 10 + (str.charAt(1) - '0');//20
            if(num<=26)
-           {
+           {                                                //83
             ArrayList<String> rec2LenAns = decodeWaysRec(str.substring(2));
             for(String s : rec2LenAns) {
                 myAns.add((char)('a' + num - 1 ) + s);
@@ -56,6 +56,40 @@ public class recursion3{
        }
 
       return myAns;
+    }
+
+
+
+    static String[] comb = {".;" , "abc" , "def" , "ghi","jkl","mno","pqrs","tu","vwx","yz"};
+
+    public static ArrayList<String> getKPC(String str) {
+        
+        if(str.length() == 0)
+        {
+            ArrayList<String> base = new ArrayList<>();
+            base.add("");
+            return base;
+        }
+        
+        char ch = str.charAt(0);
+        String ros = str.substring(1);
+        
+        ArrayList<String> rans = getKPC(ros);
+        ArrayList<String> myAns = new ArrayList<>();
+        
+        String codeforch = comb[ch - '0'];
+        
+        for(int  i =0 ; i < codeforch.length() ; i++)
+        
+        {
+            char newCh = codeforch.charAt(i);
+            for(String e : rans)
+            {
+                myAns.add(newCh + e);
+            }
+        }
+        
+        return myAns;
     }
 
 
@@ -117,7 +151,11 @@ public class recursion3{
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         String str = scn.next();
-        System.out.println(decodeWays2(str));
+        ArrayList<String> ans =decodeWaysRec(str);
+
+        for(String s : ans){
+            System.out.print(s + " ");
+        }
     }
     
 }

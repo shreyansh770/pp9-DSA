@@ -18,7 +18,6 @@ public class questions {
     }
 
     // leetcode 876
-
     public ListNode middleNode(ListNode head) {
         if (head == null || head.next == null)
             return head;
@@ -35,8 +34,6 @@ public class questions {
     }
 
     //leetcode 19
-
-
     public ListNode removeNthFromEnd(ListNode head, int n) {
         if(head == null || head.next == null) return null;
         
@@ -60,6 +57,28 @@ public class questions {
     
         return head;
         
+        
+    }
+
+
+    //206
+    public ListNode reverseList(ListNode head) {
+        if(head == null || head.next ==null) return head;
+        
+        ListNode p = null;
+        ListNode c = head;
+        
+        
+        while(c!=null)
+        {
+            
+            ListNode f = c.next;
+            c.next = p;
+            p = c;
+            c = f;
+        }
+        
+        return p;
         
     }
 
