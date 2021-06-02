@@ -315,39 +315,38 @@ public class linkedlist {
     /**************************************************** */
 
     // public Node addTwoLinkedList(Node l1, Node l2) {
-    //     l1 = reverse(l1);
-    //     l2 = reverse(l2);
+    // l1 = reverse(l1);
+    // l2 = reverse(l2);
 
-    //     int carry = 0;
-    //     ListNode head = new ListNode(0), p = head;
-    //     while (l1 != null || l2 != null || carry != 0) {
-    //         int sum = carry;
-    //         if (l1 != null) {
-    //             sum += l1.val;
-    //             l1 = l1.next;
-    //         }
-    //         if (l2 != null) {
-    //             sum += l2.val;
-    //             l2 = l2.next;
-    //         }
-    //         p.next = new ListNode(sum % 10);
-    //         p = p.next;
-    //         carry = sum / 10;
-    //     }
-
-    //     head = head.next;
-
-    //     head = reverse(head);
-
-    //     return head;
+    // int carry = 0;
+    // ListNode head = new ListNode(0), p = head;
+    // while (l1 != null || l2 != null || carry != 0) {
+    // int sum = carry;
+    // if (l1 != null) {
+    // sum += l1.val;
+    // l1 = l1.next;
+    // }
+    // if (l2 != null) {
+    // sum += l2.val;
+    // l2 = l2.next;
+    // }
+    // p.next = new ListNode(sum % 10);
+    // p = p.next;
+    // carry = sum / 10;
     // }
 
+    // head = head.next;
+
+    // head = reverse(head);
+
+    // return head;
+    // }
 
     /****************************************************************/
 
-    public Node reverseWthRecu(Node head)
-    {
-        if(head == null || head.next == null) return head;
+    public Node reverseWthRecu(Node head) {
+        if (head == null || head.next == null)
+            return head;
 
         Node temp = reverseWthRecu(head.next);
 
@@ -358,4 +357,42 @@ public class linkedlist {
         return temp;
     }
 
+    /*******************************************************************/
+
+    public static int length(Node node) {
+        if (node == null)
+            return 0;
+
+        Node curr = node;
+        int len = 0;
+        while (curr != null) {
+            curr = curr.next;
+            len++;
+        }
+
+        return len;
+    }
+
+    public static int findIntersection(Node one, Node two) {
+        int a = length(one);
+        int b = length(two);
+
+        Node bigger = a > b ? one : two;
+        Node smaller = a < b ? one : two;
+
+        int diff = Math.max(a, b) - Math.min(a, b);
+
+        while (diff-- > 0) {
+            bigger = bigger.next;
+        }
+
+        while (bigger != smaller) {
+            bigger = bigger.next;
+            smaller = smaller.next;
+        }
+
+        return smaller != null ? smaller.data : -1;
+    }
+
+    /*********************************************************************/
 }
