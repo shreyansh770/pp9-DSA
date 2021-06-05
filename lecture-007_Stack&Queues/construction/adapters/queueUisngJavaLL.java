@@ -24,12 +24,22 @@ public class queueUisngJavaLL {
             return ll.removeFirst();
         }
 
-        public static void main(String[] args) {
-            queue q = new queue();
-            for (int i = 1; i <= 10; i++) {
-                q.add(i * 10);
-            }
+    }
 
+    public static void main(String[] args) {
+        queue q = new queue();
+
+        q.add(10);
+        q.add(20);
+        q.remove();
+        q.add(30);
+        q.remove();
+        q.add(40);
+        q.add(50);
+        q.add(60);
+
+        while (q.size() != 0) {
+            System.out.println(q.remove());
         }
     }
 }
