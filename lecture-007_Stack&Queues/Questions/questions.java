@@ -57,7 +57,8 @@ public class questions {
                     return;
                 }
 
-                else st.removeFirst();
+                else
+                    st.removeFirst();
             }
 
         }
@@ -69,6 +70,58 @@ public class questions {
             System.out.println("true");
             return;
         }
+    }
+
+    public static void nextGreater(int[] arr) {
+
+    }
+
+    public static void celebrityProb(int[][] arr) {
+        int celeb = 0;
+        int n = arr.length;
+        for (int i = 0; i < n; i++) {
+            if (celeb != i && arr[celeb][i] == 1) {
+                celeb = i;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (celeb == i)
+                continue;
+            if ((arr[celeb][i] == 1) || (arr[i][celeb] == 0)) {
+                System.out.println("none");
+                return;
+            }
+        }
+
+        System.out.println(celeb);
+    }
+
+    public static void mergeIntervals(int[][] arr){
+
+      Arrays.sort(arr,(a,b)->{
+            return a[0] - b[0];//default behaviour (increasing)
+            //return b[0] - a[0] // opposite of default behaviour (decreasing)
+      });
+
+      LinkedList<int[]> st = new LinkedList<>();
+        
+      for(int[] a :arr){
+          int minStartTime = a[0];
+          int maxEndTime = a[1];
+          while(st.size()!=0 && a[0] <= st.getFirst()[1]){
+              minStartTime = st.getFirst()[0];
+              maxEndTime = Math.max(maxEndTime, st.getFirst()[1]);
+              st.remove();
+          }
+          
+          st.addFirst(new int[] {minStartTime , maxEndTime});
+      }
+      
+      while(st.size()!=0){
+          int[] a = st.removeLast();
+          System.out.println(a[0] + " "+a[1]);
+
     }
 
     public static void main(String[] args) throws Exception {
