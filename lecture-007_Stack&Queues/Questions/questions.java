@@ -72,12 +72,31 @@ public class questions {
         }
     }
 
-    public static void nextGreater(int[] arr) {
+    public static int[] nextGreater(int[] arr) {
+        int na[] = new int[arr.length];
+        Stack<Integer> st = new Stack<>();
 
+        st.push(arr[arr.length - 1]);
+        na[arr.length - 1] = -1;
+
+        for (int i = arr.length - 2; i >= 0; i--) {
+            while (st.size() != 0 && arr[i] >= st.peek()) {
+                st.pop();
+            }
+
+            if (st.size() == 0)
+                na[i] = -1;
+            else
+                na[i] = st.peek();
+
+            st.push(arr[i]);
+        }
+
+        return na;
     }
 
     public static void celebrityProb(int[][] arr) {
-        int celeb = 0;
+        int celeb = 0;// we have assumed that 0 is a celeb
         int n = arr.length;
         for (int i = 0; i < n; i++) {
             if (celeb != i && arr[celeb][i] == 1) {
