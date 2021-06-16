@@ -14,9 +14,10 @@ public class recursion5 {
 
         board[sr][sc] = 1;
 
+        // int[][] dir = {{-1,0},{0,1},{1,0},{0,-1}};
         for (int d = 0; d < dir.length; d++) {
-            int r = sr + dir[d][0];
-            int c = sc + dir[d][1];
+            int r = sr + dir[d][0];// r= 2
+            int c = sc + dir[d][1];// c = 2
 
             if (r >= 0 && c >= 0 && r < board.length && c < board[0].length && board[r][c] == 0) {
                 count += FloodFill(r, c, board, ans + dirS[d], dir, dirS);

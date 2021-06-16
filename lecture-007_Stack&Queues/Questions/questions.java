@@ -116,31 +116,59 @@ public class questions {
         System.out.println(celeb);
     }
 
-    public static void mergeIntervals(int[][] arr){
+    public static void mergeIntervals(int[][] arr) {
 
-      Arrays.sort(arr,(a,b)->{
-            return a[0] - b[0];//default behaviour (increasing)
-            //return b[0] - a[0] // opposite of default behaviour (decreasing)
-      });
+        Arrays.sort(arr, (a, b) -> {
+            return a[0] - b[0];// default behaviour (increasing)
+            // return b[0] - a[0] // opposite of default behaviour (decreasing)
+        });
 
-      LinkedList<int[]> st = new LinkedList<>();
-        
-      for(int[] a :arr){
-          int minStartTime = a[0];
-          int maxEndTime = a[1];
-          while(st.size()!=0 && a[0] <= st.getFirst()[1]){
-              minStartTime = st.getFirst()[0];
-              maxEndTime = Math.max(maxEndTime, st.getFirst()[1]);
-              st.remove();
-          }
-          
-          st.addFirst(new int[] {minStartTime , maxEndTime});
-      }
-      
-      while(st.size()!=0){
-          int[] a = st.removeLast();
-          System.out.println(a[0] + " "+a[1]);
+        LinkedList<int[]> st = new LinkedList<>();
 
+        for (int[] a : arr) {
+            int minStartTime = a[0];
+            int maxEndTime = a[1];
+            while (st.size() != 0 && a[0] <= st.getFirst()[1]) {
+                minStartTime = st.getFirst()[0];
+                maxEndTime = Math.max(maxEndTime, st.getFirst()[1]);
+                st.remove();
+            }
+
+            st.addFirst(new int[] { minStartTime, maxEndTime });
+        }
+
+        while (st.size() != 0) {
+            int[] a = st.removeLast();
+            System.out.println(a[0] + " " + a[1]);
+
+        }
+
+    }
+
+    public static void smallestNumberFollowingPattern(String str) {
+        Stack<Integer> stk = new Stack<>();
+        int num = 1;
+
+        for (int i = 0; i < str.length(); i++) {
+
+            char ch = str.charAt(i);
+
+            if (ch == 'd') {
+                stk.push(num);
+                num++;
+            } else {
+                stk.push(num);
+                num++;
+
+                while (stk.size() > 0) {
+                    System.out.print(stk.pop());
+                }
+            }
+        }
+        stk.push(num);
+        while (stk.size() > 0) {
+            System.out.print(stk.pop());
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -150,4 +178,5 @@ public class questions {
 
         removeDuplicates(str);
     }
+
 }
