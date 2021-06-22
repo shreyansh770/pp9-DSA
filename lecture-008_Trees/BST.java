@@ -202,4 +202,16 @@ public class BST {
         return root;
 
     }
+
+    static int sum = 0;
+    public static void rwsol(Node node){
+      if(node==null) return;
+      
+      rwsol(node.right);
+      int t = sum;
+      sum+=node.data;
+      node.data = t;
+      
+      rwsol(node.left);
+    }
 }
