@@ -339,6 +339,166 @@ public class BinaryTree {
         return self;
     }
 
+        /**********************************************/
+  
+    //METHOD - 1;
+    public static boolean isBalanced(Node node){
+        if (node == null)
+            return true;
+
+        int lh = height(node.left);
+        int rh = height(node.right);
+ 
+        if (Math.abs(lh - rh) <= 1 && isBalanced(node.left) && isBalanced(node.right))
+            return true;
+
+        return false;
+    }
+
+    //METHOD - 2;
+ 
+    public static class balPair{
+        int height = -1;
+        boolean isBal = true;
+    }
+
+    public static balPair isBal_02(Node node){
+        if(node == null) return new balPair();
+
+        
+        balPair lPair = isBal_02(node.left);
+        if(!lPair.isBal) return lPair;
+
+        balPair rPair = isBal_02(node.right);
+        if(!rPair.isBal) return rPair;
+
+        balPair myAns = new balPair();
+        if(Math.abs(lPair.height - rPair.height)>1){
+            myAns.isBal = false;
+            return myAns;
+        }
+
+        myAns.height = Math.max(lPair.height,rPair.height) +1;
+
+        return myAns;
+    }
+
+    // METHOD - 3
+
+    public static int isBal_03(Node node){
+        if(node == null) return -1;
+
+        int lh = isBal_03(node.left);
+
+        if(lh == -2) return lh;
+
+        int rh = isBal_03(node.right);
+
+        if(rh == -2) return rh;
+
+        if(Math.abs(lh - rh) > 1) return -2;
+
+        return Math.max(lh, rh) +1;
+    }
 
 
+          /************************************************/
+
+    
+    public static class tiltPair{
+        int tiltSF = 0;
+        int sum = 0;
+    }
+    public static tiltPair tiltOfBT(Node node){
+        if(node == null) return new tiltPair();
+
+        tiltPair lans = tiltOfBT(node.left);
+        tiltPair rans = tiltOfBT(node.right);
+
+        tiltPair myAns = new tiltPair();
+
+        myAns.tiltSF = lans.tiltSF + rans.tiltSF + Math.abs(lans.sum - rans.sum);
+        myAns.sum = lans.sum +rans.sum + node.data;
+        return myAns;
+
+    }
+
+         /************************************************/
+
+    // Method - 1 O(n^2)
+    public static int diameterOfBt(Node node){
+        if(node == null) return 0;
+
+        if(node.left == null && node.right == null) return 0;
+
+        return Math.max( height(node.left) +height(node.right)+2 , Math.max(diameterOfBt(node.left), diameterOfBt(node.right))  );
+        // -> +2 bcoz leftheight + rightheight + edges from root to left and right both
+    }
+
+    // Method-2 O(n)
+    // {diameter , height} -> if same data type you can also take array
+    public static int[] diameterOfBy_02(Node root){
+       if(root == null) return new int[]{0,-1};
+
+       int[] ld = diameterOfBy_02(root.left);
+       int[] rd = diameterOfBy_02(root.right);
+
+       int[] myAns = new int[2];
+
+       myAns[0] = Math.max(Math.max(ld[0],rd[0]), ld[1] +rd[1] +2);
+       myAns[1] = Math.max(ld[1] , rd[1]) +1;
+
+       return myAns;
+    }
+
+    //Method -3 (Static approach)
+    int dia = 0;
+
+    public int diameterOfBy_03(Node root){
+        if(root == null) return -1;
+
+        int ld = diameterOfBy_03(root.left);
+        int rd = diameterOfBy_03(root.right);
+
+        dia = Math.max(dia , ld + rd +2);
+        return ld + rd +1;
+    }
+
+       /************************************************/
+
+    public static class lBSTpair{
+        boolean isBST = true;
+        int max = -(int)1e9;
+        int min = (int)1e9;
+
+        int maxSize = 0;// size of largest BST node
+        Node maxBSTNode = null;//largest BST node
+    }
+
+    public static lBSTpair largestBST(Node node){
+        if(node == null) return new lBSTpair();
+
+        lBSTpair left = largestBST(node.left);
+
+        lBSTpair right = largestBST(node.right);
+
+        lBSTpair myAns = new lBSTpair();
+
+        if(left.isBST && right.isBST && left.max <node.data && right.min > node.data){
+           myAns.isBST = true;
+           myAns.min = Math.min(left.min,node.data);
+           myAns.max = Math.max(right.max,node.data);
+
+           myAns.maxSize = left.maxSize + right.maxSize +1;
+           myAns.maxBSTNode = node;
+        } else{
+           
+           myAns.maxSize = Math.max(left.maxSize , right.maxSize);
+           myAns.isBST = false;
+           myAns.maxBSTNode = left.maxSize > right.maxSize ? left.maxBSTNode : right.maxBSTNode;
+        }
+
+        return myAns;
+
+    }
 }
