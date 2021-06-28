@@ -260,7 +260,7 @@ public class genericTree {
 
     /**************************************************/
 
-   /*IMP*/ public static Node getTail(Node node) {
+    /* IMP */ public static Node getTail(Node node) {
 
         while (node.childs.size() != 0) {
             node = node.childs.get(0);
@@ -281,5 +281,71 @@ public class genericTree {
 
             node.childs.remove(i);
         }
+    }
+
+    /**************************************************/
+
+    public static void lvlOrderTraversal(Node node) {
+        Queue<Node> q = new LinkedList<>();
+
+        q.add(node);
+
+        while (q.size() != 0) {
+
+            Node root = q.remove();
+            System.out.println(root);
+            for (Node child : root.childs) {
+                q.add(child);
+            }
+        }
+
+    }
+
+    /******************************************** */
+
+    // Using two stacks
+    public static void zigZag(Node node) {
+        if (node == null)
+            return;
+
+        Stack<Node> s1 = new Stack<>();
+        Stack<Node> s2 = new Stack<>();
+
+        int lvl = 0;
+        s1.push(node);
+        lvl++;
+
+        while (!s1.empty()) {
+
+            Node root = s1.pop();
+            System.out.print(root.data+" ");
+            if (lvl % 2 != 0) {
+                for (Node child : root.childs) {
+                    s2.push(child);
+                }
+
+            } else {
+
+                for (int i = root.childs.size() - 1; i >= 0; i--) {
+                    s2.push(root.childs.get(i));
+                }
+
+            }
+
+            if (s1.size() == 0) {
+                s1 = s2;
+                s2 = new Stack<>();
+                lvl++;
+                System.out.println();
+            }
+
+        }
+
+    }
+
+
+    // stack + queue
+    public static void zigZag_02(Node node){
+
     }
 }
