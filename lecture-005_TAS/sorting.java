@@ -102,7 +102,7 @@ public class sorting {
         int n = arr.length ; 
         swap(arr,pivotIdx,n-1);
 
-        int itr = 0 , p = -1 , li = n-2;
+        int itr = 0 , p = -1 , li = n-1;
         while(itr<=li)
         {
             if(arr[itr]<=arr[li]) swap(arr, itr, ++p);

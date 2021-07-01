@@ -14,10 +14,14 @@ public class construction {
         }
     }
 
+    /*****************************************/
+
     public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
         graph[u].add(new Edge(u, v, w));
         graph[v].add(new Edge(v, u, w));
     }
+
+    /*****************************************/
 
     public static void display(ArrayList<Edge>[] graph, int N) {
 
@@ -32,6 +36,8 @@ public class construction {
 
     }
 
+    /*****************************************/
+
     public static int findEdge(ArrayList<Edge>[] graph, int u, int v) {
 
         ArrayList<Edge> list = graph[u];
@@ -43,6 +49,8 @@ public class construction {
         return -1;
     }
 
+    /*****************************************/
+
     public static void removeEdge(ArrayList<Edge>[] graph, int u, int v) {
 
         int i1 = findEdge(graph, u, v);
@@ -53,6 +61,8 @@ public class construction {
 
     }
 
+    /*****************************************/
+
     public static void removeVtx(ArrayList<Edge>[] graph, int u) {
         ArrayList<Edge> list = graph[u];
         for (int i = list.size() - 1; i >= 0; i--) {
@@ -60,6 +70,8 @@ public class construction {
             removeEdge(graph, e.src, e.nbr);
         }
     }
+
+    /*****************************************/
 
     public static boolean hasPath(ArrayList<Edge>[] graph, int src, int des, boolean[] vis) {
         if (src == des)
@@ -74,6 +86,8 @@ public class construction {
 
         return res;
     }
+
+    /*****************************************/
 
     public static int printAllPath(ArrayList<Edge>[] graph, int src, int des, boolean[] vis, String psf) {
 
@@ -95,6 +109,8 @@ public class construction {
         return count;
     }
 
+    /*****************************************/
+
     public static void preOrder(ArrayList<Edge>[] graph, int src, int des, boolean[] vis, int wsf, String psf) {
 
         System.out.println(src + " -> " + psf + " @ " + wsf);
@@ -110,6 +126,8 @@ public class construction {
 
     }
 
+    /*****************************************/
+
     public static void postOrder(ArrayList<Edge>[] graph, int src, int des, boolean[] vis, int wsf, String psf) {
 
         vis[src] = true;
@@ -123,29 +141,291 @@ public class construction {
         vis[src] = false;
     }
 
-    public static void lighestPath(ArrayList<Edge>[] graph, int src, int des){
+    /*****************************************/
+
+
+    public static class pathpair {
+        String psf = "";
+        int wsf = (int)1e9;
+    }
+
+    public static pathpair lighestPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {
+        if (src == dest) {
+            pathpair base = new pathpair();
+            base.psf += src;
+            base.wsf = 0;
+
+            return base;
+        }
+
+        vis[src] = true;
+        pathpair myAns = new pathpair();
+        for (Edge e : graph[src]) {
+            if (!vis[e.nbr]) {
+                pathpair recAns = lighestPath(graph, e.nbr, dest, vis);
+                if (recAns.wsf != -1 && recAns.wsf + e.wt < myAns.wsf) {
+                    myAns.psf = src + recAns.psf;
+                    myAns.wsf = recAns.wsf + e.wt;
+                }
+            }
+        }
+        vis[src] = false;
+        return myAns;
+    }
+
+    public static void lighestPath(ArrayList<Edge>[] graph, int src, int dest) {
+        boolean[] vis = new boolean[graph.length];
+        pathpair ans = lighestPath(graph, src, dest, vis);
+
+        System.out.println("Heaviest Path: " + ans.psf + " of weight: " + ans.wsf);
+    }
+
+
+
+
+
+    /*****************************************/
+
+    public static class pathPair {
+        String psf = "";
+        int wsf = -1;
+    }
+
+    public static pathPair heaviestPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {
+        if (src == dest) {
+            pathPair base = new pathPair();
+            base.psf += src;
+            base.wsf = 0;
+
+            return base;
+        }
+
+        vis[src] = true;
+        pathPair myAns = new pathPair();
+        for (Edge e : graph[src]) {
+            if (!vis[e.nbr]) {
+                pathPair recAns = heaviestPath(graph, e.nbr, dest, vis);
+                if (recAns.wsf != -1 && recAns.wsf + e.wt > myAns.wsf) {
+                    myAns.psf = src + recAns.psf;
+                    myAns.wsf = recAns.wsf + e.wt;
+                }
+            }
+        }
+        vis[src] = false;
+        return myAns;
+    }
+
+    public static void heaviestPath(ArrayList<Edge>[] graph, int src, int dest) {
+        boolean[] vis = new boolean[graph.length];
+        pathPair ans = heaviestPath(graph, src, dest, vis);
+
+        System.out.println("Heaviest Path: " + ans.psf + " of weight: " + ans.wsf);
+    }
+
+    /*****************************************/
+
+    public static class ceilFloorPair {
+        int ceil = (int) 1e9;
+        int floor = -(int) 1e9;
+    }
+
+    public static void ceilAndFloor(ArrayList<Edge>[] graph, int data, int src, int wsf, boolean[] vis,
+            ceilFloorPair pair) {
+        if (wsf > data) {
+            pair.ceil = Math.min(pair.ceil, wsf);
+        } else {
+            pair.floor = Math.max(pair.floor, wsf);
+        }
+
+        vis[src] = true;
+        for (Edge e : graph[src]) {
+            if (!vis[e.nbr]) {
+                ceilAndFloor(graph, data, e.nbr, wsf + e.wt, vis, pair);
+            }
+        }
+        vis[src] = false;
+    }
+
+    public static void ceilFloor(ArrayList<Edge>[] graph, int data, int src) {
+
+        ceilFloorPair pair = new ceilFloorPair();
+        boolean[] vis = new boolean[graph.length];
+        ceilAndFloor(graph, data, src, 0, vis, pair);
+    }
+
+    /*****************************************/
+
+    //O(E)
+    public static void dfs_gcc(ArrayList<Edge>[] graph, int src, boolean[] vis) {
+
+        vis[src] = true;
         
-    }
-
-    public static class pathPair{
-          
-       String psf = "";
-       int wsf = 0;
+        for (Edge e : graph[src]) {
+            if (!vis[e.nbr])
+                dfs_gcc(graph, e.nbr, vis);
+        }
 
     }
 
+    //O(E + V)
+    public static int getConnectedComponents(ArrayList<Edge>[] graph, int src) {
 
-    public static pathPair heaviestPath(ArrayList<Edge>[] graph, int src, int des){
+        int componentCount = 0;
+        boolean[] vis = new boolean[graph.length];
+        for(int i=0;i<graph.length;i++){
+            if(!vis[i]){
+            dfs_gcc(graph, i, vis);
+            componentCount++;        
+          }
+        }
+        
+        return componentCount;
+    }
 
-       if(src == des){
-           pathPair base = new pathPair();
-           base.psf += src;
+    /*****************************************/
 
-           return base;
-       }
 
+    public static void countIsland(int[][] graph,int i,int j,int[][] dir,boolean[][] visited){
+        visited[i][j] = true;
+
+
+        for(int d =0;d<dir.length;d++){
+
+
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+
+            if( r>=0 && c>=0 && r<graph.length && c<graph[0].length&& graph[r][c] == 0 && !visited[r][c]){
+                countIsland(graph,r,c,dir,visited);
+            }
+
+
+        }
+    }
+
+    public static int noOfIslands(int[][] graph){
+
+        int isLandCount = 0;
+        int n = graph.length;
+        int m = graph[0].length;
+        int[][] dir = {{0,1},{1,0},{0,-1},{-1,0}};
+        boolean[][] visited = new int[n][m];
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+
+                if(graph[i][j] == 0 && !visited[i][j]){
+                    isLandCount++;
+                }
+ 
+            }
+        }
+
+        return isLandCount;
 
     }
+
+    /*****************************************/
+
+    public static int countIsLand(int[][] grid,int i ,int j , boolean[][] visited,int[][] dir)
+    {
+        visited[i][j] = true;
+        int size = 0;
+        for(int d = 0; d<dir.length;d++)
+        {
+            int r = i + dir[d][0];
+            int c = j + dir[d][1];
+            
+            if(r>=0 && c>=0 && r<grid.length && c<grid[0].length && grid[r][c] == 1 && visited[r][c] == false)
+            {
+               size+=countIsLand(grid,r,c,visited,dir);
+            }
+        }
+            
+            return size+1;
+    }
+    
+    public static int maxAreaOfIsland(int[][] grid) {
+                   boolean[][] visited = new boolean[grid.length][grid[0].length];
+        
+        int maxSize = 0;
+        
+        int[][] dir = {{0,1},{0,-1},{1,0},{-1,0}};
+        
+        for(int i = 0 ; i <grid.length;i++)
+        {
+            for(int j = 0;j<grid[0].length;j++)
+            {
+                if(grid[i][j] == 1 && visited[i][j] == false)
+                {
+                    int s = countIsLand(grid,i,j,visited,dir);
+                   maxSize =    Math.max(s,maxSize);
+                }
+            }
+        }
+        
+        return maxSize;
+    }
+    
+
+    /*****************************************/
+
+    public static void hamiltonianPathCycle(ArrayList<Edge>[] graph ,int osrc,int src,boolean[] vis,int EdgeCount,String ans){
+          if(EdgeCount == graph.length - 1){
+              int idx = findEdge(graph, src, osrc);
+              if(idx!=-1){
+                  System.out.println(ans+"*");
+              }else{
+                System.out.println(ans+".");
+              }
+
+              return;
+          }
+
+          vis[src] = true;
+
+          for(Edge e : graph[src]){
+              if(!vis[e.nbr]){
+                  hamiltonianPathCycle(graph, osrc, e.nbr, vis, EdgeCount+1, ans + e.nbr);
+              }
+          }
+
+
+
+          vis[src] = false;
+    }
+
+
+    public static void hamiltonianPathCycle(ArrayList<Edge>[] graph ,int src){
+
+        int N = graph.length;
+        boolean[] vis = new boolean[N];
+
+        hamiltonianPathCycle(graph, src, src, vis, 0,""+src);
+    }
+
+
+
+
+      /*****************************************/
+
+
+      public static void bFS(ArrayList<Edge>[] graph,int src){
+
+        LinkedList<Integer> que = new LinkedList<>();
+        int N = graph.length;
+        boolean[] vis = new boolean[N];
+
+        que.addLast(src);
+        int level = 0;
+
+        while(){
+
+        }
+    }
+
+
+
 
 
     public static void construct() {
