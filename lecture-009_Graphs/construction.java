@@ -14,11 +14,15 @@ public class construction {
         }
     }
 
+    
+    /**************************************************************/
+
     public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
         graph[u].add(new Edge(u, v, w));
         graph[v].add(new Edge(v, u, w));
     }
 
+     /**************************************************************/
     public static void display(ArrayList<Edge>[] graph, int N) {
         for (int i = 0; i < N; i++) {
             System.out.print(i + " -> ");
@@ -28,7 +32,11 @@ public class construction {
             System.out.println();
         }
 
+
+
     }
+      /**************************************************************/
+
 
     public static int findEdge(ArrayList<Edge>[] graph, int u, int v) {
         ArrayList<Edge> list = graph[u];
@@ -41,6 +49,8 @@ public class construction {
         return -1;
     }
 
+       /**************************************************************/
+
     public static void removeEdge(ArrayList<Edge>[] graph, int u, int v) {
         int i1 = findEdge(graph, u, v);
         int i2 = findEdge(graph, v, u);
@@ -49,6 +59,9 @@ public class construction {
         graph[v].remove(i2);
     }
 
+
+        /**************************************************************/
+
     public static void removeVtx(ArrayList<Edge>[] graph, int u) {
         ArrayList<Edge> list = graph[u];
         for (int i = list.size() - 1; i >= 0; i--) {
@@ -56,6 +69,8 @@ public class construction {
             removeEdge(graph, e.src, e.nbr);
         }
     }
+   
+       /**************************************************************/
 
     public static boolean hasPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {
         if (src == dest)
@@ -69,6 +84,8 @@ public class construction {
 
         return res;
     }
+
+       /**************************************************************/
 
     public static int printAllPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis, String psf) {
         if (src == dest) {
@@ -86,6 +103,9 @@ public class construction {
         return count;
     }
 
+        /**************************************************************/
+
+
     public static void preOrder(ArrayList<Edge>[] graph, int src, boolean[] vis, int wsf, String psf) {
         System.out.println(src + " -> " + (psf + src) + " @ " + wsf);
         vis[src] = true;
@@ -96,6 +116,8 @@ public class construction {
 
         vis[src] = false;
     }
+
+      /**************************************************************/
 
     public static void postOrder(ArrayList<Edge>[] graph, int src, boolean[] vis, int wsf, String psf) {
         vis[src] = true;
@@ -108,10 +130,15 @@ public class construction {
         vis[src] = false;
     }
 
+      /**************************************************************/
+
     public static void lightestPath(ArrayList<Edge>[] graph, int src, int dest) {
 
         // System.out.println("Lightest Path: " + x + " of weight: " + y);
     }
+
+      /**************************************************************/
+
 
     public static class pathPair {
         String psf = "";
@@ -149,6 +176,10 @@ public class construction {
         System.out.println("Heaviest Path: " + ans.psf + " of weight: " + ans.wsf);
     }
 
+     /**************************************************************/
+
+
+
     public static class ceilFloorPair {
         int ceil = (int) 1e9;
         int floor = -(int) 1e9;
@@ -177,6 +208,9 @@ public class construction {
         ceilAndFloor(graph, src, data, vis, 0, pair);
     }
 
+
+     /**************************************************************/
+
     // O(E)
     public static void dfs_GCC(ArrayList<Edge>[] graph, int src, boolean[] vis) {
         vis[src] = true;
@@ -200,6 +234,9 @@ public class construction {
         System.out.println(componentCount);
     }
 
+     /**************************************************************/
+
+
     public void dfs(char[][] grid, int[][] dir, int sr, int sc) {
         grid[sr][sc] = '0';
         for (int d = 0; d < 4; d++) {
@@ -211,6 +248,8 @@ public class construction {
         }
 
     }
+
+      /**************************************************************/
 
     public int numIslands(char[][] grid) {
         int n = grid.length, m = grid[0].length, componentCount = 0;
@@ -228,6 +267,8 @@ public class construction {
         return componentCount;
     }
 
+       /**************************************************************/
+
     public int dfs(int[][] grid, int[][] dir, int sr, int sc) {
 
         grid[sr][sc] = 0;
@@ -244,6 +285,8 @@ public class construction {
 
     }
 
+        /**************************************************************/
+
     public int maxAreaOfIsland(int[][] grid) {
         int n = grid.length, m = grid[0].length, maxSize = 0;
 
@@ -259,6 +302,8 @@ public class construction {
         }
         return maxSize;
     }
+
+        /**************************************************************/
 
     public static void hamintonianPathCycle(ArrayList<Edge>[] graph, int osrc, int src, int EdgeCount, boolean[] vis,
             String ans) {
@@ -289,6 +334,8 @@ public class construction {
         boolean[] vis = new boolean[N];
         hamintonianPathCycle(graph, src, src, 0, vis, "");
     }
+
+       /**************************************************************/
 
     public static void BFS(ArrayList<Edge>[] graph, int src, int dest) {
         LinkedList<Integer> que = new LinkedList<>();
@@ -326,6 +373,8 @@ public class construction {
         }
     }
 
+       /**************************************************************/
+
     public static boolean cycleDetection(ArrayList<Edge>[] graph, int src, boolean[] vis) {
 
         LinkedList<Integer> que = new LinkedList<>();
@@ -360,6 +409,9 @@ public class construction {
 
         System.out.println(res);
     }
+
+       /**************************************************************/
+
 
     public static class BFS_Pair {
         int vtx = 0;
@@ -397,7 +449,9 @@ public class construction {
 
     }
 
-    public static void construction() {
+      /**************************************************************/
+
+    public static void Construction() {
         int N = 7;
         ArrayList<Edge>[] graph = new ArrayList[N];
         for (int i = 0; i < N; i++)
@@ -421,6 +475,6 @@ public class construction {
     }
 
     public static void main(String[] args) {
-        construction();
+        Construction();
     }
 }
