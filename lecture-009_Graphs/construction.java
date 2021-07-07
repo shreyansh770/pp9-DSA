@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
+
+import jdk.javadoc.internal.doclets.formats.html.markup.Script;
 
 public class construction {
     public static class Edge {
@@ -14,7 +17,6 @@ public class construction {
         }
     }
 
-    
     /**************************************************************/
 
     public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
@@ -22,7 +24,7 @@ public class construction {
         graph[v].add(new Edge(v, u, w));
     }
 
-     /**************************************************************/
+    /**************************************************************/
     public static void display(ArrayList<Edge>[] graph, int N) {
         for (int i = 0; i < N; i++) {
             System.out.print(i + " -> ");
@@ -32,11 +34,9 @@ public class construction {
             System.out.println();
         }
 
-
-
     }
-      /**************************************************************/
 
+    /**************************************************************/
 
     public static int findEdge(ArrayList<Edge>[] graph, int u, int v) {
         ArrayList<Edge> list = graph[u];
@@ -49,7 +49,7 @@ public class construction {
         return -1;
     }
 
-       /**************************************************************/
+    /**************************************************************/
 
     public static void removeEdge(ArrayList<Edge>[] graph, int u, int v) {
         int i1 = findEdge(graph, u, v);
@@ -59,8 +59,7 @@ public class construction {
         graph[v].remove(i2);
     }
 
-
-        /**************************************************************/
+    /**************************************************************/
 
     public static void removeVtx(ArrayList<Edge>[] graph, int u) {
         ArrayList<Edge> list = graph[u];
@@ -69,8 +68,8 @@ public class construction {
             removeEdge(graph, e.src, e.nbr);
         }
     }
-   
-       /**************************************************************/
+
+    /**************************************************************/
 
     public static boolean hasPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {
         if (src == dest)
@@ -85,7 +84,7 @@ public class construction {
         return res;
     }
 
-       /**************************************************************/
+    /**************************************************************/
 
     public static int printAllPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis, String psf) {
         if (src == dest) {
@@ -103,8 +102,7 @@ public class construction {
         return count;
     }
 
-        /**************************************************************/
-
+    /**************************************************************/
 
     public static void preOrder(ArrayList<Edge>[] graph, int src, boolean[] vis, int wsf, String psf) {
         System.out.println(src + " -> " + (psf + src) + " @ " + wsf);
@@ -117,7 +115,7 @@ public class construction {
         vis[src] = false;
     }
 
-      /**************************************************************/
+    /**************************************************************/
 
     public static void postOrder(ArrayList<Edge>[] graph, int src, boolean[] vis, int wsf, String psf) {
         vis[src] = true;
@@ -130,15 +128,14 @@ public class construction {
         vis[src] = false;
     }
 
-      /**************************************************************/
+    /**************************************************************/
 
     public static void lightestPath(ArrayList<Edge>[] graph, int src, int dest) {
 
         // System.out.println("Lightest Path: " + x + " of weight: " + y);
     }
 
-      /**************************************************************/
-
+    /**************************************************************/
 
     public static class pathPair {
         String psf = "";
@@ -176,9 +173,7 @@ public class construction {
         System.out.println("Heaviest Path: " + ans.psf + " of weight: " + ans.wsf);
     }
 
-     /**************************************************************/
-
-
+    /**************************************************************/
 
     public static class ceilFloorPair {
         int ceil = (int) 1e9;
@@ -208,8 +203,7 @@ public class construction {
         ceilAndFloor(graph, src, data, vis, 0, pair);
     }
 
-
-     /**************************************************************/
+    /**************************************************************/
 
     // O(E)
     public static void dfs_GCC(ArrayList<Edge>[] graph, int src, boolean[] vis) {
@@ -234,8 +228,7 @@ public class construction {
         System.out.println(componentCount);
     }
 
-     /**************************************************************/
-
+    /**************************************************************/
 
     public void dfs(char[][] grid, int[][] dir, int sr, int sc) {
         grid[sr][sc] = '0';
@@ -249,7 +242,7 @@ public class construction {
 
     }
 
-      /**************************************************************/
+    /**************************************************************/
 
     public int numIslands(char[][] grid) {
         int n = grid.length, m = grid[0].length, componentCount = 0;
@@ -267,7 +260,7 @@ public class construction {
         return componentCount;
     }
 
-       /**************************************************************/
+    /**************************************************************/
 
     public int dfs(int[][] grid, int[][] dir, int sr, int sc) {
 
@@ -285,7 +278,7 @@ public class construction {
 
     }
 
-        /**************************************************************/
+    /**************************************************************/
 
     public int maxAreaOfIsland(int[][] grid) {
         int n = grid.length, m = grid[0].length, maxSize = 0;
@@ -303,7 +296,7 @@ public class construction {
         return maxSize;
     }
 
-        /**************************************************************/
+    /**************************************************************/
 
     public static void hamintonianPathCycle(ArrayList<Edge>[] graph, int osrc, int src, int EdgeCount, boolean[] vis,
             String ans) {
@@ -335,7 +328,7 @@ public class construction {
         hamintonianPathCycle(graph, src, src, 0, vis, "");
     }
 
-       /**************************************************************/
+    /**************************************************************/
 
     public static void BFS(ArrayList<Edge>[] graph, int src, int dest) {
         LinkedList<Integer> que = new LinkedList<>();
@@ -373,7 +366,7 @@ public class construction {
         }
     }
 
-       /**************************************************************/
+    /**************************************************************/
 
     public static boolean cycleDetection(ArrayList<Edge>[] graph, int src, boolean[] vis) {
 
@@ -410,8 +403,7 @@ public class construction {
         System.out.println(res);
     }
 
-       /**************************************************************/
-
+    /**************************************************************/
 
     public static class BFS_Pair {
         int vtx = 0;
@@ -449,7 +441,114 @@ public class construction {
 
     }
 
-      /**************************************************************/
+    /**************************************************************/
+
+    public static int infectionSpread(ArrayList<Edge>[] graph, int src, int time) {
+
+        LinkedList<Integer> que = new LinkedList<>();
+        boolean[] vis = new boolean[graph.length];
+        que.addLast(src);
+        int lvl = 1;
+        int infecTedPer = 0;
+
+        while (que.size() != 0) {
+            int qSize = que.size();
+
+            if (lvl > time) {
+                break;
+            }
+
+            for (int i = 0; i < qSize; i++) {
+
+                int rem = que.removeFirst();
+                if (vis[rem])
+                    continue;
+                infecTedPer++;
+                vis[rem] = true;
+
+                for (Edge e : graph[rem]) {
+                    System.out.println(e);
+                    if (!vis[e.nbr]) {
+                        que.addLast(e.nbr);
+                    }
+                }
+
+            }
+
+            lvl++;
+
+        }
+
+        return infecTedPer;
+    }
+
+    /**************************************************************/
+
+    public static boolean biPartite(ArrayList<Edge>[] graph, int src , int[] vis) {
+
+        LinkedList<Integer> q = new LinkedList<>();
+        q.add(src);
+        boolean isBap = true;
+        boolean cycle = false;
+        int lvl = 0; // color;
+
+        while (q.size() != 0) {
+            int qSize = q.size();
+
+            while (qSize-- > 0) {
+
+                int rem = q.removeFirst();
+
+                if (vis[rem] != -1) { // cycle
+                    cycle = true;
+
+                    if (vis[rem] != lvl) {
+                        isBap = false;// not bipartite
+                        break;
+                    }
+
+                    continue;// no conflict
+
+                }
+
+                vis[rem] = lvl;
+
+                for (Edge e : graph[rem]) {
+                    if (vis[e.nbr] == -1) {
+                        q.addLast(e.nbr);
+                    }
+                }
+            }
+
+            lvl = (lvl + 1) % 2; // [0,1] -> red,green
+        }
+
+        if (cycle) {
+            if (isBap)
+                System.out.println("Even length");
+            else
+                System.out.println("Odd length");
+        } else {
+            System.out.println("Acyclic and Bipartite");
+        }
+
+        return isBap;
+
+    }
+
+
+    public static void biPartite(ArrayList<Edge>[] graph){
+        boolean isBAap = true;
+        int[] vis = new int[graph.length];
+        Arrays.fill(vis, -1);
+        for(int i=0;i<graph.length;i++){
+            isBAap = isBAap && biPartite(graph, i,vis);
+        }
+
+        System.out.println(isBAap);
+    }
+
+    /**************************************************************/
 
     public static void Construction() {
         int N = 7;
