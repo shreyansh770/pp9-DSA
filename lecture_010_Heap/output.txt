@@ -1,0 +1,60 @@
+Comapany: Samsung
+Model: ultra20
+rAM: 18
+Storage: 1000
+Battery: 5100
+
+Comapany: Samsung
+Model: ultra20
+rAM: 12
+Storage: 1000
+Battery: 5200
+
+Comapany: Samsung
+Model: ultra20
+rAM: 12
+Storage: 1000
+Battery: 5100
+
+Comapany: onePlus
+Model: 8Pro
+rAM: 12
+Storage: 128
+Battery: 4230
+
+Comapany: Apple
+Model: iphone12Pro
+rAM: 12
+Storage: 128
+Battery: 4120
+
+Comapany: onePlus
+Model: 8Pro
+rAM: 12
+Storage: 64
+Battery: 4230
+
+Comapany: Apple
+Model: iphone12
+rAM: 12
+Storage: 64
+Battery: 4100
+
+Comapany: onePlus
+Model: 8Pro
+rAM: 12
+Storage: 64
+Battery: 4100
+
+Comapany: vivo
+Model: k9
+rAM: 12
+Storage: 64
+Battery: 4100
+
+Comapany: Apple
+Model: iphone12Pro
+rAM: 8
+Storage: 64
+Battery: 4100
+
