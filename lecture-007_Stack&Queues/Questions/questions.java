@@ -98,12 +98,15 @@ public class questions {
     public static void celebrityProb(int[][] arr) {
         int celeb = 0;// we have assumed that 0 is a celeb
         int n = arr.length;
+
+        //celeb should know no one
         for (int i = 0; i < n; i++) {
             if (celeb != i && arr[celeb][i] == 1) {
                 celeb = i;
             }
         }
 
+        // every one knows celeb
         for (int i = 0; i < n; i++) {
             if (celeb == i)
                 continue;

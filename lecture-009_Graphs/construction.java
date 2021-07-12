@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import jdk.javadoc.internal.doclets.formats.html.markup.Script;
+
 
 public class construction {
     public static class Edge {
@@ -130,8 +130,40 @@ public class construction {
 
     /**************************************************************/
 
-    public static void lightestPath(ArrayList<Edge>[] graph, int src, int dest) {
+    public static class lightestPathPair{
+        String psf = "";
+        int wsf = (int)1e9;
+    }
 
+    public static lightestPathPair lighestPath(ArrayList<Edge>[] graph, int src, int dest ,boolean[] vis){
+          if(src == dest){
+              lightestPathPair base = new lightestPathPair();
+              base.psf = "";
+              base.wsf = 0;
+          }
+
+          vis[src] = true;
+
+          lightestPathPair myAns = new lightestPathPair();
+
+          for(Edge e : graph[src]){
+              if(!vis[e.nbr]){
+                lightestPathPair recAns = lighestPath(graph, e.nbr, dest, vis);
+                if(recAns.wsf!=(int)1e9 && recAns.wsf + e.wt < myAns.wsf){
+                    myAns.psf = src + recAns.psf;
+                    myAns.wsf = recAns.wsf + e.wt;
+                }
+              }
+          }
+
+          vis[src] = true;;
+
+          return myAns;
+    }
+
+    public static void lightestPath(ArrayList<Edge>[] graph, int src, int dest) {
+        boolean[] vis = new boolean[graph.length];
+        pathPair ans = lightestPath(graph, src, dest, vis);
         // System.out.println("Lightest Path: " + x + " of weight: " + y);
     }
 
