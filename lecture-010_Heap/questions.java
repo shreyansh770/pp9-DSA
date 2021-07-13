@@ -30,7 +30,7 @@ public class questions {
 
     }
 
-    public static void SortedArray(int[][] arr) {
+    public static void SortedksortedArray(int[][] arr) {
         int n = arr.length, m = arr[0].length;
 
         // a , b me 2D array ke 1D indexes ayenge
