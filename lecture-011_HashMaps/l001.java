@@ -152,7 +152,7 @@ public class l001 {
         // hashset me sirf 'key' hoti hai
         HashSet<Integer> set = new HashSet<>();
         int len=0;
-        int head = 0;
+        int head = 0 , tail=0;
 
         for(int i=0;i<arr.length;i++){
             set.add(arr[i]);
@@ -175,6 +175,13 @@ public class l001 {
             if(right-left-1>len){
                 len = right-left-1;
                 head = left+1;
+                tail  = right-1;
+            }else if(right - left - 1 == len){
+                if(left+1<head){
+                    len = right-left-1;
+                    head = left+1;
+                    tail = right-1;
+                }
             }
             
         }
