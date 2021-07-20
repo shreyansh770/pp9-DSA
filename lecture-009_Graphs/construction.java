@@ -161,9 +161,9 @@ public class construction {
           return myAns;
     }
 
-    public static void lightestPath(ArrayList<Edge>[] graph, int src, int dest) {
+    public static void lighestPath(ArrayList<Edge>[] graph, int src, int dest) {
         boolean[] vis = new boolean[graph.length];
-        pathPair ans = lightestPath(graph, src, dest, vis);
+        lightestPathPair ans = lighestPath(graph, src, dest, vis);
         // System.out.println("Lightest Path: " + x + " of weight: " + y);
     }
 

@@ -1,9 +1,11 @@
-import java.util.*;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
-public class HashMap {
+public class hashMap {
+    // Data Members=========================================
 
     private class Node {
-        Interger key = null;
+        Integer key = null;
         Integer value = null;
 
         Node(Integer key, Integer value) {
@@ -12,123 +14,166 @@ public class HashMap {
         }
     }
 
-    private LinkedList<Node>[] Buckets; // array of linked list
-    private int tNoofNodes = 0;
+    private LinkedList<Node>[] Buckets;
+    private int totalNoOfNodes = 0;
     private int bucketLen = 0;
 
-    // Constructor================================
+    // Constructor==========================================
 
     private void intilize(int size) {
+        bucketLen = size;
         Buckets = new LinkedList[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
             Buckets[i] = new LinkedList<>();
-        }
 
-        this.tNoofNodes = 0;
+        totalNoOfNodes = 0;
     }
 
-    HashMap() {
+    public hashMap() {
         intilize(10);
     }
 
-    // Data Members====================================
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        int tempSize = this.totalNoOfNodes;
+        for (int i = 0; i < this.bucketLen; i++) {
+            LinkedList<Node> group = this.Buckets[i];
+            int size = group.size();
+            while (size-- > 0) {
 
-    // Basic Functions=================================
+                Node node = group.removeFirst();
+                sb.append(node.key + "=" + node.value);
+                group.addLast(node);
+
+                if (--tempSize != 0)
+                    sb.append(",");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    // Basic Functions======================================
 
     public int size() {
-
+        return this.totalNoOfNodes;
     }
 
     public boolean isEmpty() {
+        return this.totalNoOfNodes == 0;
+    }
+
+    // DS Functions=========================================
+
+    public void rehash() {
+        LinkedList<Node>[] tempBuckets = this.Buckets;// shallow copy->address copy
+        intilize((int) (this.bucketLen * 2));
+
+        for (int i = 0; i < tempBuckets.length; i++) {
+            LinkedList<Node> group = tempBuckets[i];
+            int size = group.size();
+            while (size-- > 0) {
+
+                Node node = group.removeFirst();
+                put(node.key , node.value);
+            }
+        }
 
     }
 
-    // Exception=======================================
-    private void underFlowException() throws Exception {
-        if (this.tNoofNodes == 0)
-              throw new Exception("Hashmap UnderFlowException");
-    }  
-    // DS Function=====================================
+    // give us all the key
+    public ArrayList<Integer> keySet() {
+
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < this.bucketLen; i++) {
+            LinkedList<Node> group = this.Buckets[i];
+            int size = group.size();
+            while (size-- > 0) {
+
+                Node node = group.removeFirst();
+                ans.add(node.key);
+                group.addLast(node);
+            }
+        }
+
+        return ans;
+    }
 
     public void put(Integer key, Integer value) {
+        boolean res = containsKey(key);
+        LinkedList<Node> group = getGroup(key);
 
+        if (res) {
+            group.getFirst().value = value;
+        } else {
+            Node node = new Node(key, value);
+            group.addLast(node);
+            this.totalNoOfNodes++;
+            double lambda = group.size() / (1.0 * this.bucketLen);
+
+            if (lambda > 0.4) {
+                rehash();
+            }
+
+        }
+    }
+
+    public void putIfAbsent(Integer key, Integer defaultValue) {
+        boolean res = containsKey(key);
+        LinkedList<Node> group = getGroup(key);
+        if (!res) {
+            Node node = new Node(key, defaultValue);
+            group.addLast(node);
+            this.totalNoOfNodes++;
+        }
     }
 
     public Integer get(Integer key) {
-        LinkedList<Node> node = getGroup(key);
-
-        int gs = node.size();
-
-        while (gs-- > 0) {
-            if (node.getFirst().key == key) {
-                break;
-            }
-
-            node.addLast(node.removeFirst());
-        }
-
-        return node.getFirst().value;
-
+        boolean res = containsKey(key);
+        LinkedList<Node> group = getGroup(key);
+        return res ? group.getFirst().value : null;
     }
 
-    public Integer remove(Integer key) throws Exception{
-
-        underFlowException();
-
-        LinkedList<Node> node = getGroup(key);
-
-        int gs = node.size();
-
-        while (gs-- > 0) {
-            if (node.getFirst().key == key) {
-                LinkedList<Node> ans = node.removeFirst();
-                break;
-
-            }
-
-            node.addLast(node.removeFirst());
-        }
-
-        return ans.value;
+    public Integer getOrDefault(Integer key, Integer defaultValue) {
+        Integer val = get(key);
+        return val != null ? val : defaultValue;
     }
 
+    public Integer remove(Integer key) {
+        boolean res = containsKey(key);
+        LinkedList<Node> group = getGroup(key);
 
-    public Integer getOrDefault(Integer key , Integer defVal){
-        if(constainKey(key)){
-            return get(key);
-        }else{
-            return defVal;
+        if (res) {
+            this.totalNoOfNodes--;
+            return group.removeFirst().key;
         }
+        return null;
     }
 
-    // unordered
-    public boolean constainKey(Integer key) {
-
-        LinkedList<Node> node = getGroup(key);
-
-        int gs = node.size();
+    public boolean containsKey(Integer key) {
+        LinkedList<Node> group = getGroup(key);
+        int gs = group.size();
         boolean res = false;
-
         while (gs-- > 0) {
-            if (node.getFirst().key == key) {
+            if (group.getFirst().key.equals(key)) {
                 res = true;
                 break;
             }
 
-            node.addLast(node.removeFirst());
+            group.addLast(group.removeFirst());
         }
 
         return res;
-
     }
 
-    public LinkedList<Node> getGroup(Integer key) {
+    private LinkedList<Node> getGroup(Integer key) {
         int hc = getHashCode(key);
         return Buckets[hc];
     }
 
-    private int getHashCode(Interger key) {
-        return Maths.abs(key.hashCode()) % bucketLen; // in built java hashCode generator
+    private int getHashCode(Integer key) {
+        return Math.abs(key.hashCode()) % bucketLen;
     }
-
 }
