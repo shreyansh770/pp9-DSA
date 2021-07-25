@@ -123,9 +123,9 @@ public class sorting {
 
 
     public static void main(String[] args) {
-       int[] arr = {7,-2,4,1,3};
+       int[] arr = {1,1,1,0,6,4};
        int data = 3;
-       PartionAnArray(arr, data);
+       PartionOverPivot(arr, arr.length-1);
        print(arr);
     }
 }
