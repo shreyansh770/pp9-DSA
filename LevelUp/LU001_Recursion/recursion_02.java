@@ -2,8 +2,39 @@ import java.util.*;
 
 public class recursion_02 {
     
-    public static void goldMine02(int[][] arr){
-
+    static int getGold(int[][] M , int sr , int sc , int  n , int m , int[][] dir){
+        
+        int gold = 0;
+        int val = M[sr][sc];
+        for(int[] d: dir){
+            int r = sr + d[0];
+            int c = sc + d[1];
+            
+            
+            if(r>=0 && c>=0 && r<n && c<m){
+                int rval = getGold(M , r, c ,n , m , dir);
+                
+                if(rval > gold) gold = rval;
+            }
+        }
+        
+        return gold + val;
+    }
+    
+    static int maxGold(int n, int m, int M[][])
+    {
+        
+        int[][] dir = {{0,1},{1,1},{-1,1}};
+        int gold = 0;
+        
+        for(int j=0;j<m;j++){
+            for(int i=0;i<n;i++){
+                
+                int ans = getGold(M , i , j , n , m,dir);
+                if(ans>gold) gold = ans;
+            }
+        }
+        return gold;
     }
 
 	public static boolean isPalindrome(String str) {
