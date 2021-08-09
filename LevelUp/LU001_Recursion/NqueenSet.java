@@ -169,9 +169,34 @@ public class NqueenSet {
 
     }
 
+    // nQueen using bits
 
+    static int rw = 0, cl = 0, d = 0, ad = 0;
 
-    
+    public static int nQueen_bits(int n, int m, int floor, int tnq) {
+        if (tnq == 0) {
+            return 1;
+        }
+
+        int count = 0;
+        for (int room = 0; room < m; room++) {
+            int r = floor, c = room;
+
+            if ((cl & (1 << c)) == 0 && (d & (1 << (r + c))) == 0 && (ad & (1 << (r - c + m - 1))) == 0) {
+                cl ^= (1 << c);
+                d ^= (1 << (r + c));
+                ad ^= (1 << (r - c + m - 1));
+                count += nQueen_bits(n, m, floor + 1, tnq - 1);
+                cl ^= (1 << c);
+                d ^= (1 << (r + c));
+                ad ^= (1 << (r - c + m - 1));
+            }
+
+        }
+
+        return count;
+    }
+
     public static void main(String[] args) {
 
         boolean[][] boxes = new boolean[4][4];
@@ -179,10 +204,10 @@ public class NqueenSet {
         int n = boxes.length;
         int m = boxes[0].length;
 
-        row = new boolean[n];
-        col = new boolean[m];
-        dig = new boolean[n + m - 1];
-        adig = new boolean[n + m - 1];
+        // row = new boolean[n];
+        // col = new boolean[m];
+        // dig = new boolean[n + m - 1];
+        // adig = new boolean[n + m - 1];
         // System.out.println(nQueen_03(n, m, 0, 4, ""));
     }
 }

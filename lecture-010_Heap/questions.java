@@ -40,7 +40,7 @@ public class questions {
         });
 
         for (int i = 0; i < n; i++) {
-            pq.add(i * m + 0); // har row ke first ele ka index daal rahe hai
+            pq.add(i * m + 0); // har row ke first ele ka 1-d index daal rahe hai
         }
 
         int[] ans = new int[n * m];
