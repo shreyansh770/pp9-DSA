@@ -492,7 +492,8 @@ public class recursion01 {
         // String str = "abc";
 
         ArrayList<String> ans = new ArrayList<>();
-        System.out.println(boardPath(10));
+       ans=  subsequnce("abc",0);
+       System.out.println(ans);
 
     }
 }
