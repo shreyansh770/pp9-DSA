@@ -1,7 +1,7 @@
 public class NqueenSet {
 
     public static boolean isSafeToPlaceQueen(boolean[][] boxes, int r, int c) {
-        // int[][] dir = { { 0, -1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } };
+        // int[][] dir = { { 0, -1 }, { -1, -1 }, { -1, 0 }, { -1, 1 } }; // -> combination
         int[][] dir = { { 0, -1 }, { -1, -1 }, { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 } };
 
         int n = boxes.length, m = boxes[0].length;

@@ -5,29 +5,30 @@ public class question {
     public static int counter = 1;
 
     // count tne
-    public static void friendsPair(int n, int count, boolean[] used, String asf) {
+    public static int c = 1;
+
+    public static void friendsPairing(int count, int n, boolean[] used, String asf) {
         if (count == n) {
-            System.out.println(counter++ + "." + asf);
+            System.out.println(c++ + "." + asf);
             return;
         }
-        int fup = 0;// first unused person;
-        while (fup <= n && used[fup]) {
+
+        int fup = 0; // first un used person
+        while (fup <= n && used[fup])
             fup++;
-        }
 
-        used[fup] = true;// used kar lo
-        friendsPair(n, count + 1, used, asf + "(" + fup + ") ");
+        used[fup] = true; // using it
+        friendsPairing(count + 1, n, used, asf + "(" + fup + ") ");
 
-        for (int pp = fup + 1; pp <= n; pp++) {
+        for (int pp = fup + 1; pp <= n; pp++) { // pair person
             if (!used[pp]) {
                 used[pp] = true;
-                friendsPair(n, count + 2, used, asf + "(" + fup + "," + pp + ") ");
+                friendsPairing(count + 2, n, used, asf + "(" + fup + "," + pp + ") ");
                 used[pp] = false;
             }
         }
 
         used[fup] = false;
-
     }
 
     public static int wordBreak(String str, String ans, HashSet<String> set) {
@@ -59,6 +60,7 @@ public class question {
 
     public static String max = "";
 
+    // test case - >1918757
     public static void findMaximum(String str, int k, int ii) {
         if (k == 0)
             return;
