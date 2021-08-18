@@ -178,7 +178,7 @@ public class l001 {
 
     }
 
-    public static  ListNode oddEvenList(ListNode head) {
+    public static ListNode oddEvenList(ListNode head) {
         ListNode even = new ListNode(-1);// dummy Node
         ListNode ep = even;
 
@@ -209,7 +209,8 @@ public class l001 {
 
     public static ListNode segregate01(ListNode head) {
 
-        if(head == null || head.next == null) return head;
+        if (head == null || head.next == null)
+            return head;
 
         ListNode zero = new ListNode(-1);
         ListNode zp = zero;
@@ -219,13 +220,13 @@ public class l001 {
 
         ListNode curr = head;
 
-        while(curr!=null){
+        while (curr != null) {
 
-            if(curr.data == 1){
-              op.next = curr;
-              op = op.next;
-            }else{
-  
+            if (curr.data == 1) {
+                op.next = curr;
+                op = op.next;
+            } else {
+
                 zp.next = curr;
                 zp = zp.next;
 
@@ -243,10 +244,11 @@ public class l001 {
     }
 
     public static ListNode segregate012(ListNode head) {
-        if(head==null||head.next==null) return null;
+        if (head == null || head.next == null)
+            return null;
 
         ListNode zero = new ListNode(-1);
-        ListNode one  = new ListNode(-1);
+        ListNode one = new ListNode(-1);
         ListNode two = new ListNode(-1);
 
         ListNode zp = zero;
@@ -255,14 +257,14 @@ public class l001 {
 
         ListNode curr = head;
 
-        while(curr!=null){
-            if(curr.data == 0){
-              zp.next = curr;
-              zp = zp.next;
-            }else if(curr.data == 1){
+        while (curr != null) {
+            if (curr.data == 0) {
+                zp.next = curr;
+                zp = zp.next;
+            } else if (curr.data == 1) {
                 op.next = curr;
                 op = op.next;
-            }else{
+            } else {
                 tp.next = curr;
                 tp = tp.next;
             }
@@ -270,12 +272,248 @@ public class l001 {
             curr = curr.next;
         }
 
-         op.next = two.next;
-         zp.next = one.next;
-          tp.next = null;
+        op.next = two.next;
+        zp.next = one.next;
+        tp.next = null;
         head = zero.next;
 
+        return head;
+    }
 
+    /* Merge Sort Linked List */
+
+    public static ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+
+        if (l1 == null || l2 == null)
+            return l1 != null ? l1 : l2;
+
+        ListNode dummy = new ListNode(-1);
+        ListNode prev = dummy, c1 = l1, c2 = l2;
+
+        while (c1 != null && c2 != null) {
+            if (c1.data <= c2.data) {
+                prev.next = c1;
+                c1 = c1.next;
+            } else {
+                prev.next = c2;
+                c2 = c2.next;
+            }
+
+            prev = prev.next;
+        }
+
+        prev.next = c1 != null ? c1 : c2;
+
+        return dummy.next;
+    }
+
+    public static ListNode middleNode(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+
+    }
+
+    public static ListNode sortList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode mid = middleNode(head);
+
+        ListNode nhead = mid.next;
+        mid.next = null;
+
+        ListNode left = sortList(head);
+        ListNode right = sortList(nhead);
+
+        return mergeTwoLists(left, right);
+
+    }
+
+    /* Merge K sorted List */
+
+    public static ListNode mergeKsortedLL(ListNode[] lists, int si, int ei) {
+        if (si == ei)
+            return lists[si];
+
+        int mid = (si + ei) / 2;
+
+        ListNode left = mergeKsortedLL(lists, si, mid);
+        ListNode right = mergeKsortedLL(lists, mid + 1, ei);
+
+        return mergeTwoLists(left, right);
+    }
+
+    public static ListNode mergeKsortedLL(ListNode[] lists) {
+        if (lists.length == 0)
+            return null;
+        return mergeKsortedLL(lists, 0, lists.length - 1);
+    }
+
+    /* Reverse in k Groups */
+
+    private static ListNode th = null, tt = null;
+
+    private static void addFirstNode(ListNode node) {
+        if (th == null) {
+            th = tt = node;
+        } else {
+            node.next = th;
+            th = node;
+        }
+    }
+
+    public static int length(ListNode head) {
+        if (head == null)
+            return 0;
+
+        int len = 0;
+        ListNode curr = head;
+        while (curr != null) {
+            curr = curr.next;
+            len++;
+        }
+
+        return len;
+    }
+
+    public static ListNode reverseInKGroup(ListNode head, int k) {
+        if (head == null || head.next == null || k <= 1)
+            return head;
+
+        int len = length(head);
+        ListNode curr = head, oh = null, ot = null;
+        while (len >= k) {
+            int tempK = k;
+            while (tempK-- > 0) {
+                ListNode forw = curr.next;
+                curr.next = null;
+                addFirstNode(curr);
+                curr = forw;
+            }
+
+            if (oh == null) {
+                oh = th;
+                ot = tt;
+            } else {
+                ot.next = th;
+                ot = tt;
+            }
+
+            th = tt = null;
+            len -= k;
+        }
+
+        ot.next = curr;
+        return oh;
+    }
+
+    /* Reverse in Range */
+
+    public static ListNode reverseInRange(ListNode head, int n, int m) {
+        if (head == null || head.next == null)
+            return head;
+
+        if (n == m)
+            return head;
+
+        ListNode curr1 = head;
+        ListNode curr2 = head;
+        ListNode prev = curr1;
+        ListNode ahead = curr2.next;
+
+        while (--n > 0) {
+            prev = curr1;
+            curr1 = curr1.next;
+        }
+
+        while (--m > 0) {
+            curr2 = curr2.next;
+            ahead = curr2.next;
+        }
+
+        curr2.next = null;
+        if (prev != curr1)
+            prev.next = null;
+
+        ListNode temp = reverse(curr1);
+
+        if (prev != curr1)
+            prev.next = temp;
+
+        curr1.next = ahead;
+
+        if (head != curr1) {
+            return head;
+        } else {
+            return temp;
+        }
+
+    }
+
+    public static ListNode reverseInRange_02(ListNode head, int n, int m) {
+
+        if (head == null || head.next == null)
+            return head;
+
+        if (n == m)
+           return head;
+
+        ListNode dummy = new ListNode(-1) , prev = dummy , curr = head;
+        int i = 1;
+
+        while(i<=m){
+  
+            while(i>= n && i<=m){
+                ListNode forw = curr.next;
+                curr.next = null;
+                addFirstNode(curr);
+                curr = forw;
+            }
+
+            if(i > m){
+                prev.next = th;
+                tt.next = curr;
+                break;
+            }
+
+            i++;
+            prev.next = curr;
+            prev = curr;
+            curr = curr.next;
+        }
+
+       return dummy.next;
+        
+    }
+
+    public static ListNode removeDuplicates(ListNode head) {
+        if(head == null || head.next  == null) return head;
+        
+        ListNode curr = head;
+        ListNode trav = head.next;
+        
+        while(trav.next!=null){
+            
+            if(trav.data!=curr.data){
+                curr.next = trav;
+                curr = trav;
+            }
+            
+            trav = trav.next;
+        }
+        
+        if(trav.next==null && trav.data == curr.data) curr.next = null;
+        
         return head;
     }
 
