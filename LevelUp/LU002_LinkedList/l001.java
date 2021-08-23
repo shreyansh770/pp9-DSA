@@ -3,6 +3,7 @@ public class l001 {
     public static class ListNode {
         int val = 0;
         ListNode next = null;
+        ListNode random = null;
 
         ListNode(int val) {
             this.val = val;
@@ -700,7 +701,7 @@ public class l001 {
             int sum = carry + (prev.next != null ? prev.next.val : 0) + (l2 != null ? l2.val : 0);
 
             carry = sum / 10;
-            sum = sum % 10;
+            sum %= 10;
 
             if (prev.next != null)
                 prev.next.val = sum;
@@ -714,24 +715,26 @@ public class l001 {
     }
 
     public static ListNode multiplyLinkedListWithDigit(ListNode l1, int digit) {
-        ListNode head = new ListNode(-1); // dummy.
-        ListNode curr = head;
+        ListNode dummy = new ListNode(-1); // dummy.
+        ListNode prev = dummy;
+        ListNode curr = l1;
 
         int carry = 0;
-        while (l1 != null || carry != 0) {
-            int sum = carry + (l1 != null ? (l1.val * digit) : 0);
+        while (curr != null || carry != 0) {
+            int sum = carry + (curr != null ? (curr.val * digit) : 0);
 
             carry = sum / 10;
             sum = sum % 10;
 
-            curr.next = new ListNode(sum);
+            prev.next = new ListNode(sum);
+            prev = prev.next;
 
-            if (l1 != null)
-                l1 = l1.next;
-            curr = curr.next;
+            if (curr != null)
+                curr = curr.next;
+
         }
 
-        return head.next;
+        return dummy.next;
     }
 
     public static ListNode multiplyTwoLL(ListNode l1, ListNode l2) {
@@ -753,9 +756,62 @@ public class l001 {
         return reverseList(ans);
     }
 
+    /* Copy Linkedlist With Random Pointers */
+
+    // a->a->b->b->c->c
+    public static void copyList(ListNode head){
+        ListNode curr = head;
+        while(curr!=null){
+            ListNode fwrd = curr.next;
+            ListNode node = new ListNode(curr.val);
+            curr.next = node;
+            node.next = fwrd;
+            curr = fwrd;
+        }
+    }
+
+    public static void copyRandoms(ListNode head){
+        ListNode curr = head;
+        while(curr!=null){
+            if(curr.random!=null){
+                curr.next.random = curr.random.next;
+            }
+
+            curr = curr.next.next;
+        }
+    }
+
+    public static ListNode extractList(ListNode head){
+
+        ListNode dummy = new ListNode(-1);
+        ListNode prev = dummy;
+        ListNode curr = head;
+
+        while(curr!=null){
+            ListNode fwrd = curr.next.next;//backup
+
+            prev.next = curr.next;//links
+            curr.next = fwrd;
+
+            curr = fwrd;//mmove
+            prev = prev.next;
+
+        }
+
+        return dummy.next;
+    }
+   
+
+    public static ListNode copyRandomList(ListNode head) {
+
+        copyList(head);
+        copyRandoms(head);
+
+        return extractList(head);
 
 
-    
+    }
+
     public static void main(String[] args) {
 
     }
