@@ -759,9 +759,9 @@ public class l001 {
     /* Copy Linkedlist With Random Pointers */
 
     // a->a->b->b->c->c
-    public static void copyList(ListNode head){
+    public static void copyList(ListNode head) {
         ListNode curr = head;
-        while(curr!=null){
+        while (curr != null) {
             ListNode fwrd = curr.next;
             ListNode node = new ListNode(curr.val);
             curr.next = node;
@@ -770,10 +770,10 @@ public class l001 {
         }
     }
 
-    public static void copyRandoms(ListNode head){
+    public static void copyRandoms(ListNode head) {
         ListNode curr = head;
-        while(curr!=null){
-            if(curr.random!=null){
+        while (curr != null) {
+            if (curr.random != null) {
                 curr.next.random = curr.random.next;
             }
 
@@ -781,26 +781,25 @@ public class l001 {
         }
     }
 
-    public static ListNode extractList(ListNode head){
+    public static ListNode extractList(ListNode head) {
 
         ListNode dummy = new ListNode(-1);
         ListNode prev = dummy;
         ListNode curr = head;
 
-        while(curr!=null){
-            ListNode fwrd = curr.next.next;//backup
+        while (curr != null) {
+            ListNode fwrd = curr.next.next;// backup
 
-            prev.next = curr.next;//links
+            prev.next = curr.next;// links
             curr.next = fwrd;
 
-            curr = fwrd;//mmove
+            curr = fwrd;// mmove
             prev = prev.next;
 
         }
 
         return dummy.next;
     }
-   
 
     public static ListNode copyRandomList(ListNode head) {
 
@@ -809,6 +808,144 @@ public class l001 {
 
         return extractList(head);
 
+    }
+
+    public static ListNode getTail(ListNode head) {
+        ListNode tail = head;
+        while (tail.next != null) {
+
+            tail = tail.next;
+
+        }
+
+        return tail;
+    }
+
+    public static ListNode segregateOnLastIndex(ListNode head) {
+
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode dl = new ListNode(-1);
+        ListNode dr = new ListNode(-1);
+
+        ListNode lh = dl, rh = dr, curr = head;
+
+        ListNode tail = getTail(head);
+
+        int val = tail.val;
+
+        while (curr != null) {
+
+            if (curr.val <= val) {
+                lh.next = curr;
+                lh = lh.next;
+
+            } else {
+                rh.next = curr;
+                rh = rh.next;
+            }
+
+            curr = curr.next;
+        }
+
+        lh.next = dr.next;
+        rh.next = null;
+
+        return dl.next;
+    }
+
+    public static ListNode segregate(ListNode head, int pivotIdx) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode pivotNode = head;
+        while (pivotIdx-- > 0)
+            pivotNode = pivotNode.next;
+
+        ListNode smaller = new ListNode(-1), larger = new ListNode(-1), sp = smaller, lp = larger, curr = head;
+        while (curr != null) {
+            if (curr != pivotNode && curr.val <= pivotNode.val) {
+                sp.next = curr;
+                sp = sp.next;
+            } else if (curr != pivotNode) {
+                lp.next = curr;
+                lp = lp.next;
+            }
+
+            curr = curr.next;
+        }
+
+        sp.next = lp.next = pivotNode.next = null;
+        sp.next = pivotNode;
+        pivotNode.next = larger.next;
+
+        return smaller.next;
+    }
+
+    // Quick Sort(->n^2)
+
+    public static ListNode[] getSegregateNodes(ListNode head, int pivotIdx) {
+        if (head == null || head.next == null)
+            return new ListNode[] { null, head, null };
+
+        ListNode pivotNode = head;
+        while (pivotIdx-- > 0)
+            pivotNode = pivotNode.next;
+
+        ListNode smaller = new ListNode(-1), larger = new ListNode(-1), sp = smaller, lp = larger, curr = head;
+        while (curr != null) {
+            if (curr != pivotNode && curr.val <= pivotNode.val) {
+                sp.next = curr;
+                sp = sp.next;
+            } else if (curr != pivotNode) {
+                lp.next = curr;
+                lp = lp.next;
+            }
+
+            curr = curr.next;
+        }
+
+        sp.next = lp.next = pivotNode.next = null;
+
+        return new ListNode[] { smaller.next, pivotNode, larger.next };
+    }
+
+    public static ListNode[] mergeList(ListNode[] left, ListNode pivotNode, ListNode[] right) {
+        ListNode head = null;
+        ListNode tail = null;
+        if (left[0] != null && right[0] != null) {
+            head = left[0];
+            tail = right[1];
+            left[1].next = pivotNode;
+            pivotNode.next = right[0];
+        } else if (left[0] != null) {
+            head = left[0];
+            tail = pivotNode;
+            left[1].next = pivotNode;
+        } else if (right[0] != null) {
+            head = pivotNode;
+            tail = right[1];
+            pivotNode.next = right[0];
+        } else {
+            head = tail = pivotNode;
+        }
+
+        return new ListNode[] { head, tail };
+    }
+
+    public static ListNode[] quickSort(ListNode head) {
+        if (head == null || head.next == null)
+            return new ListNode[] { head, head };
+
+        int len = getLength(head);
+
+        ListNode[] segregateNodes = getSegregateNodes(head, len / 2);
+
+        ListNode[] left = quickSort(segregateNodes[0]);
+        ListNode[] right = quickSort(segregateNodes[2]);
+
+        return mergeList(left, segregateNodes[1], right);
 
     }
 

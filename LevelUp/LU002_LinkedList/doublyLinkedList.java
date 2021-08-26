@@ -102,6 +102,8 @@ public class doublyLinkedList {
             node.prev = this.tail;
             this.tail = node;
         }
+
+        this.size ++;
     }
 
     public void addLast(int val) {
