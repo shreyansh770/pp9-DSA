@@ -232,25 +232,168 @@ public class l002_stringSet {
 
     
     //Wildcard Matching
-    public String removeStars(String str){
-        if(str.length() == 0) return str;
+    public String removeStars(String str) {
+        if (str.length() == 0)
+            return str;
 
-            StringBuilder sb = new StringBuilder();
-            sb.append(str.charAt(0));
-            int i  = 1;
-            while(i<str.length()){
-                while(i<str.length() && sb.charAt(sb.length()-1) == '*' && str.charAt(i)=='*'){
-                    i++;
-                }
+        StringBuilder sb = new StringBuilder();
+        sb.append(str.charAt(0));
 
-                sb.append(str.charAt(i));
+        int i = 1;
+        while (i < str.length()) {
+            while (i < str.length() && sb.charAt(sb.length() - 1) == '*' && str.charAt(i) == '*')
                 i++;
 
-            }
+            if (i < str.length())
+                sb.append(str.charAt(i));
+            i++;
+        }
 
-            return sb.toString();
+        return sb.toString();
     }
 
+    public int isMatch(String s, String p, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0) {
+            if (n == 0 && m == 0)
+                return dp[n][m] = 1; // true
+            else if (m == 1 && p.charAt(m - 1) == '*')
+                return dp[n][m] = 1;
+            else
+                return dp[n][m] = 0;
+        }
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        char ch1 = s.charAt(n - 1);
+        char ch2 = p.charAt(m - 1);
+
+        if (ch1 == ch2 || ch2 == '?') {
+            return dp[n][m] = isMatch(s, p, n - 1, m - 1, dp);
+        } else if (ch2 == '*') {
+            boolean res = false;
+            res = res || isMatch(s, p, n - 1, m, dp) == 1; // sequnence of character
+            res = res || isMatch(s, p, n, m - 1, dp) == 1; // empty string
+
+            return dp[n][m] = res ? 1 : 0;
+
+        } else
+            return dp[n][m] = 0;
+    }
+
+    public boolean isMatch(String s, String p) {
+        p = removeStars(p);
+        int n = s.length(), m = p.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        int ans = isMatch(s, p, n, m, dp);
+
+        return ans == 1;
+    }
+
+    //REGEX
+
+
+
+
+
+    // Uncrossed lines
+    class Solution {
+    
+        public int unCrossed(int[] nums1, int[] nums2,int n,int m,int[][] dp){
+            
+            if(n==0  || m==0){
+                return dp[n][m] = 0;
+            }
+            
+            if(dp[n][m]!=-1) return dp[n][m];
+            
+            if(nums1[n-1] == nums2[m-1]){
+                return dp[n][m] = unCrossed(nums1,nums2,n-1,m-1,dp)+1;
+            }else{
+                return dp[n][m] = Math.max(unCrossed(nums1,nums2,n-1,m,dp),unCrossed(nums1,nums2,n,m-1,dp));
+            }
+            
+        }
+        
+        
+        public int maxUncrossedLines(int[] nums1, int[] nums2) {
+            
+            int n = nums1.length;
+            int m = nums2.length;
+            
+            int[][] dp =new int[n+1][m+1];
+            
+            for(int[] d : dp) Arrays.fill(d,-1);
+            
+            return unCrossed(nums1,nums2,n,m,dp);
+        }
+    }
+
+    // Max dot product
+
+    public int helper(int[] nums1,int[] nums2,int n,int m,int[][] dp){
+        
+        if(n==0 || m==0) return dp[n][m] = -(int)1e8;// res
+        
+        if(dp[n][m]!=-(int)1e9) return dp[n][m];
+            
+         int prod = nums1[n-1] * nums2[m-1];
+        
+         int yes = helper(nums1,nums2,n-1,m-1,dp) + prod; // yesall
+        
+         int no = Math.max(helper(nums1,nums2,n,m-1,dp),helper(nums1,nums2,n-1,m,dp));// kisi ek ko hata diya
+        
+         return dp[n][m] = Math.max(Math.max(yes,no),prod);
+        
+    }
+    
+    
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        
+        int n = nums1.length;
+        int m = nums2.length;
+        
+        int[][] dp = new int[n+1][m+1];
+        
+        for(int[] d : dp) Arrays.fill(d,-(int)1e9);
+        
+        return helper(nums1,nums2,n,m,dp);
+    }
+
+
+    //  Longest Common Substring
+    public int helper(String s1 , String s2,int n,int m,int[][] dp){
+        int len = 0;
+        for(int i=0;i<=n;i++){
+            for(int j=0;j<=m;j++){
+                if(i==0||j==0){
+                    dp[i][j] = 0;
+                    continue;
+                }
+                
+                if(s1.charAt(i-1) == s2.charAt(j-1)){
+                    dp[i][j] = dp[i-1][j-1] +1;
+                    len = Math.max(len,dp[i][j]);
+                }else{
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        
+        return len;
+        
+    }
+    
+    public int longestCommonSubstr(String S1, String S2, int n, int m){
+        // code here
+        
+        int[][] dp = new int[n+1][m+1];
+        
+        return helper(S1,S2,n,m,dp);
+    }
 
     public static void main(String[] args) {
 
