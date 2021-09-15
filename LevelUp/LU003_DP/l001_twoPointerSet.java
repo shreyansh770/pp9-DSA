@@ -383,6 +383,39 @@ public class l001_twoPointerSet {
         return dp[sr][sc] = maxVal;
     }
 
+
+    public static void goldMine_backEngg(int[][] dir, int sr, int sc, int[][] dp,String asf) {
+
+      
+        if(sc == dp[0].length-1){
+            System.out.println(asf+"("+sr+" ,"+sc+") ");
+            return;
+        }
+        
+
+        int maxGold = 0;
+
+        int idx = -1;
+
+        for(int d=0;d<dir.length;d++){
+            int r = sr + dir[d][0];
+            int c = sc + dir[d][1];
+
+            if( r>=0 && c>=0 && r< dp.length && c<dp[0].length && dp[r][c] >maxGold){
+                maxGold = dp[r][c];
+                idx = d;
+            }
+        }
+
+        if(idx!=-1){
+            int r = sr + dir[idx][0] , c = sc + dir[idx][1];
+            goldMine_backEngg(dir, r, c, dp, asf+"("+sr+" ,"+sc+") ");
+        }
+
+
+
+     }
+
     public static int maxGold(int n, int m, int M[][]) {
         int[][] dir = { { 0, 1 }, { -1, 1 }, { 1, 1 } };
         int[][] dp = new int[n][m];
@@ -390,47 +423,51 @@ public class l001_twoPointerSet {
         for (int[] d : dp)
             Arrays.fill(d, -1);
         int gold = 0;
+        int rIdx = 0;
         for (int r = 0; r < n; r++) {
-            gold = Math.max(gold, gold(n, m, r, 0, M, dp, dir));
+            int ans = Math.max(gold, gold(n, m, r, 0, M, dp, dir));
+            if(ans > gold){
+                ans  = gold;
+                rIdx = r;
+            }
         }
 
-        display2D(M);
+        goldMine_backEngg(dir, rIdx, 0, dp, "");
+
         System.out.println();
         display2D(dp);
         return gold;
 
     }
 
+    public long countFriendsPairing_memo(int n, long[] dp) {
 
-    public long countFriendsPairing_memo(int n,long[] dp){
-        
-        if(n == 0){
+        if (n == 0) {
             return dp[n] = 1;
         }
 
-        if(dp[n]!=-1) return dp[n];
+        if (dp[n] != -1)
+            return dp[n];
 
-        long single = countFriendsPairing_memo(n-1,dp);
-        long pairUp = n-2>=0 ?countFriendsPairing_memo(n-2,dp)*(n-1) : 0;
+        long single = countFriendsPairing_memo(n - 1, dp);
+        long pairUp = n - 2 >= 0 ? countFriendsPairing_memo(n - 2, dp) * (n - 1) : 0;
 
-        return dp[n] = (single + pairUp)%mod;
+        return dp[n] = (single + pairUp) % mod;
     }
 
+    public long countFriendsPairing_tabu(int n, long[] dp) {
 
-    public long countFriendsPairing_tabu(int n,long[] dp){
-
-        for(int i=0;i<=n;i++){
-            if(n <= 1){
-                 dp[n] = 1;
-                 continue;
+        for (int i = 0; i <= n; i++) {
+            if (n <= 1) {
+                dp[n] = 1;
+                continue;
             }
 
-            dp[i] = (dp[i-1] + (dp[i-2]*(i-1))%mod)%mod;
+            dp[i] = (dp[i - 1] + (dp[i - 2] * (i - 1)) % mod) % mod;
         }
-        
+
         return dp[n];
 
-       
     }
 
     // top down
@@ -443,7 +480,8 @@ public class l001_twoPointerSet {
             return dp[n][k];
 
         int selfGroup = divideInKGroup(n - 1, k - 1, dp);
-        int partOfGroup = divideInKGroup(n - 1, k, dp) * k;// usne kaha ke tum apne grps bna lo mai kisi ke sath bhi a jauga
+        int partOfGroup = divideInKGroup(n - 1, k, dp) * k;// usne kaha ke tum apne grps bna lo mai kisi ke sath bhi a
+                                                           // jauga
 
         return dp[n][k] = selfGroup + partOfGroup;
     }
@@ -452,21 +490,19 @@ public class l001_twoPointerSet {
     public static int divideInKGroup_tabu(int N, int K, int[][] dp) {
 
         // n != 0 && k!=0
-        for(int n =1;n<=N;n++){
-            for(int k=1;k<=K;k++){
+        for (int n = 1; n <= N; n++) {
+            for (int k = 1; k <= K; k++) {
                 if (n == k || k == 1) {
                     dp[n][k] = 1;
                     continue;
                 }
 
-                dp[n][k] = dp[n-1][k-1] + dp[n-1][k]*k;
+                dp[n][k] = dp[n - 1][k - 1] + dp[n - 1][k] * k;
             }
         }
 
         return dp[N][K];
     }
-
-    
 
     public static void divideInKGroup() {
         int n = 5;
@@ -477,13 +513,14 @@ public class l001_twoPointerSet {
         display2D(dp);
     }
 
-
-
     public static void main(String[] args) {
         // fibo();
         int[][] arr = { { 10, 33, 13, 15 }, { 22, 21, 04, 1 }, { 5, 0, 2, 3 }, { 0, 6, 14, 2 } };
         // maxGold(arr.length, arr[0].length, arr);
-        divideInKGroup();
+        int n = 4, m = 4;
+        int[][] M = { { 1, 3, 1, 5 }, { 2, 2, 4, 1 }, { 5, 0, 2, 3 }, { 0, 6, 1, 2 } };
+
+        maxGold(n, m, M);
     }
 
 }

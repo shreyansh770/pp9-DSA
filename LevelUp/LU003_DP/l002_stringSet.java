@@ -226,12 +226,11 @@ public class l002_stringSet {
             return dp[n][m] = Math.min(Math.min(insert, delete), replace);
         }
     }
-    
+
     // q2-> we have been given three arrays -> insert, delete,replace -> with the
     // cost of inserting ,deleting & replacing any char from a to z
 
-    
-    //Wildcard Matching
+    // Wildcard Matching
     public String removeStars(String str) {
         if (str.length() == 0)
             return str;
@@ -293,111 +292,265 @@ public class l002_stringSet {
         return ans == 1;
     }
 
-    //REGEX
-
-
-
-
+    // REGEX
 
     // Uncrossed lines
-    class Solution {
-    
-        public int unCrossed(int[] nums1, int[] nums2,int n,int m,int[][] dp){
-            
-            if(n==0  || m==0){
-                return dp[n][m] = 0;
-            }
-            
-            if(dp[n][m]!=-1) return dp[n][m];
-            
-            if(nums1[n-1] == nums2[m-1]){
-                return dp[n][m] = unCrossed(nums1,nums2,n-1,m-1,dp)+1;
-            }else{
-                return dp[n][m] = Math.max(unCrossed(nums1,nums2,n-1,m,dp),unCrossed(nums1,nums2,n,m-1,dp));
-            }
-            
+
+    public int unCrossed(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
+
+        if (n == 0 || m == 0) {
+            return dp[n][m] = 0;
         }
-        
-        
-        public int maxUncrossedLines(int[] nums1, int[] nums2) {
-            
-            int n = nums1.length;
-            int m = nums2.length;
-            
-            int[][] dp =new int[n+1][m+1];
-            
-            for(int[] d : dp) Arrays.fill(d,-1);
-            
-            return unCrossed(nums1,nums2,n,m,dp);
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        if (nums1[n - 1] == nums2[m - 1]) {
+            return dp[n][m] = unCrossed(nums1, nums2, n - 1, m - 1, dp) + 1;
+        } else {
+            return dp[n][m] = Math.max(unCrossed(nums1, nums2, n - 1, m, dp), unCrossed(nums1, nums2, n, m - 1, dp));
         }
+
+    }
+
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+
+        int n = nums1.length;
+        int m = nums2.length;
+
+        int[][] dp = new int[n + 1][m + 1];
+
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return unCrossed(nums1, nums2, n, m, dp);
     }
 
     // Max dot product
 
-    public int helper(int[] nums1,int[] nums2,int n,int m,int[][] dp){
-        
-        if(n==0 || m==0) return dp[n][m] = -(int)1e8;// res
-        
-        if(dp[n][m]!=-(int)1e9) return dp[n][m];
-            
-         int prod = nums1[n-1] * nums2[m-1];
-        
-         int yes = helper(nums1,nums2,n-1,m-1,dp) + prod; // yesall
-        
-         int no = Math.max(helper(nums1,nums2,n,m-1,dp),helper(nums1,nums2,n-1,m,dp));// kisi ek ko hata diya
-        
-         return dp[n][m] = Math.max(Math.max(yes,no),prod);
-        
+    public int helper(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
+
+        if (n == 0 || m == 0)
+            return dp[n][m] = -(int) 1e8;// res
+
+        if (dp[n][m] != -(int) 1e9)
+            return dp[n][m];
+
+        int prod = nums1[n - 1] * nums2[m - 1];
+
+        int yes = helper(nums1, nums2, n - 1, m - 1, dp) + prod; // yesall
+
+        int no = Math.max(helper(nums1, nums2, n, m - 1, dp), helper(nums1, nums2, n - 1, m, dp));// kisi ek ko hata
+                                                                                                  // diya
+
+        return dp[n][m] = Math.max(Math.max(yes, no), prod);
+
     }
-    
-    
+
     public int maxDotProduct(int[] nums1, int[] nums2) {
-        
+
         int n = nums1.length;
         int m = nums2.length;
-        
-        int[][] dp = new int[n+1][m+1];
-        
-        for(int[] d : dp) Arrays.fill(d,-(int)1e9);
-        
-        return helper(nums1,nums2,n,m,dp);
+
+        int[][] dp = new int[n + 1][m + 1];
+
+        for (int[] d : dp)
+            Arrays.fill(d, -(int) 1e9);
+
+        return helper(nums1, nums2, n, m, dp);
     }
 
-
-    //  Longest Common Substring
-    public int helper(String s1 , String s2,int n,int m,int[][] dp){
+    // Longest Common Substring
+    public int longestCommonSubstr_DP(String s1, String s2, int n, int m, int[][] dp) {
         int len = 0;
-        for(int i=0;i<=n;i++){
-            for(int j=0;j<=m;j++){
-                if(i==0||j==0){
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= m; j++) {
+                if (i == 0 || j == 0) {
                     dp[i][j] = 0;
                     continue;
                 }
-                
-                if(s1.charAt(i-1) == s2.charAt(j-1)){
-                    dp[i][j] = dp[i-1][j-1] +1;
-                    len = Math.max(len,dp[i][j]);
-                }else{
+
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                    len = Math.max(len, dp[i][j]);
+                } else {
                     dp[i][j] = 0;
                 }
             }
         }
-        
+
         return len;
-        
-    }
-    
-    public int longestCommonSubstr(String S1, String S2, int n, int m){
-        // code here
-        
-        int[][] dp = new int[n+1][m+1];
-        
-        return helper(S1,S2,n,m,dp);
+
     }
 
+    public int longestCommonSubstr(String S1, String S2, int n, int m) {
+        // code here
+
+        int[][] dp = new int[n + 1][m + 1];
+
+        return longestCommonSubstr_DP(S1, S2, n, m, dp);
+    }
+
+    // https://practice.geeksforgeeks.org/problems/count-subsequences-of-type-ai-bj-ck4425/1
+    public int fun(String s) {
+        int n = s.length();
+
+        // aCount-> a^i , bCount->a^i b^j , cCount->a^i b^j c^k
+        int aCount = 0, bCount = 0, cCount = 0, emptyStr = 1;
+        int mod = (int) 1e9 + 7;
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+
+            if (ch == 'a') {
+                aCount = (aCount + (emptyStr + aCount) % mod) % mod;
+            } else if (ch == 'b') {
+                bCount = (bCount + (aCount + bCount) % mod) % mod;
+            } else if (ch == 'c') {
+                cCount = (cCount + (bCount + cCount) % mod) % mod;
+            }
+        }
+
+        return cCount;
+    }
+
+    // Longest Palindromic Subsequence
+    public String longestPalindrome(String s) {
+
+        int count = 0;
+        int len = 0;
+        int si = 0;
+
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+
+        for (int g = 0; g < n; g++) {
+
+            for (int i = 0, j = g; j < n; i++, j++) {
+                if (g == 0) {
+                    dp[i][j] = true;
+                } else if (g == 1 && s.charAt(i) == s.charAt(j)) {
+                    dp[i][j] = true;
+                } else {
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+
+                }
+                if (dp[i][j]) {
+                    if (j - i + 1 > len) {
+                        len = j - i + 1;
+                        si = i;
+                    }
+                    count++;
+                }
+            }
+
+        }
+        return s.substring(si, si + len);
+
+    }
+
+    // Word Break
+
+    public boolean wordBreak(String str, List<String> wordDict) {
+        HashSet<String> set = new HashSet<>();
+        int len = 0; // len of lrgest wrd in dict
+        int n = str.length();
+        for (String s : wordDict) {
+            set.add(s);
+            len = Math.max(s.length(), len);
+        }
+
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true; //
+
+        // dp[k] = true means vaha tak ke string space seperated sequence me break kr
+        // skte hai
+        for (int i = 0; i <= n; i++) {
+            if (!dp[i])
+                continue;
+
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = str.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + l] = true;
+                }
+
+            }
+        }
+
+        return dp[n];
+    }
+
+    public static String lpss_backEngg(String str, int si, int ei, int[][] dp) {
+
+        if (si >= ei) {
+            return si == ei ? str.charAt(si) + " " : "";
+        }
+
+        if (str.charAt(si) == str.charAt(ei)) {
+
+            return str.charAt(si) + lpss_backEngg(str, si + 1, ei - 1, dp) + str.charAt(ei);
+        } else if (dp[si + 1][ei] > dp[si + 1][ei - 1]) {
+            return lpss_backEngg(str, si + 1, ei, dp);
+        } else {
+            return lpss_backEngg(str, si, ei - 1, dp);
+        }
+    }
+
+
+                /*******************************************/
+
+    public void wordBreak_backEngg(String s, int idx, boolean[] dp, int maxLen, List<String> wordDict,
+            HashSet<String> set, String ssf, List<String> ans) {
+        if (idx >= s.length()) {
+            ans.add(ssf.substring(0, ssf.length() - 1));
+            return;
+        }
+
+        for (int l = 1; l <= maxLen && idx + l <= s.length(); l++) {
+            if (dp[idx + l]) {
+                String substr = s.substring(idx, idx + l);
+                if (set.contains(substr)) {
+                    wordBreak_backEngg(s, idx + l, dp, maxLen, wordDict, set, ssf + substr + " ", ans);
+                }
+            }
+        }
+    }
+
+    public List<String> wordBreak_(String s, List<String> wordDict) {
+        HashSet<String> set = new HashSet<>();
+        int len = 0, n = s.length();
+        for (String ss : wordDict) {
+            set.add(ss);
+            len = Math.max(ss.length(), len);
+        }
+
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = true;
+        for (int i = 0; i <= n; i++) {
+            if (!dp[i])
+                continue;
+
+            for (int l = 1; l <= len && i + l <= n; l++) {
+                String substr = s.substring(i, i + l);
+                if (set.contains(substr)) {
+                    dp[i + l] = true;
+                }
+            }
+        }
+
+        List<String> ans = new ArrayList<>();
+        if (dp[n])
+            wordBreak_backEngg(s, 0, dp, len, wordDict, set, "", ans);
+
+        return ans;
+    }
+
+                /*******************************************/
+     
     public static void main(String[] args) {
 
-        numDistinct();
+        longestPalindromeSubseq();
 
     }
 
