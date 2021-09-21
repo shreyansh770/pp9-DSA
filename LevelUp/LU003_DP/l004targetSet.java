@@ -231,6 +231,8 @@ public class l004targetSet {
 
     /************************************************************/
 
+    // subsequence
+
     public static int knapSack(int W, int wt[], int val[], int n,int[][] dp) { 
          
         if(n==0 || W == 0) return dp[n][W] = 0;
@@ -248,12 +250,33 @@ public class l004targetSet {
         return dp[n][W] = maxAns;
     }
 
+    // for loop
+
+    public static int knapSack(int W, int wt[], int val[], int n,int idx,int[][] dp){
+        if(idx==n || W == 0) return dp[idx][W] = 0;
+
+        if(dp[idx][W]!=-1) return dp[idx][W];
+
+
+        int maxAns = 0;
+        for(int i = idx;i<n;i++){
+
+            if(W - wt[i] >=0){
+                  maxAns = Math.max(maxAns,knapSack(W-wt[i], wt, val, n, i+1, dp) + val[i]);
+            }
+            
+            // maxAns =Math.max(maxAns,knapSack(W, wt, val, n, i+1, dp));
+ 
+        }
+
+        return dp[idx][W] = maxAns;
+    }
+
 
 
     /************************************************************/
      
     // Find number of solutions of a linear equation of n variables
-
     public static int countSol(int[] coeff , int rhs , int idx,int[] dp){
  
         if(rhs == 0){
@@ -261,11 +284,13 @@ public class l004targetSet {
             return dp[idx] = 1;
         }
 
+        if(dp[idx]!=0) return dp[idx];
+
         int count = 0;
         for(int i=idx;i<coeff.length;i++){
 
             if(rhs - coeff[i]>=0){
-               count+= countSol(coeff, rhs-coeff[i], 0, dp);
+               count+= countSol(coeff, rhs-coeff[i], i, dp);
             }
         }
 
@@ -276,6 +301,75 @@ public class l004targetSet {
     /*************************************************************** */
 
     // Unbounded knapsack
+    public static int unboundedKnapsack(int[] wt,int[] val,int W){
+        int n = wt.length;
+        int[] dp = new int[W+1];
+
+        // permutaion-> ek W ke liye 0 se end tak sare weigths
+        for(int weight=0;weight<=W;weight++){
+            for(int i=0;i<wt.length;i++){
+               if(weight - wt[i]>=0){
+                  dp[weight] = Math.max(dp[weight],dp[weight-wt[i]]+val[i]);
+               }
+            }
+        }
+
+       return dp[W];
+        // Combination -> ek weight ke liye sare W
+
+       /* for(int i=0;i<wt.length;i++){
+            for(int weight=0;weight<=W;weight++){
+               if(weight - wt[i]>=0){
+                  dp[weight] = Math.max(dp[weight],dp[weight-wt[i]]+val[i]);
+               }
+            }
+        }*/
+    }
+
+
+    /******************************************************************/
+
+    //Partition Equal Subset Sum
+    public int targetSum_memo(int[] arr,int n ,int tar,int[][] dp){
+        
+        if(n==0 || tar ==0){
+            return dp[n][tar] = (tar==0 ? 1:0);
+        }
+        
+        if(dp[n][tar]!=-1) return dp[n][tar];
+        
+        boolean res = false;
+        if(tar-arr[n-1]>=0){
+           res = res|| targetSum_memo(arr,n-1,tar-arr[n-1],dp)==1;
+        }
+        
+        res = res || targetSum_memo(arr,n-1,tar,dp)==1;
+        
+        
+        return dp[n][tar] = res ? 1 : 0;
+        
+        
+    }
+    
+    
+    public boolean canPartition(int[] nums) {
+        
+        int n = nums.length,sum=0;
+        for(int ele:nums) sum+=ele;
+        
+        if(sum % 2 !=0) return false;
+        
+        int tar = sum/2;
+        
+        int[][] dp = new int[n+1][tar+1];
+        
+        for(int[]d:dp) Arrays.fill(d,-1);
+        
+        return targetSum_memo(nums,n,tar,dp)==1;
+    }
+
+
+    /*********************************************************** */
 
     public static void main(String[] args) {
 
