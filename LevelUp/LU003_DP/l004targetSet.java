@@ -371,6 +371,44 @@ public class l004targetSet {
 
     /*********************************************************** */
 
+    //Target Sum (494)
+    public static int findTargetSumWays(int[] nums,int tar,int n,int ssf,int[][]dp){
+        
+        if(n==0){
+            return dp[n][ssf] =  (tar == ssf ? 1 : 0);
+        }
+        
+        if(dp[n][ssf]!=-1) return dp[n][ssf];
+        
+        int count = 0;
+        count+=findTargetSumWays(nums,tar,n-1,ssf+nums[n-1],dp);
+        count+=findTargetSumWays(nums,tar,n-1,ssf-nums[n-1],dp);
+        
+        return dp[n][ssf] = count;
+        
+    }
+    
+    public static int findTargetSumWays(int[] nums, int target) {
+        
+        int n = nums.length , sum=0;
+        
+        for(int e : nums) sum+=e;
+        
+        if(sum < target || target<-sum) return 0;
+        
+        int[][] dp = new int[n+1][2*sum+1];
+        
+        for(int[] d: dp) Arrays.fill(d,-1);
+        
+        // negative dp indexes ko overcome krne ke liye
+        // bcoz -tar<=sum<=tar 
+        // but array indexes can't be negative
+        // so we will shift it and make it possitive
+        // and that shift will also be added to the target
+        return findTargetSumWays(nums,sum + target,n,sum,dp);
+    }
+
+
     public static void main(String[] args) {
 
        int N = 4;
