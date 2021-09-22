@@ -277,25 +277,35 @@ public class l004targetSet {
     /************************************************************/
      
     // Find number of solutions of a linear equation of n variables
-    public static int countSol(int[] coeff , int rhs , int idx,int[] dp){
+    public static int countSol(int[] coeff , int rhs , int idx,int[][] dp){
  
         if(rhs == 0){
 
-            return dp[idx] = 1;
+            return dp[idx][rhs] = 1;
         }
 
-        if(dp[idx]!=0) return dp[idx];
+        if(dp[idx][rhs]!=0) return dp[idx][rhs];
 
         int count = 0;
-        for(int i=idx;i<coeff.length;i++){
+        for(int i=idx;i>0;i--){
 
-            if(rhs - coeff[i]>=0){
-               count+= countSol(coeff, rhs-coeff[i], i, dp);
+            if(rhs - coeff[i-1]>=0){
+               count+= countSol(coeff, rhs-coeff[i-1], i, dp);
             }
         }
 
-        return dp[rhs] =count;
+        return dp[idx][rhs] =count;
 
+    }
+
+
+    public static void counSol_(){
+        int coeff[] = {2, 2, 5};
+        int rhs = 4;
+        int n = coeff.length;
+        int[][] dp = new int[coeff.length+1][rhs+1];
+        System.out.println (countSol(coeff, rhs,n,dp));
+        display2D(dp);
     }
 
     /*************************************************************** */
@@ -411,11 +421,13 @@ public class l004targetSet {
 
     public static void main(String[] args) {
 
-       int N = 4;
-       int arr[] = {2,3,5,7};
-       int sum = 10  ;    
+    //    int N = 4;
+    //    int arr[] = {2,3,5,7};
+    //    int sum = 10  ;    
 
-        isSubsetSum(N,arr,sum);
+    //     isSubsetSum(N,arr,sum);
+
+           counSol_();
 
     }
 
