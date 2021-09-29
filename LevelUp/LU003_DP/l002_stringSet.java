@@ -293,7 +293,42 @@ public class l002_stringSet {
     }
 
     // REGEX
+    public int isMatch_(String s, String p, int n, int m, int[][] dp) {
+        if (n == 0 && m == 0)
+            return dp[n][m] = 1;
+        if (m == 0)
+            return dp[n][m] = 0;
 
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        char ch1 = n > 0 ? s.charAt(n - 1) : '$';
+        char ch2 = p.charAt(m - 1);
+
+        if (ch1 != '$' && (ch1 == ch2 || ch2 == '.'))
+            return dp[n][m] = isMatch_(s, p, n - 1, m - 1, dp);
+        else if (ch2 == '*') {
+            boolean res = false;
+
+            if (n > 0 && m > 1 && (p.charAt(m - 2) == '.' || p.charAt(m - 2) == ch1))
+                res = res || isMatch_(s, p, n - 1, m, dp) == 1;
+            res = res || isMatch_(s, p, n, m - 2, dp) == 1;
+
+            return dp[n][m] = res ? 1 : 0;
+        } else
+            return dp[n][m] = 0;
+    }
+
+    public boolean isMatch_(String s, String p) {
+        p = removeStars(p);
+        int n = s.length(), m = p.length();
+
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return isMatch_(s, p, n, m, dp) == 1;
+    }
     // Uncrossed lines
 
     public int unCrossed(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
@@ -497,8 +532,7 @@ public class l002_stringSet {
         }
     }
 
-
-                /*******************************************/
+    /*******************************************/
 
     public void wordBreak_backEngg(String s, int idx, boolean[] dp, int maxLen, List<String> wordDict,
             HashSet<String> set, String ssf, List<String> ans) {
@@ -546,8 +580,63 @@ public class l002_stringSet {
         return ans;
     }
 
-                /*******************************************/
-     
+    /*******************************************/
+
+    // House robber - II
+
+    public int houseRobber(int[] arr, int si, int ei, int[] dp) {
+
+        if (si > ei)
+            return 0;
+
+        if (dp[si] != -1)
+            return dp[si];
+
+        int rob = houseRobber(arr, si + 2, ei, dp) + arr[si];
+        int notRob = houseRobber(arr, si + 1, ei, dp);
+
+        return dp[si] = Math.max(rob, notRob);
+    }
+
+    public int rob(int[] nums) {
+
+        int n = nums.length;
+        if (n == 0 || n == 1) {
+            return n == 1 ? nums[0] : 0;
+        }
+        int[] dp1 = new int[n];
+        Arrays.fill(dp1, -1);
+
+        int[] dp2 = new int[n];
+        Arrays.fill(dp2, -1);
+
+        return Math.max(houseRobber(nums, 0, n - 2, dp1), houseRobber(nums, 1, n - 1, dp2));
+    }
+
+    public int houseRobber(int[] nums, int[] dp, int n) {
+
+        if (n <= 0)
+            return 0;
+
+        if (dp[n] != -1)
+            return dp[n];
+
+        int rob = houseRobber(nums, dp, n - 2) + nums[n - 1];
+
+        int notRob = houseRobber(nums, dp, n - 1);
+
+        return dp[n] = Math.max(rob, notRob);
+    }
+
+    public int robI(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, -1);
+
+        return houseRobber(nums, dp, n);
+
+    }
+
     public static void main(String[] args) {
 
         longestPalindromeSubseq();
