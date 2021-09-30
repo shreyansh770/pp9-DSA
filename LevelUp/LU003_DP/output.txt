@@ -1,2 +1,1 @@
-Min value: 27
-Max value: 105
+30
