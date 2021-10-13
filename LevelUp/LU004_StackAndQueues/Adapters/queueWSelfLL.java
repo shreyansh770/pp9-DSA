@@ -1,4 +1,4 @@
-package Adapters;
+
 
 public class queueWSelfLL {
     private class Node {
