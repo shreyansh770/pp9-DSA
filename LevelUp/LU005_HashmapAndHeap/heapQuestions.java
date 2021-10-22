@@ -1,0 +1,259 @@
+import java.util.*;
+
+public class heapQuestions{
+
+    // nlog(k)
+    public static int kthSmallest(int[] arr, int l, int r, int k) 
+    { 
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
+             return b-a;
+        });
+
+        // nlog(k)
+        while(l<=r){
+            pq.add(arr[l]); // log(k)
+            if(pq.size() >k){
+                pq.remove();
+            }
+            l++;
+        }
+
+        return pq.peek();
+    } 
+
+    //n + klog(n)
+
+    class KthLargest {
+
+        private int size = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        public KthLargest(int k, int[] nums) {
+            this.size = k;
+
+            for(int e : nums){
+                pq.add(e);
+                if(pq.size() > k) pq.remove();
+            }
+
+        }
+        
+        public int add(int val) {
+            
+            pq.add(val);
+            if(pq.size()>this.size) pq.remove();
+
+            return pq.peek();
+        }
+    }
+
+    public int kthSmallest(int[][] matrix, int k) {
+        
+
+        int n = matrix.length;
+        int m = matrix[0].length;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
+             int r1= a/m , c1 = a%m;
+             int r2 = b/m , c2 = b%m;
+
+             return matrix[r1][c1] - matrix[r2][c2];
+        });
+
+        for(int i=0;i<n;i++){
+            pq.add(i*m +0);
+        }
+
+        int r = 0 , c=0;
+        while(k-->0){
+
+            int idx = pq.remove();
+            r = idx/ m ;
+            c = idx%m;
+            c+=1;
+
+            if(c<m) pq.add(r*m+c);
+
+        }
+
+        
+        return matrix[r][c];
+    }
+
+
+    public int kthSmallest_(int[][] matrix, int k) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            int i1 = a / m, j1 = a % m;
+            int i2 = b / m, j2 = b % m;
+
+            return matrix[i1][j1] - matrix[i2][j2];
+        });
+
+        for (int i = 0; i < n; i++)
+            pq.add(i * m + 0);
+
+        int r = 0, c = 0;
+        while (k-- > 0) {
+            int idx = pq.remove();
+            r = idx / m;
+            c = idx % m;
+            if (c + 1 < m)
+                pq.add(r * m + c + 1);
+        }
+
+        return matrix[r][c];
+    }
+
+    public int[] topKFrequent(int[] nums, int k) {
+        
+        Map<Integer, Integer> m = new HashMap<>();
+        
+        for(int ele : nums){
+            m.put(ele, m.getOrDefault(ele, 0) + 1);
+        }
+        
+        PriorityQueue<Map.Entry<Integer,Integer>> pq = new PriorityQueue<>((a,b)->{
+            
+            int f1 = a.getValue();
+            int f2 = b.getValue();
+            
+            return f1 - f2;
+            
+        });
+        
+        for(Map.Entry<Integer,Integer> val :m.entrySet()){
+            pq.add(val);
+            
+            if(pq.size()>k) pq.remove();
+        }
+        
+        int[] ans = new int[k];
+        int i = 0;
+        while(pq.size()!=0){
+            ans[i++] = pq.remove().getKey();
+        }
+        
+        return ans;
+    }
+
+
+    public int[][] kClosest(int[][] points, int k) {
+    
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
+            
+            int d1 = points[a][0]*points[a][0] + points[a][1]*points[a][1];
+            
+            int d2 = points[b][0]*points[b][0] + points[b][1]*points[b][1];
+            
+            return d2 -d1;
+             
+        });
+            
+            
+        for(int i=0;i<points.length;i++){
+            pq.add(i);
+            
+            if(pq.size()>k) pq.remove();
+        }
+        
+        int[][] ans = new int[k][];
+        int i = 0;
+        while(pq.size()!=0){
+            int idx = pq.remove();
+            
+            ans[i++] = points[idx];
+        }
+        
+        return ans;
+    }
+
+
+    public List<String> topKFrequent(String[] words, int k) {
+        
+        HashMap<String ,Integer> map = new HashMap<>();
+        
+        for(String s : words){
+            map.put(s , map.getOrDefault(s,0)+1);
+        }
+        
+        PriorityQueue<String> pq = new PriorityQueue<>((a,b)->{
+            
+            if(map.get(a) == map.get(b)) return b.compareTo(a); // lexiographical
+            
+              return map.get(a) - map.get(b);
+            
+        }) ;
+        
+        for(String s : map.keySet()){
+            pq.add(s);
+            
+            if(pq.size()>k) pq.remove();
+        }
+        
+        
+        List<String> ans = new LinkedList<>();
+        
+        while(pq.size()!=0){
+            
+            ans.add(0,pq.remove()); //  addFirst
+        }
+        
+        return ans;
+        
+        
+    }
+
+
+    // BFS + storing the heights of block in every direction at which we are standing in pq(min)
+    public int swimInWater(int[][] grid) {
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int[][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
+            int r1 = a/m , c1 = a%m;
+            int r2 = b/m , c2 = b%m;
+            
+            return grid[r1][c1] - grid[r2][c2];
+        });
+        
+        boolean[][] vis = new boolean[n][m];
+        
+        pq.add(0);
+        
+        vis[0][0] = true;
+        int time = 0;
+        while(pq.size()!=0){
+           int idx = pq.remove();
+         
+           int r1 = idx/m , c1 = idx%m;
+            
+            int height = grid[r1][c1];
+            
+            time = Math.max(time , height);
+            
+            if(r1 == n-1 && c1 == m-1) break;
+            
+            for(int[] d : dir){
+                int r = r1 + d[0];
+                int c = c1 + d[1];
+                
+                if(r>=0 && c>=0 && r<n && c<m && !vis[r][c]){
+                    vis[r][c] = true;
+                    pq.add(r*m + c);
+                }
+            }
+            
+           
+        }
+        
+        
+        return time;
+    }
+
+    public void main(String[] args){
+
+    }
+}

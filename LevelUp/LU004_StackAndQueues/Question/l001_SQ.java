@@ -680,26 +680,94 @@ public class l001_SQ {
             } else {
                 logPair rp = st.removeFirst();
                 ans[rp.id] += (log.timeStamp - rp.timeStamp + 1) - rp.sleepTime;
-                
-                 // rp ke wjha se uske exact niche vala kitne tym ke liye sleep pe tha
 
-                if(st.size()!=0){              // ending       // start
-                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp +1;
+                // rp ke wjha se uske exact niche vala kitne tym ke liye sleep pe tha
+
+                if (st.size() != 0) { // ending // start
+                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp + 1;
                 }
             }
 
-
         }
-
 
         return ans;
 
     }
 
+    public int carFleet(int target, int[] position, int[] speed) {
+        int n = speed.length;
+        double[][] timeDist = new double[n][2];
 
-    // public int carFleet(int target, int[] position, int[] speed) {
+        for (int i = 0; i < n; i++) {
+            timeDist[i][0] = 1.0 * position[i];// distance
+            timeDist[i][1] = ((target - position[i]) * 1.0) / speed[i]; // time
+        }
+
+        // Sort on the basis of dist
+        Arrays.sort(timeDist, (a, b) -> {
+            return (int) (a[0] - b[0]);
+        });
+
+        double prevTime = timeDist[n - 1][1];
+
+        int cF = 1;
+
+        for (int i = n - 2; i >= 0; i--) {
+
+            if (timeDist[i][1] > prevTime) {
+                prevTime = timeDist[i][1];
+                cF++;
+            }
+        }
+
+        return cF;
+
+    }
+
+    // CarFleet -2
+    public double[] getCollisionTimes(int[][] cars) {
         
-    // }
+        int n = cars.length;
+        double[] ans = new double[n];
+        
+        Arrays.fill(ans,-(1.0*1));
+        LinkedList<Integer> st = new LinkedList<>();
+        st.addFirst(n-1);
+        for(int i=n-2;i>=0;i--){
+            
+           int pos = cars[i][0];
+           int speed = cars[i][1];
+               
+
+           while(st.size()!=0){
+               
+               int carOnTop = st.getFirst();
+               int cPos = cars[carOnTop][0];
+               int cSp = cars[carOnTop][1];
+               
+               if(speed <= cSp){
+                  st.removeFirst();
+                  continue;
+               }               
+               double cT = (double)(cPos - pos)/(speed - cSp) ;
+               
+               if(ans[carOnTop]<0 || ans[carOnTop]>cT){
+                   ans[i] = cT;
+                   break;
+               }
+               
+               st.removeFirst();
+               
+           }
+            
+            st.addFirst(i);
+
+        }
+                    
+                    
+        return ans;
+    }
+   
     public static void main(String[] args) {
 
     }
