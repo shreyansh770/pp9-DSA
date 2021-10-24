@@ -253,6 +253,74 @@ public class heapQuestions{
         return time;
     }
 
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        
+        PriorityQueue<Integer> pq = new PriorityQueue<>(); // we will store the diff in heights here
+        
+        int n = heights.length;
+        
+        for(int i=1;i<n;i++){
+            int diff = heights[i] - heights[i-1];
+            
+            if(diff > 0){
+                pq.add(diff);
+                
+                if(pq.size()>ladders){
+                    bricks-=pq.remove(); // if the size of pq becomes more than ladders than we remove the min diff and say that we will cover that with bricks
+                }
+                
+                if(bricks < 0) return i-1;
+            }
+        }
+        
+        return n-1;
+        
+    }
+    public int[] smallestRange(List<List<Integer>> nums) {
+        
+        int n = nums.size();
+        
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->{
+            int r1 = a[0]; // 1d row array ka index
+            int c1 = a[1] ; // 1d array kaa row ka index
+            int r2 = b[0];
+            int c2 = b[1];
+            
+            return nums.get(r1).get(c1) - nums.get(r2).get(c2);
+        });
+        
+        int maxValueofRange = -(int)1e9;
+        for(int i=0;i<n;i++){
+            pq.add(new int[]{i,0});
+            maxValueofRange = Math.max(maxValueofRange , nums.get(i).get(0));
+        }
+        
+        int sp = -1 , ep = -1 , range = (int)1e9;
+        
+        while(pq.size() == n){
+            int[] arr = pq.remove();
+            
+            int r = arr[0] , c = arr[1] , val = nums.get(r).get(c);
+            
+            if(maxValueofRange - val < range){
+                range = maxValueofRange - val;
+                sp = val;
+                ep = maxValueofRange;
+            }
+            
+            c++;
+            
+            if(c<nums.get(r).size()){
+                pq.add(new int[]{r,c});
+                maxValueofRange = Math.max(maxValueofRange , nums.get(r).get(c));
+            }
+            
+        }
+
+        return new int[]{sp,ep};
+
+    }
+
     public void main(String[] args){
 
     }
