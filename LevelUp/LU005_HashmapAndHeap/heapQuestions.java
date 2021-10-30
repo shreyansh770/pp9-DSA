@@ -321,6 +321,78 @@ public class heapQuestions{
 
     }
 
+
+    class MedianFinder {
+
+        public MedianFinder() {
+            
+        }
+        
+        public void addNum(int num) {
+            
+        }
+        
+        public double findMedian() {
+            return 4.5;
+        }
+    }
+
+
+
+    // class RandomizedSet {
+
+    //     HashMap<Integer, Integer> map;
+    //     ArrayList<Integer> list;
+
+    //     public RandomizedSet() {
+    //         this.map = new HashMap<>();
+    //     }
+
+    //     public boolean insert(int val) {
+    //         if (map.containsKey(val))
+    //             return false;
+
+    //             list.add(val);
+    //             map.putIfAbsent(val, list.size());
+
+    //         return true;
+
+    //     }
+
+    //     public boolean remove(int val) {
+
+    //         if (map.containsKey(val) == false)
+    //             return false;
+
+    //         int idx=map.get(val);
+    //         int lidx=list.size()-1;
+    //         list.set(idx, list.get(lidx));
+    //         list.remove(list.size()-1);
+    //         map.put(list.get(idx),idx);
+    //         map.remove(val);
+
+    //         return true;
+
+    //     }
+
+    //     public int getRandom() {
+    //         Random rand = new Random();
+
+    //         int idx = rand.nextInt(list.size());
+
+    //         return list.get(idx);
+
+    //     }
+
+    // }
+
+
+
+
+
+
+
+
     public void main(String[] args){
 
     }
