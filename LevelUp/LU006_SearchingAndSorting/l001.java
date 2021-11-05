@@ -120,6 +120,93 @@ public class l001 {
         return ei; // si
     }
 
+    // Inversion count
+
+    public static long totalInversionCount(long[] arr, long[] sortedArray, long si, long mid, long ei) {
+        int i = (int) si, j = (int) mid + 1, k = (int) si;
+        long count = 0;
+
+        while (i <= mid && j <= ei) {
+            if (arr[i] <= arr[j])
+                sortedArray[k++] = arr[i++];
+            else {
+                sortedArray[k++] = arr[j++];
+                count += mid - i + 1;
+            }
+        }
+
+        while (i <= mid || j <= ei)
+            sortedArray[k++] = arr[i <= mid ? i++ : j++];
+
+        // why...?
+        while (si <= ei)
+            arr[(int) si] = sortedArray[(int) si++];
+
+        return count;
+    }
+
+    public static long inversionCount(long[] arr, long[] sortedArray, long si, long ei) {
+        if (si >= ei)
+            return 0;
+
+        long mid = (si + ei) / 2;
+        long count = 0;
+
+        count += inversionCount(arr, sortedArray, si, mid);
+        count += inversionCount(arr, sortedArray, mid + 1, ei);
+
+        count += totalInversionCount(arr, sortedArray, si, mid, ei);
+        return count;
+    }
+
+    public static long inversionCount(long arr[], long N) {
+        if (N == 0)
+            return 0;
+
+        long[] sortedArray = new long[(int) N];
+        return inversionCount(arr, sortedArray, 0, N - 1);
+    }
+
+    // 658
+
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int n = arr.length;
+        List<Integer> ans = new ArrayList<>();
+        if (x <= arr[0]) {
+            for (int i = 0; i < k; i++) { // K
+                ans.add(arr[i]);
+            }
+
+            return ans;
+        } else if (x >= arr[n - 1]) {
+
+            for (int i = n - k; i < n; i++) {// K
+                ans.add(arr[i]);
+            }
+
+            return ans;
+        }
+
+        int idx = perfectLocation(arr, x);// log(n)
+        int si = Math.max(0, idx - k);
+        int ei = Math.min(n - 1, idx + k);
+
+        while (ei - si + 1 > k) { // 2K
+
+            if (x - arr[si] > arr[ei] - x)
+                si++;
+
+            else
+                ei--;
+        }
+
+        for (int i = si; i <= ei; i++) {//
+            ans.add(arr[i]);
+        }
+
+        return ans;
+    }
+
     // 167
     public int[] twoSum(int[] arr, int target) {
         int i = 1, j = arr.length;
@@ -141,20 +228,20 @@ public class l001 {
         return a;
     }
 
-    // Q find all the unique pairs that sum up to give target
+    // Q find all the unique 'pairs' that sum up to give target
 
-    public List<List<Integer>> allPairs(int[] nums , int tar,int SI , int EI){
+    public List<List<Integer>> allPairs(int[] nums, int SI, int EI, int tar) {
 
         List<List<Integer>> ans = new ArrayList<>();
 
         Arrays.sort(nums);
 
-        int si =SI,ei = EI;
+        int si = SI, ei = EI;
 
-        while(si<ei){
+        while (si < ei) {
             int csum = nums[si] + nums[ei];
 
-            if(csum == tar){
+            if (csum == tar) {
 
                 List<Integer> sa = new ArrayList<>();
 
@@ -163,49 +250,151 @@ public class l001 {
 
                 ans.add(sa);
 
-                si++ , ei--;
-                while(si<ei && nums[si] == nums[si-1]) si++;
-                while(si<ei && nums[ei] == nums[ei+1]) ei--;
+                si++;
+                ei--;
+                while (si < ei && nums[si] == nums[si - 1])
+                    si++;
+                while (si < ei && nums[ei] == nums[ei + 1])
+                    ei--;
 
-            }else if(csum<tar){
+            } else if (csum < tar) {
 
                 si++;
-            }else{
+            } else {
 
                 ei--;
-            }
-        }
-    }
-
-    // 3SUM
-
-    // 4SUM
-
-    // K-SUM
-
-    // two sum count =================================
-
-    public int count(int[] arr1 , int[] arr2){
-        int ans = 0;
-
-        HashMap<Integer, Integer> map = new HashMap<>();
-
-        for(int i=0;i<arr1.length;i++){
-            map.put(arr1[i], map.getOrDefault(arr1[i],0)+1);
-        }
-
-
-        for(int i=0;i<arr2.length;i++){
-            
-            if(map.containsKey(-arr2[i]){
-                ans++;
             }
         }
 
         return ans;
     }
 
-    // 4sum -> 2
+    // 3SUM
+
+    public List<List<Integer>> threeSum(int[] nums, int si, int ei, int tar) {
+
+        List<List<Integer>> ans = new ArrayList<>();
+
+        for (int i = si; i <= ei;) {
+
+            int fix = nums[i];
+
+            List<List<Integer>> res = allPairs(nums, i + 1, ei, tar - fix);
+
+            for (List<Integer> s : res) {
+                s.add(fix);
+                ans.add(s);
+            }
+
+            i++;
+
+            while (i < ei && nums[i] == nums[i - 1])
+                i++;
+
+        }
+
+        return ans;
+
+    }
+
+    public List<List<Integer>> threeSum(int[] nums) {
+
+        if (nums.length == 0 || nums.length == 1) {
+            return new ArrayList<>();
+        }
+
+        Arrays.sort(nums);
+        return threeSum(nums, 0, nums.length - 1, 0);
+
+    }
+
+    // 4SUM
+
+    public List<List<Integer>> fourSum(int[] nums, int si, int ei, int tar) {
+
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = si; i <= ei;) {
+            int fix = nums[i];
+
+            List<List<Integer>> res = threeSum(nums, i + 1, ei, tar - fix);
+
+            for (List<Integer> s : res) {
+                s.add(fix);
+                ans.add(s);
+            }
+
+            i++;
+            while (i < ei && nums[i] == nums[i - 1])
+                i++;
+
+        }
+
+        return ans;
+    }
+
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        if (nums.length == 0 || nums.length == 1) {
+            return new ArrayList<>();
+        }
+
+        Arrays.sort(nums);
+
+        return fourSum(nums, 0, nums.length - 1, target);
+
+    }
+
+    // K-SUM
+
+    public List<List<Integer>> KSum(int[] nums, int target, int k, int si, int ei) {
+
+        if (k == 2) {
+            return allPairs(nums, si, ei, target);
+        }
+
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = si; i <= ei;) {
+            int fix = nums[si];
+
+            List<List<Integer>> res = KSum(nums, target - fix, k - 1, i + 1, ei);
+
+            for (List<Integer> s : res) {
+                s.add(fix);
+                ans.add(s);
+            }
+
+            i++;
+
+            while (i < ei && nums[i] == nums[i - 1])
+                i++;
+
+        }
+
+        return ans;
+    }
+
+    // two sum count =================================
+
+    public int twoSumCount(int[] arr1, int[] arr2, int target) {
+        int ans = 0;
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < arr1.length; i++) {
+            map.put(arr1[i], map.getOrDefault(arr1[i], 0) + 1);
+        }
+
+        for (int i = 0; i < arr2.length; i++) {
+            int new_target = target - arr2[i];
+
+            if (map.containsKey(new_target)) {
+                ans += map.get(new_target);
+            }
+        }
+
+        return ans;
+    }
+
+    // 4sum2
 
     public int fourSumCount(int[] nums1, int[] nums2, int[] nums3, int[] nums4) {
 
@@ -221,8 +410,8 @@ public class l001 {
         for (int e : nums3) {
             for (int f : nums4) {
 
-                if (map.containsKey(-(e + f))) {
-                    ans += map.get(-(e + f));
+                if (map.containsKey(0 - (e + f))) {
+                    ans += map.get(0 - (e + f));
                 }
             }
         }
@@ -230,5 +419,239 @@ public class l001 {
         return ans;
 
     }
+
+    // 33
+
+    public int search(int[] arr, int target) {
+
+        int si = 0;
+        int ei = arr.length - 1;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (arr[mid] == target)
+                return mid;
+
+            if (arr[si] <= arr[mid]) {
+                if (arr[si] <= target && target < arr[mid]) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+            } else {
+                if (arr[mid] < target && target <= arr[ei]) {
+                    si = mid + 1;
+                } else {
+                    ei = mid - 1;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    // with duplicates
+    // tc :- 8,8,8,8,8,8,8,8,7,8,8,8,8,8
+    public boolean search_02(int[] arr, int target) {
+        int si = 0;
+        int ei = arr.length - 1;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (arr[mid] == target || arr[si] == target)
+                return true;
+
+            if (arr[si] < arr[mid]) {
+                if (arr[si] <= target && target < arr[mid]) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+            } else if (arr[si] > arr[mid]) {
+                if (arr[mid] < target && target <= arr[ei]) {
+                    si = mid + 1;
+                } else {
+                    ei = mid - 1;
+                }
+            } else {
+                si++;
+            }
+
+        }
+
+        return false;
+    }
+
+    public boolean search_03(int[] arr, int target) {
+        int si = 0;
+        int ei = arr.length - 1;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (arr[mid] == target || arr[si] == target || arr[ei] == target)
+                return true;
+
+            if (arr[si] < arr[mid]) {
+                if (arr[si] <= target && target < arr[mid]) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+            } else if (arr[si] > arr[mid]) {
+                if (arr[mid] < target && target <= arr[ei]) {
+                    si = mid + 1;
+                } else {
+                    ei = mid - 1;
+                }
+            } else {
+                si++;
+                ei--;
+            }
+
+        }
+
+        return false;
+    }
+
+    public int findMin(int[] nums) {
+        
+        int n = nums.length;
+        
+        int si = 0;
+        int ei = n-1;
+        
+        while(si<ei){
+            
+            int mid = (si+ei)/2;
+            
+            if(nums[mid]<nums[ei]){
+                ei = mid;
+            }else{// si se mid sorted h
+                si =mid+1;
+            }
+        }
+        
+        return nums[si];
+    }
+
+    // with duplicates
+    public int findMin_02(int[] nums) {
+        int n = nums.length;
+        
+        int si = 0;
+        int ei = n-1;
+        
+        while(si<ei){
+            
+            int mid = (si+ei)/2;
+            
+            if(nums[mid]<nums[ei]){
+                ei = mid;
+            }else if(nums[mid]>nums[ei]){// si se mid sorted h
+                si =mid+1;
+            }else{
+                ei--;
+            }
+        }
+        
+        return nums[si];
+    }
+
+
+               /* Binary search application question*/
+
+    public boolean isPossible(int curr , int[] piles , int h){
+        
+        int totalHours = 0;
+        
+        for(int e : piles){
+            int time = e/curr;
+            
+            if(e%curr!=0){
+                time++; // upper limit
+            }
+            
+            totalHours+=time;
+            
+            if(totalHours > h) return false;
+        }
+        
+        return true;
+    }
+     
+    
+    public int minEatingSpeed(int[] piles, int h) {
+        
+        int si = 1,ei = (int)1e9;
+        
+        
+        while(si<=ei){
+            
+            int mid = (si+ei)/2;
+            
+            if(!isPossible(mid,piles,h)){
+                si = mid +1;
+            }else{
+                ei = mid-1;
+            }
+        }
+        
+        return si;
+    }
+
+
+
+        
+    public boolean isPossible_(int w , int[] weights , int days){
+        
+        int wsf=0;
+        int dsf=0;
+        for(int e :weights){
+            wsf+=e;
+            
+            if(e > w) return false;
+            if(wsf > w){
+                dsf++;
+                wsf = e;
+            }
+            
+            if(dsf > days){
+                return false;
+            }
+        }
+        
+        dsf ++;
+        
+        return dsf <= days;
+    }
+    
+    
+    public int shipWithinDays(int[] weights, int days) {
+        
+        
+        int si = 1 , ei = (int)1e9;
+        
+        while(si<=ei){
+            
+            int mid = (si+ei)/2;
+            
+            if(!isPossible_(mid , weights , days)){
+                si = mid+1;
+            }else{
+                ei = mid-1;
+            }
+            
+        }
+        
+        return si;
+    }
+    
 
 }
