@@ -521,137 +521,311 @@ public class l001 {
     }
 
     public int findMin(int[] nums) {
-        
+
         int n = nums.length;
-        
+
         int si = 0;
-        int ei = n-1;
-        
-        while(si<ei){
-            
-            int mid = (si+ei)/2;
-            
-            if(nums[mid]<nums[ei]){
+        int ei = n - 1;
+
+        while (si < ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (nums[mid] < nums[ei]) {
                 ei = mid;
-            }else{// si se mid sorted h
-                si =mid+1;
+            } else {// si se mid sorted h
+                si = mid + 1;
             }
         }
-        
+
         return nums[si];
     }
 
     // with duplicates
     public int findMin_02(int[] nums) {
         int n = nums.length;
-        
+
         int si = 0;
-        int ei = n-1;
-        
-        while(si<ei){
-            
-            int mid = (si+ei)/2;
-            
-            if(nums[mid]<nums[ei]){
+        int ei = n - 1;
+
+        while (si < ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (nums[mid] < nums[ei]) {
                 ei = mid;
-            }else if(nums[mid]>nums[ei]){// si se mid sorted h
-                si =mid+1;
-            }else{
+            } else if (nums[mid] > nums[ei]) {// si se mid sorted h
+                si = mid + 1;
+            } else {
                 ei--;
             }
         }
-        
+
         return nums[si];
     }
 
+    /* Binary search application question */
 
-               /* Binary search application question*/
+    public boolean isPossible(int curr, int[] piles, int h) {
 
-    public boolean isPossible(int curr , int[] piles , int h){
-        
         int totalHours = 0;
-        
-        for(int e : piles){
-            int time = e/curr;
-            
-            if(e%curr!=0){
+
+        for (int e : piles) {
+            int time = e / curr;
+
+            if (e % curr != 0) {
                 time++; // upper limit
             }
-            
-            totalHours+=time;
-            
-            if(totalHours > h) return false;
+
+            totalHours += time;
+
+            if (totalHours > h)
+                return false;
         }
-        
+
         return true;
     }
-     
-    
+
     public int minEatingSpeed(int[] piles, int h) {
-        
-        int si = 1,ei = (int)1e9;
-        
-        
-        while(si<=ei){
-            
-            int mid = (si+ei)/2;
-            
-            if(!isPossible(mid,piles,h)){
-                si = mid +1;
-            }else{
-                ei = mid-1;
+
+        int si = 1, ei = (int) 1e9;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (!isPossible(mid, piles, h)) {
+                si = mid + 1;
+            } else {
+                ei = mid - 1;
             }
         }
-        
+
         return si;
     }
 
+    public boolean isPossible_(int w, int[] weights, int days) {
 
+        int wsf = 0;
+        int dsf = 0;
+        for (int e : weights) {
+            wsf += e;
 
-        
-    public boolean isPossible_(int w , int[] weights , int days){
-        
-        int wsf=0;
-        int dsf=0;
-        for(int e :weights){
-            wsf+=e;
-            
-            if(e > w) return false;
-            if(wsf > w){
+            if (e > w)
+                return false;
+            if (wsf > w) {
                 dsf++;
                 wsf = e;
             }
-            
-            if(dsf > days){
+
+            if (dsf > days) {
                 return false;
             }
         }
-        
-        dsf ++;
-        
+
+        dsf++;
+
         return dsf <= days;
     }
-    
-    
+
     public int shipWithinDays(int[] weights, int days) {
+
+        int si = 1, ei = (int) 1e9;
+
+        while (si <= ei) {
+
+            int mid = (si + ei) / 2;
+
+            if (!isPossible_(mid, weights, days)) {
+                si = mid + 1;
+            } else {
+                ei = mid - 1;
+            }
+
+        }
+
+        return si;
+    }
+
+    public boolean isPos(double mid, double[] area, int guests) {
+        int guest = 0;
+
+        for (double a : area) {
+            guest += a / mid;
+
+            if (guest > guests)
+                return true;
+        }
+
+        return false;
+    }
+
+    public double maxAreaServingCake(int[] arr, int guest) {
+
+        int n = arr.length;
+        double[] area = new double[n];
+        double si = 0, ei = 0;
+        for (int i = 0; i < n; i++) {
+            double a = arr[i] * 3.14 * arr[i];
+            area[i] = a;
+            ei = Math.max(ei, a);
+        }
+
+        while (si < ei) {
+            double mid = (si + ei) / 2;
+
+            if (isPos(mid, area, guest)) {
+                si = mid + 0.1;
+            } else {
+                ei = mid;
+            }
+        }
+
+        return si;
+    }
+
+
+    // time -> O(n+m) space-> O(n+m)
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+
+        int n = nums1.length;
+        int m = nums2.length;
+        int[] ans = new int[n + m];
+        int midx = 0;
+
+        int i = 0, j = 0, k = 0;
+
+        while (i < n && j < m) {
+
+            if (nums1[i] <= nums2[j]) {
+                ans[k] = nums1[i++];
+            } else if (nums1[i] > nums2[j]) {
+                ans[k] = nums2[j++];
+            }
+
+            if (k == (n + m) / 2)
+                midx = k;
+            k++;
+        }
+
+        while (i < n) {
+            ans[k] = nums1[i++];
+            if (k == (n + m) / 2)
+                midx = k;
+            k++;
+        }
+
+        while (j < m) {
+            ans[k] = nums2[j++];
+            if (k == (n + m) / 2)
+                midx = k;
+            k++;
+        }
+
+        if ((n + m) % 2 == 0) {
+            System.out.println(midx);
+            return ((ans[midx] + ans[midx - 1]) * 1.0) / 2 * 1.0;
+        } else {
+            System.out.println(midx);
+            return ans[midx];
+        }
+    }
+
+
+    // Time -> log(min(n,m))
+    public double findMedianSortedArrays_(int[] nums1, int[] nums2) {
         
         
-        int si = 1 , ei = (int)1e9;
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        
+        if(n1 > n2){
+            // mid might become larger than n2 so bmid will become negative
+            
+            return findMedianSortedArrays_(nums2,nums1);
+        }
+        
+        
+        int total = n1 + n2;
+        
+        int si = 0;
+        int ei = n1; // partition last element se bhi ho skta hai
         
         while(si<=ei){
             
             int mid = (si+ei)/2;
             
-            if(!isPossible_(mid , weights , days)){
-                si = mid+1;
-            }else{
-                ei = mid-1;
+            int bmid = ((total+1)/2) - mid;
+            
+            int al = (mid == 0 ? -(int)1e9 : nums1[mid-1]);
+            int ar = (mid == n1 ? (int)1e9  : nums1[mid] );
+            
+            int bl = (bmid == 0 ? -(int)1e9 : nums2[bmid-1]);
+            int br = (bmid == n2 ? (int)1e9  : nums2[bmid]);
+            
+            if(bl <= ar && al<=br){
+                
+                if(total%2 == 0){
+                    
+                    return ((Math.max(al,bl) + Math.min(ar,br))*1.0)/(2*1.0);
+
+                }else{
+                    return Math.max(al,bl) *1.0;
+                }
             }
+            
+            
+            if(bl>ar){
+                si = mid+1;// ar tak to sare elements aenge he
+            }
+            
+            if(al>br){
+                ei = mid-1; // [ar,n-1] will not come
+            }
+        }
+        
+        return -1;
+    }
+
+
+    public boolean distribution(int[] q ,int n,int nop){
+        
+        
+        for(int p : q){
+            
+            int store = p/nop;
+            if(p%nop!= 0) store++;
+            
+            n-=store;
             
         }
         
-        return si;
+        return n>=0; // n>0 because some stores can get 0 items too
+        
     }
     
+    public int minimizedMaximum(int n, int[] quantities) {
+       
+        int si = 1;
+        int ei = 1;
+        
+        for(int e : quantities) ei = Math.max(ei , e);
+        
+        while(si<=ei){
+            int mid = (si+ei)/2;
+            
+            if(!distribution(quantities , n , mid)){
+                
+                si=mid+1;
+                //System.out.print(si+" ");
+            }else{
+                ei=mid-1;
+                //System.out.print(ei+"* ");
+            }
+        }
+        
+        return si;
+        
+    }
 
 }

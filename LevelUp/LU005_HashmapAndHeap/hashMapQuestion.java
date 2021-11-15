@@ -161,6 +161,94 @@ public class hashMapQuestion {
 
     }
 
+    class MedianFinder {
+
+        PriorityQueue<Integer> min = new PriorityQueue<>();
+        PriorityQueue<Integer> max = new PriorityQueue<>((a, b) -> {
+            return b - a;
+        });
+
+        public MedianFinder() {
+
+        }
+
+        public void addNum(int num) {
+
+            if (max.size() == 0 || num <= max.peek()) {
+                max.add(num);
+            } else {
+                min.add(num);
+            }
+
+            if (max.size() - min.size() == 2) {
+                min.add(max.remove());
+            } else if (max.size() - min.size() == -1) {
+                max.add(min.remove());
+            }
+
+        }
+
+        public double findMedian() {
+            if (max.size() == min.size()) {
+                return (min.peek() + max.peek()) / 2.0;
+            }
+
+            else
+                return max.peek() * 1.0;
+        }
+    }
+
+    class pair {
+        String word = "";
+        int height = 0;
+
+        pair(String word, int height) {
+            this.word = word;
+            this.height = height;
+        }
+    }
+
+
+    //BFS + HASHSET
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+
+        HashSet<String> set = new HashSet<>();
+
+        LinkedList<pair> que = new LinkedList<>();
+        set.add(beginWord);
+        que.addLast(new pair(beginWord, 1));
+
+        // int level = 1;
+
+        while (que.size() != 0) {
+
+            pair s = que.removeFirst();
+
+            // System.out.print(s.word + " ");
+
+            if (s.word.equals(endWord))
+                return s.height;
+
+            for (String str : wordList) {
+                int count = 0;
+                for (int i = 0; i < s.word.length(); i++) {
+                    if (str.charAt(i) != s.word.charAt(i)) {
+                        count++;
+                    }
+                }
+
+                if (count == 1 && !set.contains(str)) {
+                    que.addLast(new pair(str, s.height + 1));
+                    set.add(str);
+
+                    // break;
+                }
+            }
+        }
+
+        return 0;
+    }
+
     public int numberOfBoomerangs(int[][] points) {
         HashMap<Integer, Integer> map = new HashMap<>();
         int ans = 0, n = points.length;
