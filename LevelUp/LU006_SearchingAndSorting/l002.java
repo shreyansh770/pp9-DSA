@@ -333,41 +333,41 @@ public class l002 {
         return ans;
     }
 
-
     /****************************************************************/
 
     public int subarraysWithAtmostKDistinct(int[] nums, int k) {
-        
+
         int n = nums.length;
         int si = 0;
         int ei = 0;
 
-        HashMap<Integer , Integer> freq = new HashMap<>(); // try with freq array it will be fast
+        HashMap<Integer, Integer> freq = new HashMap<>(); // try with freq array it will be fast
         int count = 0;
         int ans = 0;
 
-        while(ei<n){
-            if(freq.containsKey(nums[ei]) == false){
+        while (ei < n) {
+            if (freq.containsKey(nums[ei]) == false) {
                 count++;
             }
 
-            freq.put(nums[ei],freq.getOrDefault(nums[ei], 0)+1);
-             ei++;
-            while(count > k){
-                if(freq.get(nums[si]) == 1){
-                       count--;
+            freq.put(nums[ei], freq.getOrDefault(nums[ei], 0) + 1);
+            ei++;
+            while (count > k) {
+                if (freq.get(nums[si]) == 1) {
+                    count--;
                 }
 
-                freq.put(nums[si],freq.get(nums[si])-1);
+                freq.put(nums[si], freq.get(nums[si]) - 1);
 
-                if(freq.get(nums[si]) == 0){
+                if (freq.get(nums[si]) == 0) {
                     freq.remove(nums[si]);
                 }
 
                 si++;
             }
 
-            ans +=(ei-si); //  ei increase ya si decrease hone se ei -si new subarrys add honge (dry run->array_str_03)
+            ans += (ei - si); // ei increase ya si decrease hone se ei -si new subarrys add honge (dry
+                              // run->array_str_03)
         }
 
         return ans;
@@ -375,44 +375,42 @@ public class l002 {
     }
 
     public int subarraysWithKDistinct(int[] nums, int k) {
-        
-        return subarraysWithAtmostKDistinct(nums, k) - subarraysWithAtmostKDistinct(nums, k-1);
+
+        return subarraysWithAtmostKDistinct(nums, k) - subarraysWithAtmostKDistinct(nums, k - 1);
     }
-    
 
     // 1248
 
-    public int numberOfSubarraysWithAtmostK(int[] nums , int k){
+    public int numberOfSubarraysWithAtmostK(int[] nums, int k) {
         int si = 0, ei = 0;
         int count = 0;
 
         int n = nums.length;
-         int ans = 0;
-        while(ei<n){
+        int ans = 0;
+        while (ei < n) {
 
-            if(nums[ei]%2 != 0) count++;
- 
+            if (nums[ei] % 2 != 0)
+                count++;
+
             ei++;
 
-            while(count > k){
-                if(nums[si]%2!=0) count--;
+            while (count > k) {
+                if (nums[si] % 2 != 0)
+                    count--;
 
                 si++;
             }
 
-
-            ans+= (ei-si);
-
+            ans += (ei - si);
 
         }
 
         return ans;
     }
 
-
     public int numberOfSubarrays(int[] nums, int k) {
-        
-         return numberOfSubarraysWithAtmostK(nums, k) - numberOfSubarraysWithAtmostK(nums,k-1);
+
+        return numberOfSubarraysWithAtmostK(nums, k) - numberOfSubarraysWithAtmostK(nums, k - 1);
 
     }
 
@@ -420,29 +418,29 @@ public class l002 {
 
     // nlogn
     public int[] maxSlidingWindow(int[] nums, int k) {
-        
-        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
-            return nums[b]-nums[a];
+
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            return nums[b] - nums[a];
         });
-        
+
         int n = nums.length;
-        
-        int[] ans = new int[n-k+1];// jitne ending pts utne max elements
-        
+
+        int[] ans = new int[n - k + 1];// jitne ending pts utne max elements
+
         int idx = 0;
-  
-        for(int i=0;i<n;i++){ // i is the ending pnt of window
+
+        for (int i = 0; i < n; i++) { // i is the ending pnt of window
             // top pe jo element hai agr vo window se bhar h
-            while(pq.size()>0 && pq.peek()<=i-k){
+            while (pq.size() > 0 && pq.peek() <= i - k) {
                 pq.remove();
             }
-            
+
             pq.add(i);
-            
-            if(i>=k-1){
+
+            if (i >= k - 1) {
                 ans[idx++] = nums[pq.peek()];
             }
-            
+
         }
         return ans;
     }
@@ -450,7 +448,312 @@ public class l002 {
     // n
     public int[] maxSlidingWindow_(int[] nums, int k) {
 
-         int n = nums.length
+        int n = nums.length;
+
+        int[] arr = new int[n - k + 1];
+        Deque<Integer> dq = new ArrayDeque<>();
+
+        int idx = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            // check whether the top element is in the window or not
+
+            while (dq.size() != 0 && dq.peek() <= i - k) {
+                dq.remove();
+            }
+
+            // check that all the previous elemt in
+            // dq are greater than me so that we can maintain the max at the top
+            // if not keep removing
+            while (dq.size() > 0 && nums[dq.peekLast()] <= nums[i]) {
+                dq.removeLast();
+            }
+
+            dq.addLast(i);
+
+            if (i >= k - 1) {
+                arr[idx++] = nums[dq.peek()];
+            }
+        }
+
+        return arr;
+
+    }
+
+    // 904
+
+    // public int totalFruit(int[] fruits) {
+
+    // }
+
+    // 930
+    public int numSubarraysWithSum_(int[] nums, int goal) {
+        
+        int si = 0;
+        int ei = 0;
+        int n = nums.length;
+        int sum = 0;
+        int ans = 0;
+        while(ei<n){
+            
+            sum+=nums[ei];
+            
+            ei++;
+            
+            while(sum > goal){
+                sum-=nums[si];
+                si++;
+            }
+            
+            ans+=ei-si;
+            
+        }
+        
+        return ans;
+    }
+    
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        
+        return numSubarraysWithSum_(nums,goal) - (goal==0 ? 0: numSubarraysWithSum_(nums,goal-1));
+    }
+
+    // 485
+    public int findMaxConsecutiveOnes(int[] nums) {
+
+        int ei=0;
+        int si =0;
+        int n = nums.length;
+        int max = -(int)1e9;
+        int count = 0; // count of 0's
+        
+        while(ei<n){
+            if(nums[ei]==0) count++;
+            
+            ei++;
+            
+            while(count > 0){
+                if(nums[si] == 0) count--;
+                
+                si++;
+            }
+            
+            max = Math.max(max,ei-si);
+        }
+        
+        return max;
+    
+    }
+
+    //https://www.lintcode.com/problem/883/
+
+
+    //subarray with allones and one zero
+    public int findMaxConsecutiveOnes_(int[] nums) {
+
+        int ei=0;
+        int si =0;
+        int n = nums.length;
+        int max = -(int)1e9;
+        int count = 0; // count of 0's
+        
+        while(ei<n){
+            if(nums[ei]==0) count++;
+            
+            ei++;
+            
+            // we can keep one 0
+            while(count > 1){
+                if(nums[si] == 0) count--;
+                
+                si++;
+            }
+            
+            max = Math.max(max,ei-si);
+        }
+        
+        return max;
+    
+    }
+
+    //1004
+
+    // subarray with allones and k zero
+    public int longestOnes(int[] nums, int k) {
+    
+
+        int ei=0;
+        int si =0;
+        int n = nums.length;
+        int max = -(int)1e9;
+        int count = 0; // count of 0's
+        
+        while(ei<n){
+            if(nums[ei]==0) count++;
+            
+            ei++;
+            
+            // we can keep one 0
+            while(count > k){
+                if(nums[si] == 0) count--;
+                
+                si++;
+            }
+            
+            max = Math.max(max,ei-si);
+        }
+        
+        return max;
+    
+    
+    }
+
+    public int subarraysDivByK(int[] nums, int k) {
+        
+        int[] rem_count = new int[k];
+        
+        int sum = 0;
+        int ans = 0;
+        rem_count[0] = 1 ; // if rem == 0 than we have to include there will be subarray from i=0 till that point
+        for(int i = 0;i<nums.length;i++){
+            sum+=nums[i];
+            
+            sum%=k;// if sum>=2k
+
+            int rem = (sum+k)%k;// if sum is neg
+            
+            ans+=rem_count[rem];
+            rem_count[rem]++;
+        }
+        
+        return ans;
+    }
+
+
+    public boolean checkSubarraySum(int[] nums, int k) {
+        
+        HashMap<Integer,Integer> map = new HashMap<>(); // rem v/s first index of that rem;
+        
+        int sum = 0;
+        map.put(0,-1); // it rem it 0 we have to include first elem also
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+            
+            sum%=k;
+            
+            int rem = (sum + k)%k;
+            
+            if(map.containsKey(rem)){
+                if(i - map.get(rem) >=2)  return true;
+            }else{
+                map.put(rem,i);
+            }
+        }
+        
+        return false;
+        
+    }
+
+
+    public int findMaxLength(int[] nums) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        
+        map.put(0,-1);// agr kahi pe bhi sum zero hota hai iska mtlb ki humko starting se lekar ab tak sare 1's and 0's cancel ho gye hai
+        
+        int sum = 0;
+        int ans = 0;
+        
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+            
+            if(nums[i] == 0) sum = sum - 1; // jisse ki agr sum == 0 humko pata lag jaye ki eql 1's and 0's ho hye h
+            
+            if(map.containsKey(sum)){
+                ans = Math.max(ans ,i-map.get(sum));
+            }else{
+                map.put(sum,i);
+            }
+        }
+        
+        return ans;
+    }
+
+    //https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s-1587115620/1
+
+
+
+    // KADANE ALGO
+    public int kadane(int[] nums){
+        int max_sum = -(int)1e9;
+        int csum = 0;
+
+        for(int i=0;i<nums.length;i++){
+              csum+=nums[i];
+
+              max_sum = Math.max(csum , max_sum);
+
+              if(csum < 0){
+                  csum = 0;
+              }
+        } 
+
+        return max_sum;
+    }
+
+
+    public int kadanes(int[] arr, int k){
+        int mod=(int)(1e9+7);
+
+        long csum=0;
+        long msum=0;
+        int i=0;
+
+        while(k>0){
+            while(i<arr.length){
+                csum+=arr[i];
+
+                if(csum<0){
+                    csum=0;
+                }
+
+                msum=Math.max(csum,msum);
+                i++;
+            }
+            i=0;
+            k--;
+        }
+
+        return (int)(msum%mod);
+    }
+
+    public int kConcatenationMaxSum(int[] arr, int k) {
+        int ans_for_2=0;
+        long mod=(int)(1e9+7);
+
+        long arr_sum=0;
+        for(int e:arr){
+            arr_sum+=e;
+        }
+
+        for(int i=1; i<=2; i++){
+            int sum=kadanes(arr,i);
+
+            if(k==i){
+                return sum;
+            }
+
+            if(i==2){
+                ans_for_2=sum;
+            }
+        }
+
+        if(arr_sum<0){
+            return (int)(ans_for_2 % mod);
+        }
+
+        int ans=(int)(ans_for_2 + ((k-2)*(arr_sum)%mod));
+
+        return Math.max(ans,0);
     }
 
     public static void main(String[] args) {
