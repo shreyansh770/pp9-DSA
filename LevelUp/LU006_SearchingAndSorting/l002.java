@@ -483,277 +483,379 @@ public class l002 {
 
     // 904
 
-    // public int totalFruit(int[] fruits) {
+    public int totalFruit(int[] fruits) {
 
-    // }
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int si = 0;
+        int ei = 0;
+        int count = 0;
+        int max = 0;
+        int n = fruits.length;
+
+        while (ei < n) {
+
+            if (!map.containsKey(fruits[ei])) {
+                map.put(fruits[ei], 0);
+                count++;
+            }
+
+            int frq = map.get(fruits[ei]);
+            map.put(fruits[ei], frq + 1);
+            ei++;
+
+            while (count > 2) {
+
+                if (map.get(fruits[si]) == 1)
+                    count--;
+
+                int fs = map.get(fruits[si]);
+                map.put(fruits[si], fs - 1);
+                if (map.get(fruits[si]) == 0)
+                    map.remove(fruits[si]);
+                si++;
+
+            }
+
+            // System.out.print(count);
+            max = Math.max(max, ei - si);
+
+        }
+
+        return max;
+    }
 
     // 930
     public int numSubarraysWithSum_(int[] nums, int goal) {
-        
+
         int si = 0;
         int ei = 0;
         int n = nums.length;
         int sum = 0;
         int ans = 0;
-        while(ei<n){
-            
-            sum+=nums[ei];
-            
+        while (ei < n) {
+
+            sum += nums[ei];
+
             ei++;
-            
-            while(sum > goal){
-                sum-=nums[si];
+
+            while (sum > goal) {
+                sum -= nums[si];
                 si++;
             }
-            
-            ans+=ei-si;
-            
+
+            ans += ei - si;
+
         }
-        
+
         return ans;
     }
-    
+
     public int numSubarraysWithSum(int[] nums, int goal) {
-        
-        return numSubarraysWithSum_(nums,goal) - (goal==0 ? 0: numSubarraysWithSum_(nums,goal-1));
+
+        return numSubarraysWithSum_(nums, goal) - (goal == 0 ? 0 : numSubarraysWithSum_(nums, goal - 1));
     }
 
     // 485
     public int findMaxConsecutiveOnes(int[] nums) {
 
-        int ei=0;
-        int si =0;
+        int ei = 0;
+        int si = 0;
         int n = nums.length;
-        int max = -(int)1e9;
+        int max = -(int) 1e9;
         int count = 0; // count of 0's
-        
-        while(ei<n){
-            if(nums[ei]==0) count++;
-            
+
+        while (ei < n) {
+            if (nums[ei] == 0)
+                count++;
+
             ei++;
-            
-            while(count > 0){
-                if(nums[si] == 0) count--;
-                
+
+            while (count > 0) {
+                if (nums[si] == 0)
+                    count--;
+
                 si++;
             }
-            
-            max = Math.max(max,ei-si);
+
+            max = Math.max(max, ei - si);
         }
-        
+
         return max;
-    
+
     }
 
-    //https://www.lintcode.com/problem/883/
+    // https://www.lintcode.com/problem/883/
 
-
-    //subarray with allones and one zero
+    // subarray with allones and one zero
     public int findMaxConsecutiveOnes_(int[] nums) {
 
-        int ei=0;
-        int si =0;
+        int ei = 0;
+        int si = 0;
         int n = nums.length;
-        int max = -(int)1e9;
+        int max = -(int) 1e9;
         int count = 0; // count of 0's
-        
-        while(ei<n){
-            if(nums[ei]==0) count++;
-            
+
+        while (ei < n) {
+            if (nums[ei] == 0)
+                count++;
+
             ei++;
-            
+
             // we can keep one 0
-            while(count > 1){
-                if(nums[si] == 0) count--;
-                
+            while (count > 1) {
+                if (nums[si] == 0)
+                    count--;
+
                 si++;
             }
-            
-            max = Math.max(max,ei-si);
+
+            max = Math.max(max, ei - si);
         }
-        
+
         return max;
-    
+
     }
 
-    //1004
+    // 1004
 
     // subarray with allones and k zero
     public int longestOnes(int[] nums, int k) {
-    
 
-        int ei=0;
-        int si =0;
+        int ei = 0;
+        int si = 0;
         int n = nums.length;
-        int max = -(int)1e9;
+        int max = -(int) 1e9;
         int count = 0; // count of 0's
-        
-        while(ei<n){
-            if(nums[ei]==0) count++;
-            
+
+        while (ei < n) {
+            if (nums[ei] == 0)
+                count++;
+
             ei++;
-            
+
             // we can keep one 0
-            while(count > k){
-                if(nums[si] == 0) count--;
-                
+            while (count > k) {
+                if (nums[si] == 0)
+                    count--;
+
                 si++;
             }
-            
-            max = Math.max(max,ei-si);
+
+            max = Math.max(max, ei - si);
         }
-        
+
         return max;
-    
-    
+
     }
 
     public int subarraysDivByK(int[] nums, int k) {
-        
+
         int[] rem_count = new int[k];
-        
+
         int sum = 0;
         int ans = 0;
-        rem_count[0] = 1 ; // if rem == 0 than we have to include there will be subarray from i=0 till that point
-        for(int i = 0;i<nums.length;i++){
-            sum+=nums[i];
-            
-            sum%=k;// if sum>=2k
+        rem_count[0] = 1; // if rem == 0 than we have to include there will be subarray from i=0 till that
+                          // point
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
 
-            int rem = (sum+k)%k;// if sum is neg
-            
-            ans+=rem_count[rem];
+            sum %= k;// if sum>=2k
+
+            int rem = (sum + k) % k;// if sum is neg
+
+            ans += rem_count[rem];
             rem_count[rem]++;
         }
-        
+
         return ans;
     }
-
 
     public boolean checkSubarraySum(int[] nums, int k) {
-        
-        HashMap<Integer,Integer> map = new HashMap<>(); // rem v/s first index of that rem;
-        
+
+        HashMap<Integer, Integer> map = new HashMap<>(); // rem v/s first index of that rem;
+
         int sum = 0;
-        map.put(0,-1); // it rem it 0 we have to include first elem also
-        for(int i=0;i<nums.length;i++){
-            sum+=nums[i];
-            
-            sum%=k;
-            
-            int rem = (sum + k)%k;
-            
-            if(map.containsKey(rem)){
-                if(i - map.get(rem) >=2)  return true;
-            }else{
-                map.put(rem,i);
+        map.put(0, -1); // it rem it 0 we have to include first elem also
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+
+            sum %= k;
+
+            int rem = (sum + k) % k;
+
+            if (map.containsKey(rem)) {
+                if (i - map.get(rem) >= 2)
+                    return true;
+            } else {
+                map.put(rem, i);
             }
         }
-        
+
         return false;
-        
+
     }
 
-
     public int findMaxLength(int[] nums) {
-        HashMap<Integer,Integer> map = new HashMap<>();
-        
-        map.put(0,-1);// agr kahi pe bhi sum zero hota hai iska mtlb ki humko starting se lekar ab tak sare 1's and 0's cancel ho gye hai
-        
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        map.put(0, -1);// agr kahi pe bhi sum zero hota hai iska mtlb ki humko starting se lekar ab tak
+                       // sare 1's and 0's cancel ho gye hai
+
         int sum = 0;
         int ans = 0;
-        
-        for(int i=0;i<nums.length;i++){
-            sum+=nums[i];
-            
-            if(nums[i] == 0) sum = sum - 1; // jisse ki agr sum == 0 humko pata lag jaye ki eql 1's and 0's ho hye h
-            
-            if(map.containsKey(sum)){
-                ans = Math.max(ans ,i-map.get(sum));
-            }else{
-                map.put(sum,i);
+
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+
+            if (nums[i] == 0)
+                sum = sum - 1; // jisse ki agr sum == 0 humko pata lag jaye ki eql 1's and 0's ho hye h
+
+            if (map.containsKey(sum)) {
+                ans = Math.max(ans, i - map.get(sum));
+            } else {
+                map.put(sum, i);
             }
         }
-        
+
         return ans;
     }
 
-    //https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s-1587115620/1
-
-
+    // https://practice.geeksforgeeks.org/problems/count-subarrays-with-equal-number-of-1s-and-0s-1587115620/1
 
     // KADANE ALGO
-    public int kadane(int[] nums){
-        int max_sum = -(int)1e9;
+    public int kadane(int[] nums) {
+        int max_sum = -(int) 1e9;
         int csum = 0;
 
-        for(int i=0;i<nums.length;i++){
-              csum+=nums[i];
+        for (int i = 0; i < nums.length; i++) {
+            csum += nums[i];
 
-              max_sum = Math.max(csum , max_sum);
+            max_sum = Math.max(csum, max_sum);
 
-              if(csum < 0){
-                  csum = 0;
-              }
-        } 
+            if (csum < 0) {
+                csum = 0;
+            }
+        }
 
         return max_sum;
     }
 
+    public int kadanes(int[] arr, int k) {
+        int mod = (int) (1e9 + 7);
 
-    public int kadanes(int[] arr, int k){
-        int mod=(int)(1e9+7);
+        long csum = 0;
+        long msum = 0;
+        int i = 0;
 
-        long csum=0;
-        long msum=0;
-        int i=0;
+        while (k > 0) {
+            while (i < arr.length) {
+                csum += arr[i];
 
-        while(k>0){
-            while(i<arr.length){
-                csum+=arr[i];
-
-                if(csum<0){
-                    csum=0;
+                if (csum < 0) {
+                    csum = 0;
                 }
 
-                msum=Math.max(csum,msum);
+                msum = Math.max(csum, msum);
                 i++;
             }
-            i=0;
+            i = 0;
             k--;
         }
 
-        return (int)(msum%mod);
+        return (int) (msum % mod);
     }
 
     public int kConcatenationMaxSum(int[] arr, int k) {
-        int ans_for_2=0;
-        long mod=(int)(1e9+7);
+        int ans_for_2 = 0;
+        long mod = (int) (1e9 + 7);
 
-        long arr_sum=0;
-        for(int e:arr){
-            arr_sum+=e;
+        long arr_sum = 0;
+        for (int e : arr) {
+            arr_sum += e;
         }
 
-        for(int i=1; i<=2; i++){
-            int sum=kadanes(arr,i);
+        for (int i = 1; i <= 2; i++) {
+            int sum = kadanes(arr, i);
 
-            if(k==i){
+            if (k == i) {
                 return sum;
             }
 
-            if(i==2){
-                ans_for_2=sum;
+            if (i == 2) {
+                ans_for_2 = sum; // kadane of 2
             }
         }
 
-        if(arr_sum<0){
-            return (int)(ans_for_2 % mod);
+        if (arr_sum < 0) {
+            return (int) (ans_for_2 % mod);// if arr_sum is neg than each concatenation will give more and more negtive
+                                           // sum => max for k=n will same as kadane of k==1
+
         }
 
-        int ans=(int)(ans_for_2 + ((k-2)*(arr_sum)%mod));
+        int ans = (int) (ans_for_2 + ((k - 2) * (arr_sum) % mod)); // see the notes for explanation yadd rakhio concept
+                                                                   // hai
 
-        return Math.max(ans,0);
+        return Math.max(ans, 0);
+    }
+
+    // kadane for returning neg
+    public int kadane_neg(int[] arr) {
+        int csum = 0;
+        int max = -(int) 1e9;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            csum += arr[i];
+
+            max = Math.max(max, csum);
+
+            if (csum < 0)
+                csum = 0;
+        }
+
+        return max;
+    }
+
+    // nice concept
+    int maximumSumRectangle(int R, int C, int M[][]) {
+
+        int ans = -(int) 1e9;
+        for (int frow = 0; frow < R; frow++) {
+
+            int[] preSum = new int[C];
+            for (int mrow = frow; mrow < R; mrow++) {
+                for (int col = 0; col < C; col++) {
+                    preSum[col] = preSum[col] + M[mrow][col];
+                }
+                int sum = kadane_neg(preSum);
+                ans = Math.max(ans, sum);
+            }
+        }
+
+        return ans;
+    }
+
+    /*************************************/
+
+    public int subArrayCountEqualTotarget(int[] arr, int target) {
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        int csum = 0;
+        int count = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            csum += arr[i];
+
+            if (map.containsKey(csum - target)) {
+                count++;
+            }
+
+            map.put(csum, map.getOrDefault(csum, 0) + 1);
+        }
+
+        return count;
     }
 
     public static void main(String[] args) {
