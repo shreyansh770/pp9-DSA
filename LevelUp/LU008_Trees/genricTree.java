@@ -56,5 +56,19 @@ public class genricTree{
         rec(root,ans);
         return ans;
     }
+
+    public static boolean areMirror(Node n1, Node n2) {
+           
+        if(n1.children.size() != n2.children.size()) return false;
+        if(n1.val != n2.val) return false;
+        int size = n1.children.size();
+
+        for(int i=0;i<size;i++){
+
+            if(!areMirror(n1.children.get(i), n2.children.get(size-i-1))) return false;
+        }
+
+        return true;
+    }
 }
 
