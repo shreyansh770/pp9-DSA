@@ -212,12 +212,11 @@ public class bfs {
 
     // Vertical Level Order Traversal
 
-
-    static class pair{
+    static class pair {
         TreeNode node;
         int vl;
 
-        pair(TreeNode node , int vl){
+        pair(TreeNode node, int vl) {
             this.node = node;
             this.vl = vl;
         }
@@ -225,7 +224,8 @@ public class bfs {
 
     public static void findWidth(TreeNode root, int[] minMax, int vl) {
 
-        if(root == null) return ;
+        if (root == null)
+            return;
         minMax[0] = Math.min(minMax[0], vl);
         minMax[1] = Math.max(minMax[1], vl);
 
@@ -244,7 +244,6 @@ public class bfs {
         verticalRecur(root.right, ans, vl + 1, shift);
     }
 
-
     public static ArrayList<ArrayList<Integer>> vlot(TreeNode root) {
 
         int[] minMax = new int[2]; // -> this is stroring the min and max on left and right rep of tree
@@ -262,136 +261,176 @@ public class bfs {
         // recursively
         // verticalRecur(root, ans, 0, Math.abs(minMax[0]));
 
-        // w/o recursion 
-        
+        // w/o recursion
+
         LinkedList<pair> q = new LinkedList<>();
-        int shift  = Math.abs(minMax[0]);
-        q.addLast(new pair(root,0));
+        int shift = Math.abs(minMax[0]);
+        q.addLast(new pair(root, 0));
 
-        while(q.size()!=0){
-            int  size = q.size();
+        while (q.size() != 0) {
+            int size = q.size();
 
-            while(size-- > 0){
+            while (size-- > 0) {
 
                 pair top = q.removeFirst();
 
                 ans.get(top.vl + shift).add(top.node.val);
 
-                if(top.node.left!=null){
-                    q.addLast(new pair(top.node.left , top.vl-1));
+                if (top.node.left != null) {
+                    q.addLast(new pair(top.node.left, top.vl - 1));
                 }
 
-                if(top.node.right!=null){
-                    q.addLast(new pair(top.node.right , top.vl+1));
+                if (top.node.right != null) {
+                    q.addLast(new pair(top.node.right, top.vl + 1));
                 }
-            } 
+            }
         }
 
         // System.out.println(ans);
         return ans;
     }
 
-   // Top view
+    // Top view
 
-   public ArrayList<Integer> topView_01(TreeNode root){
-       
-      ArrayList<ArrayList<Integer>> ans = vlot(root);
-      ArrayList<Integer> res = new ArrayList<>();
+    public ArrayList<Integer> topView_01(TreeNode root) {
 
-      for(int i=0;i<ans.size();i++){
-          res.add(ans.get(i).get(0));
-      }
+        ArrayList<ArrayList<Integer>> ans = vlot(root);
+        ArrayList<Integer> res = new ArrayList<>();
 
-      return res;
-   }
+        for (int i = 0; i < ans.size(); i++) {
+            res.add(ans.get(i).get(0));
+        }
 
-   public class treePair{
-       TreeNode node;
-       int hl; // -> horizontal level
-       treePair(TreeNode node , int hl){
-           this.node = node;
-           this.hl = hl;
-       }
-   }
+        return res;
+    }
 
-   public void rec(TreeNode root , int vl , int hl ,HashMap<Integer,treePair> m ){
+    public class treePair {
+        TreeNode node;
+        int hl; // -> horizontal level
 
-        if(root == null) return ;
-         
-        if(!m.containsKey(vl)){
-            m.put(vl,new treePair(root, hl));
-        }else{
-            if(m.get(vl).hl > hl){ //  jiksa hl chota hoga vo phle aya hoga kyuki usne niche vale ko chupa liya hoga islea vo top viw me nhi ayega
-                m.put(vl , new pair(root,hl));
+        treePair(TreeNode node, int hl) {
+            this.node = node;
+            this.hl = hl;
+        }
+    }
+
+    public void rec(TreeNode root, int vl, int hl, HashMap<Integer, treePair> m) {
+
+        if (root == null)
+            return;
+
+        if (!m.containsKey(vl)) {
+            m.put(vl, new treePair(root, hl));
+        } else {
+            if (m.get(vl).hl > hl) { // jiksa hl chota hoga vo phle aya hoga kyuki usne niche vale ko chupa liya hoga
+                                     // islea vo top viw me nhi ayega
+                m.put(vl, new pair(root, hl));
             }
         }
 
-        rec(root.left,vl-1,hl+1,m);
-        rec(root.left,vl+1,hl+1,m);
-   }
+        rec(root.left, vl - 1, hl + 1, m);
+        rec(root.left, vl + 1, hl + 1, m);
+    }
 
-   public ArrayList<Integer> topView_02(TreeNode root){
+    public ArrayList<Integer> topView_02(TreeNode root) {
 
-       HashMap<Integer,treePair> m = new HashMap<>();// vl vs treepair
+        HashMap<Integer, treePair> m = new HashMap<>();// vl vs treepair
 
-       rec(root,0,0,m);
+        rec(root, 0, 0, m);
 
-       ArrayList<Integer> ans = new ArrayList<>();
+        ArrayList<Integer> ans = new ArrayList<>();
 
-       for(Integer key : m.keySet()){
-           ans.add(m.get(key).node.val);
-       }
+        for (Integer key : m.keySet()) {
+            ans.add(m.get(key).node.val);
+        }
 
-       return ans;
-   }
+        return ans;
+    }
 
-   // bottom view
+    // bottom view
 
-      static class bpair{
-          TreeNode node;
-          int vl;
+    static class bpair {
+        TreeNode node;
+        int vl;
 
-          bpair(TreeNode node , int vl){
-              this.node = node;
-              this.vl = vl;
-          }
-      }
-      
-       public static ArrayList<Integer> bottomView(TreeNode root){
-           
-           LinkedList<bpair> q = new LinkedList<>();
+        bpair(TreeNode node, int vl) {
+            this.node = node;
+            this.vl = vl;
+        }
+    }
 
-           int[] minMax = new int[2];
+    public static ArrayList<Integer> bottomView(TreeNode root) {
 
-           minMax[0] = (int)1e9;
-           minMax[1] = -(int)1e9;
-           findWidth(root, minMax, 0);
-  
-           int width = minMax[1] - minMax[0] +1;
-           int shift = -(minMax[0]);
+        LinkedList<bpair> q = new LinkedList<>();
 
-           q.addLast(new bpair(root, shift));
-          // HashMap<Integer,Integer> ans = new HashMap(); -> do it will map arraylist se java me nhi ho raha
-           ArrayList<Integer> ans = new ArrayList<>();
+        int[] minMax = new int[2];
 
-           while(q.size()!=0){
-               bpair top = q.removeFirst();
+        minMax[0] = (int) 1e9;
+        minMax[1] = -(int) 1e9;
+        findWidth(root, minMax, 0);
 
-               TreeNode node = top.node;
-               int vl = top.vl;
+        int width = minMax[1] - minMax[0] + 1;
+        int shift = -(minMax[0]);
 
-               ans.add(vl, node.val); // not vl+shift bcoz we have added shift intinally in the queue
+        q.addLast(new bpair(root, shift));
+        // HashMap<Integer,Integer> ans = new HashMap(); -> do it will map arraylist se
+        // java me nhi ho raha
+        ArrayList<Integer> ans = new ArrayList<>();
 
-               if(node.left!=null){
-                    q.addLast(new bpair(node.left,vl-1));
-               }
+        while (q.size() != 0) {
+            bpair top = q.removeFirst();
 
-               if(node.right!=null){
-                    q.addLast(new bpair(node.right,vl+1));
-               }
+            TreeNode node = top.node;
+            int vl = top.vl;
 
-           }
+            ans.add(vl, node.val); // not vl+shift bcoz we have added shift intinally in the queue
 
-           return ans;
-       }
+            if (node.left != null) {
+                q.addLast(new bpair(node.left, vl - 1));
+            }
+
+            if (node.right != null) {
+                q.addLast(new bpair(node.right, vl + 1));
+            }
+
+        }
+
+        return ans;
+    }
+
+    // diagonal traversal
+
+    public void rec_d(TreeNode root, ArrayList<ArrayList<Integer>> diag, int dl) {
+
+        if (root == null)
+            return;
+
+        if (dl == diag.size()) {
+            diag.add(new ArrayList<>());
+        }
+
+        diag.get(dl).add(root.val);
+
+        // on left we +1 in out dl
+        rec_d(root.left, diag, dl + 1);
+
+        // on right we have stay on same dl
+        rec_d(root.right, diag, dl);
+    }
+
+    public ArrayList<Integer> diagonal(TreeNode root) {
+        ArrayList<ArrayList<Integer>> diag = new ArrayList<>();
+
+        rec_d(root, diag, 0);
+
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 0; i < diag.size(); i++) {
+            for (int j = 0; j < diag.get(i).size(); j++) {
+                ans.add(diag.get(i).get(j));
+            }
+        }
+
+        return ans;
+    }
 }
