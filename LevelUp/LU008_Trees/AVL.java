@@ -24,9 +24,6 @@ public class AVL {
         return rightMost(root.right);
     }
 
-
-
-    // this will not work on leetcode because TreeNode class is diffrent
     public void updateHeightBf(TreeNode root) {
 
         int lh = root.left == null ? -1 : root.left.height;
@@ -68,8 +65,7 @@ public class AVL {
     // balancing the root;
     TreeNode rotate(TreeNode root) {
 
-        // updateHeightBf(root);
-        updateHeightBf_(root);
+        updateHeightBf(root);
 
         if (root.bf == 2) {
 
@@ -160,45 +156,6 @@ public class AVL {
 
         return rotate(root);
     }
-
-
-    // 1387
-
-    int[] height = new int[100000];
-
-    public void updateHeightBf_(TreeNode root){
-
-        int lh = root.left == null ? -1 : height[root.left.val];
-        int rh = root.right == null ? -1 : height[root.right.val];
-
-        height[root.val] = Math.max(lh,rh)+1; 
-    }
-
-    public int getBf(TreeNode root){
-        int lh = root.left == null ? -1 : height[root.left.val];
-        int rh = root.right == null ? -1 : height[root.right.val];
-
-        return lh - rh;
-    }
-
-    public TreeNode constructTree(TreeNode root){
-        if(root == null) return null;
-
-        root.left = constructTree(root.left);
-        root.right = constructTree(root.right);
-
-        return rotate(root);
-    }
-
-    public TreeNode balanceBST(TreeNode root) {
-        
-        Arrays.fill(height,-1);
-
-        return constructTree(root);
-
-        
-    }
-
 
     public  void main(String[] args) {
 
