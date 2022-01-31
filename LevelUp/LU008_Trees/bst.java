@@ -23,7 +23,7 @@ public class bst {
 
     public int height(TreeNode root) {
 
-        return root == null ? -1 : Math.max(root.left, root.right) + 1;
+        return root == null ? -1 : Math.max(root.left.val, root.right.val) + 1;
     }
 
     public int min_(TreeNode root) {
