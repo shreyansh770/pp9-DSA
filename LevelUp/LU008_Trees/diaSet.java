@@ -140,7 +140,7 @@ public class diaSet {
     }
 
     // gfg
-    int ans = -(int)1e8;
+    int ans = -(int)1e8; // will store max left_to_left pathsum
     
     public int maxLeafToNode(TreeNode root){
         
@@ -153,12 +153,13 @@ public class diaSet {
         
         int myAns = Math.max(leftans,rightans)+root.val; // jaha se max ans a raha hai vo path me include hoga
         
+        // ans will not update for the root that does't have left or right child
         if(leftans!=-(int)1e8 && rightans!=-(int)1e8 ){
             int left_to_left = leftans + rightans + root.val;
             ans = Math.max(ans,left_to_left);
         }
         
-        return myAns;
+        return myAns; //  this is returning path till leaf with max sum
     }
     
     int maxPathSum(TreeNode root)

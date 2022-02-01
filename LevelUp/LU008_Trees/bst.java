@@ -393,26 +393,61 @@ public class bst {
 
     // recursive
 
-    public void dfs(TreeNode root, int[] k,int[] ans){
-        if(root == null) return;
+    public void dfs(TreeNode root, int[] k, int[] ans) {
+        if (root == null)
+            return;
 
         dfs(root.left, k, ans);
 
         k[0]--;
-        if(k[0] == 0) ans[0] = root.val;
+        if (k[0] == 0)
+            ans[0] = root.val;
 
         dfs(root.right, k, ans);
 
     }
 
-    public int kthSmallest_(TreeNode root , int k){
+    public int kthSmallest_(TreeNode root, int k) {
         int[] arr = new int[1];
         arr[0] = k;
         int[] ans = new int[1];
         ans[0] = -1;
-        dfs(root, arr,ans);
+        dfs(root, arr, ans);
         return ans[0];
     }
 
     // morris -- ?
+
+    
+    // 173
+    class BSTIterator {
+
+        LinkedList<TreeNode> st;
+
+        public BSTIterator(TreeNode root) {
+            st = new LinkedList<>();
+            addAllLeft(root);
+        }
+
+        private void addAllLeft(TreeNode root) {
+            while (root != null) {
+                st.addFirst(root);
+                root = root.left;
+            }
+        }
+
+        public int next() {
+            TreeNode top = st.removeFirst();
+
+            addAllLeft(top.right);
+
+            return top.val;
+        }
+
+        public boolean hasNext() {
+            return st.size() != 0;
+        }
+    }
+
+    
 }
