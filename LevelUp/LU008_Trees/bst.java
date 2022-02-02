@@ -418,7 +418,6 @@ public class bst {
 
     // morris -- ?
 
-    
     // 173
     class BSTIterator {
 
@@ -449,5 +448,204 @@ public class bst {
         }
     }
 
-    
+    // 116
+    class Node {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node next;
+
+        public Node() {
+        }
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, Node _left, Node _right, Node _next) {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
+    };
+
+    public Node connect(Node root) {
+
+        if (root == null)
+            return null;
+
+        LinkedList<Node> q = new LinkedList<>();
+
+        q.addLast(root);
+        q.addLast(null);
+        Node ptr = root;
+
+        while (q.size() > 1) {
+
+            Node top = q.removeFirst();
+            if (top == null) {
+                q.addLast(null);
+            } else {
+
+                if (top.left != null) {
+                    top.left.next = top.right;
+                    Node next = q.getFirst();
+
+                    if (next != null) {
+                        top.right.next = next.left;
+                    }
+
+                    q.addLast(top.left);
+                    q.addLast(top.right);
+                }
+
+            }
+
+        }
+
+        return root;
+    }
+
+    // space O(1)
+
+    public Node connect_(Node root) {
+
+        if (root == null)
+            return null;
+
+        Node curr = root;
+        while (curr != null) {
+            Node prev = curr;
+
+            while (prev != null) {
+
+                if (prev.left == null)
+                    break;
+                prev.left.next = prev.right;
+
+                Node next = prev.next;
+
+                if (next != null) {
+                    prev.right.next = next.left;
+                }
+
+                prev = prev.next;
+
+            }
+
+            curr = curr.left;
+        }
+
+        return root;
+
+    }
+
+    // 968
+    public int findCameraCount(TreeNode root, int camera) {
+
+        if (root == null)
+            return -1; // dont need camera
+
+        int left_req = findCameraCount(root.left, camera);
+        int right_req = findCameraCount(root.right, camera);
+
+        if (left_req == 1 || right_req == 1) {
+            camera++;
+            return 0; // i am the camera
+        }
+
+        if (left_req == 0 || right_req == 0) {
+            return -1;// dont need camera
+        }
+
+        // not monitored ,require camera
+        return 1;
+    }
+
+    public int minCameraCover(TreeNode root) {
+        int camera = 0;
+
+        if (findCameraCount(root, camera) == 1)
+            camera++;
+
+        return camera;
+    }
+
+    // 1373
+
+    int maxSum;
+
+    private class pair {
+        int sum;
+        int max;
+        int min;
+        TreeNode node;
+
+        pair(int sum, int max, int min, TreeNode node) {
+            this.sum = sum;
+            this.max = max;
+            this.min = min;
+            this.node = node;
+        }
+    }
+
+    private pair isBST(TreeNode root) {
+
+        if (root == null)
+            return new pair(0, -(int) 1e9, (int) 1e9, null);
+
+        pair l = isBST(root.left);
+        pair r = isBST(root.right);
+
+        if ((l != null && r != null && root.val > l.max && root.val < r.min) == false) {
+
+            return null; // not bst
+        }
+
+        int sum = l.sum + r.sum + root.val;
+
+        maxSum = Math.max(sum, maxSum);
+
+        // just for root whoes left or right or both are null
+        if (root.left == null || root.right == null) {
+            int min = Math.min(root.val, l.min);
+            int max = Math.max(root.val, r.max);
+            return new pair(sum, max, min, root);
+        }
+
+        return new pair(sum, r.max, l.min, root);
+    }
+
+    public int maxSumBST(TreeNode root) {
+
+        maxSum = 0;
+        isBST(root);
+
+        return maxSum;
+    }
+
+    //979
+
+    int moves=0;
+    public int requirement(TreeNode root){
+
+        if(root == null) return 0;
+        
+        int left_req = requirement(root.left);
+        int right_req = requirement(root.right);
+        
+        moves+= Math.abs(left_req) + Math.abs(right_req);  // moves => sum of coins required/ excess on left and right
+
+        return root.val +left_req + right_req -1; //  total requirement of ith node is its total value + left child req + right child req -1(1 for itlsef)
+
+
+    }
+
+    public int distributeCoins(TreeNode root) {
+        
+        requirement(root);
+        return moves;
+    }
+
 }
