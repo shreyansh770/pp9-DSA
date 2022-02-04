@@ -176,6 +176,77 @@ public class intro {
         return res;
     }
 
+    // marking while removing here we can detect cycle
+    public static void BFS(int src , ArrayList<Edge>[] graph){
+
+        LinkedList<Integer> que = new LinkedList<>();
+
+        int V = graph.length;
+
+        boolean[] vis = new boolean[V];
+        que.addLast(src);
+        int level = 0;
+        boolean isCycle  = false;
+        while(que.size()>0){
+            int size = que.size();
+
+            while(size-->0){
+                int ele = que.removeFirst();
+
+                if(vis[ele]){
+                    isCycle = true;
+                    continue;
+                }
+
+                vis[ele] = true; // here we are marking after removing
+
+                for(Edge nbr:graph[ele]){
+                    if(!vis[nbr.v]){
+                        que.addLast(nbr.v);
+                    }
+                }
+            }
+
+            level++;
+        }
+
+        if(isCycle) System.out.println("cycle exits");
+
+    }
+
+    // marking while inserting -> we can't detect cycle in this type
+    public static void BFS_02(int src , ArrayList<Edge>[] graph){
+
+        LinkedList<Integer> que = new LinkedList<>();
+
+        int V = graph.length;
+
+        boolean[] vis = new boolean[V];
+        que.addLast(src);
+        vis[src] = true;
+        int level = 0;
+        boolean isCycle  = false;
+        while(que.size()>0){
+            int size = que.size();
+
+            while(size-->0){
+                int ele = que.removeFirst();
+
+                for(Edge nbr:graph[ele]){
+                    if(!vis[nbr.v]){
+                        vis[nbr.v] = true; // here we are marking while adding 
+                        que.addLast(nbr.v);
+                    }
+                }
+            }
+
+            level++;
+        }
+
+        if(isCycle) System.out.println("cycle exits");
+
+    }
+
     public static void construct() {
 
         int V = 11;
@@ -198,10 +269,14 @@ public class intro {
         addEdge(6, 7, 3, graph);
         addEdge(5, 7, 3, graph);
 
-        removeEdge(4,9, graph);
-        removeEdge(4,10, graph);
-        removeEdge(4,5, graph);
-        removeEdge(4,2, graph);
+        //GCC
+        // removeEdge(4,9, graph);
+        // removeEdge(4,10, graph);
+        // removeEdge(4,5, graph);
+        // removeEdge(4,2, graph);
+
+        //BFS
+        removeEdge(4,6, graph);
 
         // pair p = maxWeightedPath(0,7,graph);
         // System.out.println(p.psf+" "+p.wsf);
