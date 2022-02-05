@@ -402,4 +402,78 @@ public class bfsQues {
 
         return reverse(topo, V);
     }
+
+    // 329
+
+    // can also be done by memorization DP
+
+    // here indeg[i][j] means how many elements are smaller than mat[i][j] in their adjacent 4 directions
+    // all the indeg[i][j] == 0 means no one can come to them so they can be the starting points 
+    // and once indeg[i][j] becomes 0 for any (i,j) that means we have covered all the possible (x,y) from where we can go to (i,j)=> now this can be added in que
+    public int longestIncreasingPath(int[][] matrix) {
+
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        int[][] indeg = new int[n][m];
+
+        int[][] dir = { { 1, 0 }, { 0, 1 }, { 0, -1 }, { -1, 0 } };
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                for (int[] d : dir) {
+                    int x = i + d[0];
+                    int y = j + d[1];
+
+                    if (x >= 0 && y >= 0 && x < n && y < m && matrix[i][j] < matrix[x][y]) {
+                        indeg[x][y]++;
+                    }
+                }
+            }
+        }
+
+        LinkedList<Integer> q = new LinkedList<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (indeg[i][j] == 0) {
+                    q.addLast(i * m + j);
+                }
+            }
+        }
+
+        int level = 0;
+
+        while (q.size() > 0) {
+            int size = q.size();
+
+            while (size-- > 0) {
+                int idx = q.removeFirst();
+
+                int i = idx / m;
+                int j = idx % m;
+
+                for (int[] d : dir) {
+                    int x = i + d[0];
+                    int y = j + d[1];
+
+                    if (x >= 0 && y >= 0 && x < n && y < m && matrix[i][j] < matrix[x][y]) {
+                        indeg[x][y]--;
+
+                        // here we are adding (x,y) to the que that means all the point from which we could have reached (x,y) have been explored
+                        if (indeg[x][y] == 0) {
+                            q.addLast(x * m + y);
+                        }
+                    }
+                }
+            }
+
+            level++;
+        }
+
+        return level;
+    }
+
+
+    
 }
