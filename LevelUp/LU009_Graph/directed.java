@@ -52,6 +52,8 @@ public class directed {
         graph[u].remove(idx);
     }
 
+    
+
     // Topological sorting(source -> wiki)
 
     public void dfs_topo(int src, ArrayList<Edge>[] graph, boolean[] vis, ArrayList<Integer> topo) {
@@ -119,8 +121,8 @@ public class directed {
             }
         }
 
-        //CYCLE EXISTS
-        if(topo.size()!=V){
+        // CYCLE EXISTS
+        if (topo.size() != V) {
             return new ArrayList<>();
         }
 
@@ -170,8 +172,6 @@ public class directed {
         return topo_order;
     }
 
-    
-
     public static void construct() {
         int V = 11;
 
@@ -197,6 +197,62 @@ public class directed {
         // bfs
         removeEdge(4, 6, graph);
     }
+
+    // kruskal algo
+    int[] par;
+
+    public int findPar(int u) {
+        if (par[u] == u) {
+            return u;
+        }
+
+        int ans = findPar(par[u]);
+
+        par[u] = ans;
+
+        return ans;
+    }
+
+    public static void addEdge_(int u, int v, int w, ArrayList<Edge>[] graph) {
+        graph[u].add(new Edge(v, w));
+        graph[v].add(new Edge(u, w));
+    }
+
+    public ArrayList<Edge>[] kruskal(int[][] edges, int N) {
+
+        // sorting on the basis of weight of edges
+        Arrays.sort(edges, (int[] a, int[] b) -> {
+            return a[2] - b[2];
+        });
+
+        ArrayList<Edge>[] mst = new ArrayList[N];
+
+        par = new int[N];
+
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+
+            int p1 = findPar(u);
+            int p2 = findPar(v);
+
+            if (p1 != p2) {
+                addEdge_(u, v, w, mst);
+                par[p2] = p1;
+            }
+        }
+
+        return mst;
+    }
+
+    
+
+    // CYCLE DETECTION USING DFS AND BFS IN DIRECTED GRAPH
+    
+
 
     public static void main(String[] args) {
         construct();

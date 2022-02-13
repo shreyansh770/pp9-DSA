@@ -83,6 +83,7 @@ public class bfsQues {
             while (s-- > 0) {
                 int u = que.removeFirst();
 
+
                 if (colors[u] != -1) {
                     if (colors[u] != c)
                         return false; // odd cycle
