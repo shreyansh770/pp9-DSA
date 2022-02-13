@@ -249,8 +249,34 @@ public class directed {
     }
 
     
+    // CYCLE DETECTION USING DFS IN DIRECTED GRAPH
+    public boolean dfs(int src , ArrayList<ArrayList<Integer>> adj,int[] vis){
+        vis[src] = 1;
+        
+        for(int nbr : adj.get(src)){
+            
+            if(vis[nbr] == 0){
+                if(dfs(nbr,adj,vis)) return true;
+            }else if(vis[nbr] == 1) return true;
+        }
+        
+        vis[src] = 2; // if we encounter thsi src again we can be sure that we wont
+        
+        return false;
+    }
+    
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        
+        int[] vis = new int[V];
 
-    // CYCLE DETECTION USING DFS AND BFS IN DIRECTED GRAPH
+        for(int i=0;i<V;i++){
+            if(vis[i]!=1 && vis[i]!=2){
+                if(dfs(i,adj,vis)) return true;
+            }
+        }
+        
+        return false;
+    }
     
 
 

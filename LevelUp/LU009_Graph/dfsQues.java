@@ -2,6 +2,41 @@ import java.util.*;
 
 public class dfsQues {
 
+
+    // cycle detection dfs in undireted graph
+    public boolean dfs(int src , boolean[] vis,ArrayList<ArrayList<Integer>> adj,int parent ){
+        
+        vis[src] = true;
+        
+        for(int nbr : adj.get(src)){
+            
+            if(!vis[nbr]){
+                if(dfs(nbr,vis,adj,src)) return true;
+            }
+            
+           else if(parent!=nbr) return true; // if parent == nbr => this is the node we came from our previous node
+        }
+        
+        return false;
+    }
+    
+    
+    // Function to detect cycle in an undirected graph.
+    public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        
+        boolean[] vis = new boolean[V];
+        
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                boolean flag = dfs(i,vis,adj,-1);
+                
+                if(flag == true) return true;
+            }
+        }
+        
+        return false;
+    }
+
     // 200
     public int numIslands(char[][] grid) {
         boolean[][] visited = new boolean[grid.length][grid[0].length];
