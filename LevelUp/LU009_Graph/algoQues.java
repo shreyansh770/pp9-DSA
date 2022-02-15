@@ -152,6 +152,16 @@ public class algoQues {
 
         boolean negCycle = false;
 
+        // we are calculating shortest dist with atmost 1 edge to atmost n edges
+        // here we are also checking for nth time to make sure the dis array don't get
+        // updated
+        // nth time if it is getting updated it means we have negative cycle
+
+        // now why on n times not more not else bcoz at max in n vertex graph we can
+        // have a maximum
+        // length between two edges to be (n-1) so after (n-1) iteration we can be sure
+        // that we can explored
+        // all the edges and come up with minimum weighted path
         for (int i = 1; i <= n; i++) {
             int[] ndis = new int[n];
             for (int j = 0; j < n; j++) {
@@ -171,9 +181,13 @@ public class algoQues {
                 }
             }
 
+            // if for there are no changes in the ndis array => we have already find the
+            // possible path and further it wont get any better
             if (isUpdate == false)
                 break;
 
+            // if dis array is even gettig updated till nth edge that means there is a
+            // negative cycle
             if (i == n && isUpdate) {
                 // negative cycle
                 negCycle = true;
@@ -226,6 +240,80 @@ public class algoQues {
         }
 
         return dis[dest] == (int) (1e8) ? -1 : dis[dest];
+
+    }
+
+    // 788 lintcode
+
+    public class spair {
+        int idx;
+        int dist;
+
+        spair(int idx, int dist) {
+            this.idx = idx;
+            this.dist = dist;
+        }
+    }
+
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+
+        int n = maze.length;
+        int m = maze[0].length;
+
+        PriorityQueue<spair> pq = new PriorityQueue<>((a, b) -> {
+            return a.dist - b.dist;
+        });
+
+        pq.add(new spair(start[0] * m + start[1], 0));
+
+        int[][] vis = new int[n][m];
+        for (int[] v : vis) {
+            Arrays.fill(v, (int) (1e8));
+        }
+        vis[start[0]][start[1]] = 0;
+
+        int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+
+        while (pq.size() != 0) {
+
+            spair i = pq.remove();
+
+            int sr = (i.idx) / m;
+            int sc = (i.idx) % m;
+
+            int dist = i.dist;
+            if (sr == destination[0] && sc == destination[1]) {
+                // System.out.print("hello");
+                return dist;
+            }
+
+            for (int[] d : dir) {
+                int r = sr + d[0];
+                int c = sc + d[1];
+
+                int curr = 1; // bcoz we are already starting from with one step (r,c)
+                while (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] != 1) {
+                    r += d[0];
+                    c += d[1];
+                    curr++;
+                }
+
+                // we would have move one extra step
+                r -= d[0];
+                c -= d[1];
+                curr--;
+
+                if (vis[r][c] <= curr + dist)
+                    continue;
+
+                vis[r][c] = curr + dist;
+
+                pq.add(new spair(r * m + c, curr + dist));
+
+            }
+        }
+
+        return -1;
 
     }
 

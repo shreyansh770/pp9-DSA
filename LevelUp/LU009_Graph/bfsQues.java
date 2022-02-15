@@ -83,7 +83,6 @@ public class bfsQues {
             while (s-- > 0) {
                 int u = que.removeFirst();
 
-
                 if (colors[u] != -1) {
                     if (colors[u] != c)
                         return false; // odd cycle
@@ -408,9 +407,13 @@ public class bfsQues {
 
     // can also be done by memorization DP
 
-    // here indeg[i][j] means how many elements are smaller than mat[i][j] in their adjacent 4 directions
-    // all the indeg[i][j] == 0 means no one can come to them so they can be the starting points 
-    // and once indeg[i][j] becomes 0 for any (i,j) that means we have covered all the possible (x,y) from where we can go to (i,j)=> now this can be added in que
+    // here indeg[i][j] means how many elements are smaller than mat[i][j] in their
+    // adjacent 4 directions
+    // all the indeg[i][j] == 0 means no one can come to them so they can be the
+    // starting points
+    // and once indeg[i][j] becomes 0 for any (i,j) that means we have covered all
+    // the possible (x,y) from where we can go to (i,j)=> now this can be added in
+    // que
     public int longestIncreasingPath(int[][] matrix) {
 
         int n = matrix.length;
@@ -461,7 +464,8 @@ public class bfsQues {
                     if (x >= 0 && y >= 0 && x < n && y < m && matrix[i][j] < matrix[x][y]) {
                         indeg[x][y]--;
 
-                        // here we are adding (x,y) to the que that means all the point from which we could have reached (x,y) have been explored
+                        // here we are adding (x,y) to the que that means all the point from which we
+                        // could have reached (x,y) have been explored
                         if (indeg[x][y] == 0) {
                             q.addLast(x * m + y);
                         }
@@ -475,6 +479,61 @@ public class bfsQues {
         return level;
     }
 
+    // 787 lintcode
 
-    
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+
+        int n = maze.length;
+        int m = maze[0].length;
+
+        LinkedList<Integer> que = new LinkedList<>();
+
+        int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+
+        // marking the stopping poinst as visited
+
+        boolean[][] vis = new boolean[n][m];
+
+        vis[start[0]][start[1]] = true;
+        que.addFirst(start[0] * m + start[1]);
+
+        while (que.size() != 0) {
+            int idx = que.removeFirst();
+            int sr = idx / m;
+            int sc = idx % m;
+
+            for (int[] d : dir) {
+                int r = sr + d[0];
+                int c = sc + d[1];
+
+                while (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] != 1) {
+                    r += d[0];
+                    c += d[1];
+                }
+
+                // we would have move one extra step
+                r -= d[0];
+                c -= d[1];
+
+                if (r == destination[0] && c == destination[1])
+                    return true;
+
+                if (vis[r][c] == true)
+                    continue;
+
+                vis[r][c] = true;
+
+                que.addFirst(r * m + c);
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+
+
 }
