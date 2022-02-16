@@ -52,8 +52,6 @@ public class directed {
         graph[u].remove(idx);
     }
 
-    
-
     // Topological sorting(source -> wiki)
 
     public void dfs_topo(int src, ArrayList<Edge>[] graph, boolean[] vis, ArrayList<Integer> topo) {
@@ -87,7 +85,7 @@ public class directed {
 
     // kahn's algo ==============================
 
-    ArrayList<Integer> topological_order_dfs(ArrayList<Edge>[] graph) {
+    ArrayList<Integer> topological_order_bfs_(ArrayList<Edge>[] graph) {
 
         int V = graph.length;
 
@@ -198,6 +196,77 @@ public class directed {
         removeEdge(4, 6, graph);
     }
 
+    // kosaraju algo
+
+    public void dfs_01(int src, ArrayList<Edge>[] graph, boolean[] vis, List<Integer> st) {
+
+        vis[src] = true;
+
+        for (Edge nbr : graph[src]) {
+            if (!vis[src]) {
+                dfs_01(nbr.v, graph, vis, st);
+            }
+        }
+
+        st.add(src);
+    }
+
+    public void dfs_02(int src, ArrayList<Edge>[] graph, boolean[] vis, ArrayList<Integer> comp) {
+
+        vis[src] = true;
+        comp.add(src);
+        for (Edge nbr : graph[src]) {
+            if (!vis[src]) {
+                dfs_01(nbr.v, graph, vis, comp);
+            }
+        }
+
+    }
+
+    public List<List<Integer>> kosaraju(ArrayList<Edge>[] graph) {
+        int V = graph.length;
+
+        boolean[] vis = new boolean[V];
+
+        List<Integer> st = new ArrayList<>();
+
+        for (int i = 0; i < V; i++) {
+            if (!vis[i]) {
+                dfs_01(i, graph, vis, st);
+            }
+        }
+
+        ArrayList<Edge>[] rgraph = new ArrayList[V];
+        for (int i = 0; i < V; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        for (int u = 0; u < V; u++) {
+            ArrayList<Edge> al = graph[u];
+            for (int j = 0; j < al.size(); j++) {
+                int v = al.get(j).v;
+                int w = al.get(j).w;
+
+                rgraph[v].add(new Edge(u, w));
+            }
+        }
+
+        List<List<Integer>> scc = new ArrayList<>();
+        ArrayList<Integer> comp = new ArrayList<>();
+        int noOfConComp = 0;
+        vis = new boolean[V];
+        for (int i = st.size() - 1; i >= 0; i--) {
+            if (!vis[i]) {
+                dfs_02(i, rgraph, vis, comp);
+                noOfConComp++;
+                scc.add(comp);
+            }
+        }
+
+        System.out.println(noOfConComp);
+        return scc;
+    }
+
     // kruskal algo
     int[] par;
 
@@ -248,37 +317,37 @@ public class directed {
         return mst;
     }
 
-    
     // CYCLE DETECTION USING DFS IN DIRECTED GRAPH
-    public boolean dfs(int src , ArrayList<ArrayList<Integer>> adj,int[] vis){
+    public boolean dfs(int src, ArrayList<ArrayList<Integer>> adj, int[] vis) {
         vis[src] = 1;
-        
-        for(int nbr : adj.get(src)){
-            
-            if(vis[nbr] == 0){
-                if(dfs(nbr,adj,vis)) return true;
-            }else if(vis[nbr] == 1) return true;
+
+        for (int nbr : adj.get(src)) {
+
+            if (vis[nbr] == 0) {
+                if (dfs(nbr, adj, vis))
+                    return true;
+            } else if (vis[nbr] == 1)
+                return true;
         }
-        
+
         vis[src] = 2; // if we encounter thsi src again we can be sure that we wont
-        
+
         return false;
     }
-    
+
     public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
-        
+
         int[] vis = new int[V];
 
-        for(int i=0;i<V;i++){
-            if(vis[i]!=1 && vis[i]!=2){
-                if(dfs(i,adj,vis)) return true;
+        for (int i = 0; i < V; i++) {
+            if (vis[i] != 1 && vis[i] != 2) {
+                if (dfs(i, adj, vis))
+                    return true;
             }
         }
-        
+
         return false;
     }
-    
-
 
     public static void main(String[] args) {
         construct();

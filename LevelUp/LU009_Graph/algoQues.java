@@ -317,4 +317,86 @@ public class algoQues {
 
     }
 
+    // 789 lintcode -> Memory limit exceeded error
+
+    public class tuple {
+
+        String psf;
+        int idx;
+        int dsf;
+
+        tuple(String psf, int idx, int dsf) {
+            this.psf = psf;
+            this.idx = idx;
+            this.dsf = dsf;
+        }
+
+    }
+
+    public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
+
+        int n = maze.length;
+        int m = maze[0].length;
+
+        PriorityQueue<tuple> pq = new PriorityQueue<>((a, b) -> {
+            if (a.dsf == b.dsf) {
+                return a.psf.compareTo(b.psf);
+            }
+            return a.dsf - b.dsf;
+        });
+
+        int[][] vis = new int[n][m];
+        for (int[] v : vis) {
+            Arrays.fill(v, (int) (1e8));
+        }
+
+        char[] dstr = { 'd', 'r', 'l', 'u' };
+        int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } }; // d r l u
+
+        vis[ball[0]][ball[1]] = 0;
+        pq.add(new tuple("", ball[0] * m + ball[1], 0));
+
+        while (pq.size() != 0) {
+            tuple t = pq.remove();
+
+            int sr = (t.idx) / m;
+            int sc = (t.idx) % m;
+            int d = t.dsf;
+
+            if (sr == hole[0] && sc == hole[1]) {
+                return t.psf;
+            }
+
+            for (int i = 0; i < dir.length; i++) {
+
+                int r = sr + dir[i][0];
+                int c = sc + dir[i][1];
+
+                int len = 1;
+                while (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] == 0 && (r != hole[0] || c != hole[1])) {
+                    r += dir[i][0];
+                    c += dir[i][1];
+                    len++;
+                }
+
+                // not encountered a hole
+                if ((r != hole[0] && c != hole[1])) {
+                    r -= dir[i][0];
+                    c -= dir[i][1];
+                    len--;
+                }
+
+                if (vis[r][c] < d + len)
+                    continue;
+
+                vis[r][c] = d + len;
+                pq.add(new tuple(t.psf + dstr[i], r * m + c, vis[r][c]));
+
+            }
+        }
+
+        return "impossible";
+
+    }
+
 }
