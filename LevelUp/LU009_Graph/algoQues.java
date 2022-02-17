@@ -317,7 +317,7 @@ public class algoQues {
 
     }
 
-    // 789 lintcode -> Memory limit exceeded error
+    // 789 lintcode 
 
     public class tuple {
 
@@ -345,15 +345,17 @@ public class algoQues {
             return a.dsf - b.dsf;
         });
 
-        int[][] vis = new int[n][m];
-        for (int[] v : vis) {
-            Arrays.fill(v, (int) (1e8));
+        tuple[][] vis = new tuple[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                vis[i][j] = new tuple("", i * m + j, (int) (1e8));
+            }
         }
 
-        char[] dstr = { 'd', 'r', 'l', 'u' };
-        int[][] dir = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } }; // d r l u
+        char[] dstr = { 'r', 'u', 'l', 'd' };
+        int[][] dir = { { 0, 1 }, { -1, 0 }, { 0, -1 }, { 1, 0 } }; // d r l u
 
-        vis[ball[0]][ball[1]] = 0;
+        vis[ball[0]][ball[1]] = new tuple("", ball[0] * m + ball[1], 0);
         pq.add(new tuple("", ball[0] * m + ball[1], 0));
 
         while (pq.size() != 0) {
@@ -367,30 +369,34 @@ public class algoQues {
                 return t.psf;
             }
 
-            for (int i = 0; i < dir.length; i++) {
+            for (int i = 0; i < 4; i++) {
 
                 int r = sr + dir[i][0];
                 int c = sc + dir[i][1];
 
                 int len = 1;
-                while (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] == 0 && (r != hole[0] || c != hole[1])) {
+                while (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] == 0 && !(r == hole[0] && c == hole[1])) {
                     r += dir[i][0];
                     c += dir[i][1];
                     len++;
                 }
 
                 // not encountered a hole
-                if ((r != hole[0] && c != hole[1])) {
+                if (!(r == hole[0] && c == hole[1])) {
+
                     r -= dir[i][0];
                     c -= dir[i][1];
                     len--;
                 }
 
-                if (vis[r][c] < d + len)
+                if (vis[r][c].dsf < d + len)
                     continue;
 
-                vis[r][c] = d + len;
-                pq.add(new tuple(t.psf + dstr[i], r * m + c, vis[r][c]));
+                if (d + len == vis[r][c].dsf && (vis[r][c].psf.compareTo(t.psf + dstr[i]) < 0))
+                    continue;
+
+                vis[r][c] = new tuple(t.psf + dstr[i], r * m + c, d + len);
+                pq.add(new tuple(t.psf + dstr[i], r * m + c, d + len));
 
             }
         }
