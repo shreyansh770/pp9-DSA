@@ -769,7 +769,7 @@ public class unionFind {
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                if (graph[i][j] == 1 && i!=j) {
+                if (graph[i][j] == 1 && i != j) {
                     int p1 = findPar(i);
                     int p2 = findPar(j);
 
@@ -780,44 +780,46 @@ public class unionFind {
             }
         }
 
-
         // now stopping the malware spread
 
-        // if a component has more than one infected node than there is no effect of removing either of the node from that component 
+        // if a component has more than one infected node than there is no effect of
+        // removing either of the node from that component
         // so we are maitaing a freq array that will keep a check on the same
 
         int[] fre = new int[n];
 
-        for(int i=0;i<initial.length;i++){
+        for (int i = 0; i < initial.length; i++) {
             int p = findPar(initial[i]);
 
             fre[p]++;
         }
 
-
         // checking which node we can remove
 
         int remIdx = -1;
         int maxSpread = 0;
-        for(int i=0;i<initial.length;i++){
+        for (int i = 0; i < initial.length; i++) {
 
-              int p = findPar(initial[i]);
+            int p = findPar(initial[i]);
 
-              if(fre[p]>1 ) continue;
+            if (fre[p] > 1)
+                continue;
 
-              if(size[p] == maxSpread){
-                  remIdx = Math.min(remIdx,initial[i]);
-              }
+            if (size[p] == maxSpread) {
+                remIdx = Math.min(remIdx, initial[i]);
+            }
 
-              if(size[p] > maxSpread){
-                    maxSpread = size[p];
-                    remIdx = initial[i];
-              }
+            if (size[p] > maxSpread) {
+                maxSpread = size[p];
+                remIdx = initial[i];
+            }
         }
 
-        // if every component has more that one infected node => stopping malware spread is not possible
+        // if every component has more that one infected node => stopping malware spread
+        // is not possible
 
         return remIdx;
 
     }
+
 }
