@@ -70,6 +70,9 @@ public class bfsQues {
     // had before that means its level at which it is being encountered is same =>
     // it is an even node cycle hence bipartite else odd node cycle => non bipartite
 
+
+    // why does color change in odd length-> bcoz we travel odd distance which toggle the number's marking
+    // that does not happen if we tarvel even distance 
     public boolean bfs_bipartite(int[][] graph, int src, int[] colors) {
 
         int c = 0; // starting with blue color
