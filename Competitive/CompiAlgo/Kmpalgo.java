@@ -27,6 +27,20 @@ public class Kmpalgo {
             } else {
 
                 if (len > 0) {
+                    // important concept 
+                    //         A       B
+                    // EX -> aaeaa b aaeaa+e
+
+                    // we know that String A(aaeaa) == B(aaeaa)  ->(1)
+
+                    //  now b != e 
+
+                    // but we know (1) => LP A(aa) == LS A(aa) == LP B(aa) == LS B(aa) -> (2)
+
+                    // so now we need to compare LS B(aa)+e with A(aae) as we know (2) 
+
+                    // and so on on until the string is matched or len becomes 0
+
                     len = lps[len - 1];
                 } else {
                     lps[idx] = 0;
@@ -49,6 +63,13 @@ public class Kmpalgo {
 
         int count = 0;
         for (int l : lps) {
+            // l == reqLen
+            // that we have found a 
+            // suffix of length reqLength
+            // which is obviously same as prefix(p)
+
+            // lps[]-> 0 1 0 1 2 '3' 1 2 '3' 1 2 '3'
+            // str     a a b#a a  b  a a  b  a a  b
             if (reqLen == l)
                 count++;
         }
