@@ -203,7 +203,7 @@ public class directed {
         vis[src] = true;
 
         for (Edge nbr : graph[src]) {
-            if (!vis[src]) {
+            if (!vis[nbr.v]) {
                 dfs_01(nbr.v, graph, vis, st);
             }
         }
@@ -216,7 +216,7 @@ public class directed {
         vis[src] = true;
         comp.add(src);
         for (Edge nbr : graph[src]) {
-            if (!vis[src]) {
+            if (!vis[nbr.v]) {
                 dfs_01(nbr.v, graph, vis, comp);
             }
         }
@@ -236,7 +236,7 @@ public class directed {
             }
         }
 
-        ArrayList<Edge>[] rgraph = new ArrayList[V];
+        ArrayList<Edge>[] rgraph = new ArrayList[V]; // graph transpose
         for (int i = 0; i < V; i++) {
             graph[i] = new ArrayList<>();
         }
