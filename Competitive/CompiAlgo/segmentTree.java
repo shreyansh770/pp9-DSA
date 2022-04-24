@@ -72,7 +72,7 @@ public class segmentTree {
         update(1, 0, arr.length - 1, pos, val);
     }
 
-    // query is finding max for the range [l,r] in arr
+    // query is for the range [l,r] in arr
     public int query(int l, int r) {
 
         return solveQuery(1, 0, arr.length - 1, l, r);
