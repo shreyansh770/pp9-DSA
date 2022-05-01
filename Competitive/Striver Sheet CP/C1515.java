@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-class C_Phoenix_and_Towers {
+public class C1515 {
 
     static class FastReader {
         BufferedReader br;
