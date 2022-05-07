@@ -95,8 +95,7 @@ public class B229 {
 
             vis[top.sr] = true;
 
-            // visitors check
-
+            // waiting time at a planet
             long tr = top.tsf;
             while(visitor[top.sr-1].contains(tr)){
                 tr++;
