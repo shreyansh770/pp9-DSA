@@ -111,6 +111,5 @@ public class CPCRC1C {
         long lans = solve(0, true, 0);
         System.out.println(rans - lans);
 
-
     }
 }
