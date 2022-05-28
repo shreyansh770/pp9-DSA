@@ -62,6 +62,8 @@ public class Kmpalgo {
         int reqLen = p.length();
 
         int count = 0;
+
+        
         for (int l : lps) {
             // l == reqLen
             // that we have found a 
