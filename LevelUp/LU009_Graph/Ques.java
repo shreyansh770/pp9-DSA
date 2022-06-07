@@ -90,6 +90,48 @@ public class Ques {
 
     }
 
+    static int[][] dirs = {{1,0},{-1,0},{0,-1},{0,1}};
+    public static int dfs(int sr,int sc ,List<List<Integer>> matrix,boolean[][] vis,int n,int m){
+
+        vis[sr][sc] = true;
+
+        int ans = 0;
+        for(int[] d : dirs){
+            int x = sr+d[0];
+            int y = sc + d[1];
+
+            if(x<n && y<m&& x>=0 && y>=0 && !vis[x][y]&& matrix.get(x).get(y)==1){
+
+                ans = ans  + dfs(x, y, matrix, vis, n, m)+1;
+            }
+        }
+
+        return ans;
+    }
+
+    
+	public static int biggestNeighbourSize(List<List<Integer>> matrix) {
+		
+
+        int n = matrix.size();
+        int m = matrix.get(0).size();
+        boolean[][] vis;
+
+        int res = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix.get(i).get(j)==1){
+                    vis = new boolean[n][m];
+
+                    res = Math.max(res,dfs(i ,j,matrix,vis,n,m));
+                }
+            }
+        }
+		
+        return res;
+		
+	}
+
     public static void main(String[] args) {
         int[][] heights = { { 8, 3, 2, 5, 2, 10, 7, 1, 8, 9 }, { 1, 4, 9, 1, 10, 2, 4, 10, 3, 5 },
                 { 4, 10, 10, 3, 6, 1, 3, 9, 8, 8 }, { 4, 4, 6, 10, 10, 10, 2, 10, 8, 8 },
