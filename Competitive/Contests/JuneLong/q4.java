@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class E {
+public class q4 {
 
     static class FastReader {
         BufferedReader br;
@@ -49,61 +49,43 @@ public class E {
         }
     }
 
-    public static boolean check(int k, int q, Integer[] arr,int[] psum) {
+    
 
-        int sum = psum[k-1];
 
-        return sum>=q;
-    }
 
     public static void main(String[] args) {
-
         FastReader fs = new FastReader();
 
         int t = fs.nextInt();
 
+
         while (t-- > 0) {
 
             int n = fs.nextInt();
-            int q = fs.nextInt();
 
-            Integer[] arr = new Integer[n];
 
-            for (int i = 0; i < n; i++) {
-                arr[i] = fs.nextInt();
+            int[] arr = new int[n+1];
+            
+            // solve(n, 1,1);
+
+            int[] permu = new int[n];
+
+            for(int i=0;i<n;i++){
+                permu[i] = i+1;
             }
 
-            Arrays.sort(arr, Collections.reverseOrder());
+            for(int i=0;i<=(n/2);i++){
 
-            int[] psum = new int[n];
-            psum[0] = arr[0];
+                // System.out.print(left+" ");
+                arr[n - 2*i - 1] = permu[n - i - 1];
+                arr[n - 2*i - 2] = permu[i];
+           }
 
-            for(int i=1;i<n;i++){
-                psum[i] = psum[i-1] + arr[i];
+            for(int e : arr){
+                System.out.print(e+" ");
             }
 
-            while (q-- > 0) {
-                int sugar = fs.nextInt();
-
-                int si = 1;
-                int ei = n;
-
-                int ans = -1;
-                while (si <= ei) {
-                    int mid = (si + ei) / 2;
-
-                    if (check(mid, sugar, arr,psum)) {
-                        ans = mid;
-                        ei = mid - 1;
-                    } else {
-                        si = mid + 1;
-                    }
-                }
-
-                System.out.println(ans);
-
-            }
-
+            System.out.println();
         }
     }
 }

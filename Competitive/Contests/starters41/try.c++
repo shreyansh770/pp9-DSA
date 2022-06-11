@@ -1,23 +1,34 @@
-signed main()
-{
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n, k;
-        cin >> n >> k;
-        vector<int> a(n+1);
-        string s;
-        cin >> s;
-        for (int i = 0; i < n; i++)
-            a[i + 1] = a[i] + (s[i] == 'B');
+#include <iostream>
+using namespace std;
 
-        int ans = n;
-        for (int i = k; i <= n; i++)
-            ans = min(ans, k - (a[i] - a[i - k]));
+int main() {
+      int n;
+      cin >> n;
+      
+      int permu[n];
+      
+      for(int i=0;i<n;i++) {
+          P[i] = i + 1;
+      }
+      
+      int arr[n]={};
 
-        cout << ans << '\n';
-    }
+      int left;
+      int right;
+      int pIdx;
+      for(int i=0;i<(n/2)+1;i++){
 
-    return 0;
+          left  = n - 2*i - 1;
+          right = n - 2*i - 2;
+          pIdx = n-i+1;
+
+          arr[left] = perm[pIdx];
+          arr[right] = permu[i];
+      }
+      
+      for(auto e : AN) {
+         cout << e << " ";
+      }
+      
+      cout << endl;
 }
