@@ -97,7 +97,7 @@ public class q3 {
 
                 nstr.reverse();
 
-                char startappend = (char) (start + k - 1);
+                char startappend = (char) (start + k - 1); // since it is odd length
                 sb.append(startappend);
                 sb.append(nstr.toString());
 
