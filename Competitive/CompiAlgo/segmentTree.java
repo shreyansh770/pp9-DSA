@@ -9,6 +9,7 @@ public class segmentTree {
     static int[] tree;
     static int[] arr;
 
+    // we are visited all the nodes of seg tree => T.C -> O(4*N)
     private static void buildSegTree(int nodeIdx, int start, int end) {
 
         if (start == end) {
