@@ -317,7 +317,7 @@ public class algoQues {
 
     }
 
-    // 789 lintcode 
+    // 789 lintcode
 
     public class tuple {
 
@@ -403,6 +403,43 @@ public class algoQues {
 
         return "impossible";
 
+    }
+
+    // Eulirian circuit
+    // https://leetcode.com/problems/reconstruct-itinerary/
+
+    // Eulerian Path for directed graph coz we have to visit each edge only once
+
+    HashMap<String, PriorityQueue<String>> hpq; // we are storing city vs nbrs pq for lexigraphical order
+    List<String> ans;
+
+    public void dfs(String src) {
+
+        PriorityQueue<String> nbrs = hpq.get(src);
+
+        while (nbrs != null && nbrs.size() != 0) {
+            String nbr = nbrs.remove(); // we are removing this so that we dont visit this nbr again
+            dfs(nbr);
+        }
+
+        ans.add(src);
+    }
+
+    public List<String> findItinerary(List<List<String>> tickets) {
+
+        hpq = new HashMap<>();
+        ans = new ArrayList<>();
+
+        for (List<String> ticket : tickets) {
+            PriorityQueue<String> pq = hpq.getOrDefault(ticket.get(0), new PriorityQueue<>());
+            pq.add(ticket.get(1));
+            hpq.put(ticket.get(0), pq);
+        }
+
+        dfs("JFK");
+
+        Collections.reverse(ans);
+        return ans;
     }
 
 }

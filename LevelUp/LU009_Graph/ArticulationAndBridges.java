@@ -17,7 +17,7 @@ public class ArticulationAndBridges {
     static boolean[] ap; // articulation point
     List<List<Integer>> res;
 
-    // articulation point
+    // articulation point :if we remove an vertex such that graph gets broken into two or more component
     public static void dfs(int src, ArrayList<ArrayList<Integer>> graph) {
         disc[src] = low[src] = time;
         time++;
@@ -73,7 +73,8 @@ public class ArticulationAndBridges {
         }
     }
 
-    // bridges
+
+    // bridges : if we remove an edge such that graph gets broken into two or more component
     public void dfs_(int src, ArrayList<ArrayList<Integer>> graph) {
         disc[src] = low[src] = time;
         time++;
