@@ -39,6 +39,7 @@ public class sorting {
     }
     
 
+    // bringing max to last
     public static int[] bubbleSort(int[] a) {
 
         // O(N^2)
@@ -58,6 +59,7 @@ public class sorting {
     }
 
 
+    // bringin minimum to front
     public static void selectionSort(int[] a) {
       
       
