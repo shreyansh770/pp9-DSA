@@ -267,7 +267,7 @@ public class directed {
         return scc;
     }
 
-    // kruskal algo
+    // kruskal algo -> MST
     int[] par;
 
     public int findPar(int u) {

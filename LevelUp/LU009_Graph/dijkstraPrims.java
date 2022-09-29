@@ -152,9 +152,10 @@ public class dijkstraPrims {
 
         boolean[] vis = new boolean[V];
 
+        // Elogv
         while (pq.size() != 0) {
 
-            pair t = pq.remove();
+            pair t = pq.remove(); //  logv
 
             if (vis[t.src])
                 continue;
