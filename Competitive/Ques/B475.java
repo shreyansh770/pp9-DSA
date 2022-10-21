@@ -2,22 +2,23 @@ import java.util.*;
 
 public class B475 {
 
-    boolean[] vis;
 
-    public void dfs1(int src,ArrayList<Integer>[] graph1){
-        vis[src] = true;
+    static boolean[][] check;
+    static int count;
+    public static void dfs(int n , int m ,int i , int j ,char[][] h , char[][] v ) {
 
-        for(int nbr : graph1[src]){
-            if(!vis[src]){
-                
-            }
-        }
-    }
+        if(i>=n || j>=m ||i<0 || j<0 || check[i][j]) return;
 
-    public void dfs2(int src,ArrayList<Integer>[] graph2){
-        vis[src] = true;
+        check[i][j] = true;count++;
 
-        // for()
+        if(h[i][j]=='>') dfs(n,m,i,j+1,h,v);
+        else dfs(n,m,i,j-1,h,v);
+
+
+        if(v[i][j]=='^') dfs(n,m,i-1,j,h,v);
+        else dfs(n,m,i+1,j,h,v);
+
+        
     }
 
     public static void main(String[] args) {
@@ -27,58 +28,40 @@ public class B475 {
         int n = scn.nextInt();
         int m = scn.nextInt();
 
-        scn.nextLine();
-
         String hor = scn.next();
         String ver = scn.next();
 
-        ArrayList<Integer>[] graph1 = new ArrayList[n];
-        ArrayList<Integer>[] graph2 = new ArrayList[m];
+        char[][] h = new char[n][m];
+
+        char[][] v = new char[n][m];
 
         for (int i = 0; i < n; i++) {
-            graph1[i] = new ArrayList<>();
-        }
-
-        for (int i = 0; i < m; i++) {
-            graph2[i] = new ArrayList<>();
-        }
-
-        for (int i = 0; i < n; i++) {
-
-            if (hor.charAt(i) == '>') {
-
-                for (int j = 0; j < m - 1; j++) {
-                    graph1[j].add(j + 1);
-                    graph1[j + 1].add(j);
-                }
-
-            } else {
-
-                for (int j = m - 1; j > 0; j--) {
-                    graph1[j].add(j - 1);
-                    graph1[j - 1].add(j);
-                }
-
+            for (int j = 0; j < m; j++) {
+                h[i][j] = hor.charAt(i);
             }
         }
 
         for (int i = 0; i < m; i++) {
-            if (ver.charAt(i) == '^') {
-
-                for (int j = 0; j < n - 1; j++) {
-                    graph2[j].add(j + 1);
-                    graph2[j + 1].add(j);
-                }
-
-            } else {
-
-                for (int j = n - 1; j > 0; j--) {
-                    graph2[j].add(j - 1);
-                    graph2[j - 1].add(j);
-                }
-
+            for (int j = 0; j < n; j++) {
+                v[j][i] = ver.charAt(i);
             }
         }
+
+        boolean flag = true;
+        outer:for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                    check = new boolean[n][m];
+                    count = 0;
+                    dfs(n, m, i, j, h, v);
+                    if(count!=n*m) {
+                        flag = false;
+                        break outer;
+                    }
+            }
+        }
+
+        if(!flag)System.out.println("NO");
+        else System.out.println("YES");
     }
 
 }
