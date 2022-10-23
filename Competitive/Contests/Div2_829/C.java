@@ -35,7 +35,6 @@ public class C {
             }
 
             if ((sum & 1) == 1) {
-
                 System.out.println(-1);
             } else {
                 System.out.println(res.size());
