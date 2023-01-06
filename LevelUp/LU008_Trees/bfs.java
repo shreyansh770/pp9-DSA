@@ -324,7 +324,7 @@ public class bfs {
         } else {
             if (m.get(vl).hl > hl) { // jiksa hl chota hoga vo phle aya hoga kyuki usne niche vale ko chupa liya hoga
                                      // islea vo top viw me nhi ayega
-                m.put(vl, new pair(root, hl));
+                m.put(vl, new treePair(root, hl));
             }
         }
 
