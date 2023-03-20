@@ -20,7 +20,7 @@ public class Gffg2 {
 
     public static void burnBachas(Node root, int time, Node blocked) {
 
-        if (root == null)
+        if (root == null||root==blocked)
             return;
 
         if (burned.get(time).size() == 0)
