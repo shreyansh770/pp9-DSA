@@ -133,7 +133,8 @@ public class dijkstraPrims {
         }
     }
 
-     // prims -> this gives MST
+     // prims -> this gives MST and works on connected graphs
+     
      public static void prims(ArrayList<Edge>[] graph, int src) {
 
         int V = graph.length;
