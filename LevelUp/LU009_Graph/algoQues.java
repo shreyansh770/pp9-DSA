@@ -142,61 +142,56 @@ public class algoQues {
 
     }
 
-    // bellam ford
+    // bellman ford
 
-    public int bellamFord(int n, int[][] edges, int src, int dest) {
-        int[] dis = new int[n];
+    static int[] bellman_ford(int V, ArrayList<ArrayList<Integer>> edges, int S) {
 
-        Arrays.fill(dis, (int) (1e8));
-        dis[src] = 0;
+        int[] dist = new int[V];
+        Arrays.fill(dist, (int) 1e8);
+        dist[S] = 0;
 
-        boolean negCycle = false;
-
-        // we are calculating shortest dist with atmost 1 edge to atmost n edges
+        // we are calculating shortest dist from src to all the vertices
         // here we are also checking for nth time to make sure the dis array don't get
         // updated
         // nth time if it is getting updated it means we have negative cycle
 
-        // now why on n times not more not else bcoz at max in n vertex graph we can
+        // now why on n times => bcoz at max in n vertex graph we can
         // have a maximum
         // length between two edges to be (n-1) so after (n-1) iteration we can be sure
-        // that we can explored
+        // that we have explored
         // all the edges and come up with minimum weighted path
-        for (int i = 1; i <= n; i++) {
-            int[] ndis = new int[n];
-            for (int j = 0; j < n; j++) {
-                ndis[j] = dis[j];
-            }
+        // and on nth iteration the value will still get reduced => negative cycle
 
-            boolean isUpdate = false;
+        boolean negCycle = false;
+        for (int i = 0; i <= V; i++) {
 
-            for (int[] edge : edges) {
-                int u = edge[0];
-                int v = edge[1];
-                int w = edge[2];
+            boolean updated = false;
+            for (ArrayList<Integer> e : edges) {
 
-                if (dis[u] + w < ndis[v]) {
-                    ndis[v] = dis[u] + w;
-                    isUpdate = true;
+                int u = e.get(0);
+                int v = e.get(1);
+                int w = e.get(2);
+
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    updated = true;
                 }
             }
 
-            // if for there are no changes in the ndis array => we have already find the
-            // possible path and further it wont get any better
-            if (isUpdate == false)
+            if (!updated)
                 break;
 
-            // if dis array is even gettig updated till nth edge that means there is a
-            // negative cycle
-            if (i == n && isUpdate) {
-                // negative cycle
+            if (i == V && updated) {
                 negCycle = true;
             }
 
-            dis = ndis;
         }
 
-        return dis[dest];
+        if (negCycle) {
+            return new int[] { -1 };
+        }
+
+        return dist;
     }
 
     // 787 using bellam ford
