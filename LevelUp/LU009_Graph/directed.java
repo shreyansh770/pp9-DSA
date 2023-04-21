@@ -217,7 +217,7 @@ public class directed {
         comp.add(src);
         for (Edge nbr : graph[src]) {
             if (!vis[nbr.v]) {
-                dfs_01(nbr.v, graph, vis, comp);
+                dfs_02(nbr.v, graph, vis, comp);
             }
         }
 
