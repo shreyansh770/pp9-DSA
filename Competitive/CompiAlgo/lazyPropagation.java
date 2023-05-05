@@ -1,7 +1,6 @@
 public class lazyPropagation {
 
     public static class SegmentTree {
-
         int[] lazy;
         int[] seg;
         int[] arr;
