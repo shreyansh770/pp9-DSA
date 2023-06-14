@@ -54,6 +54,8 @@ public class dijkstraPrims {
 
     // works on directed graph
 
+    // ElogV
+
     // DIJKSTRA -> this give 'shortest path from source to every other vertex'-> this will not always give MST
 
     // DRY RUN BOTH THE METHOD TO CLEAR THINGS
