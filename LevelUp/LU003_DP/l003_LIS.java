@@ -304,6 +304,32 @@ public class l003_LIS {
         return max;
     }
 
+    public static int LCS(String A, String B, String C, int n, int m, int k) {
+		
+		int[][][] dp = new int[n+1][m+1][k+1];
+
+		for(int i =0;i<=n;i++){
+			for(int j=0;j<=m;j++){
+				for(int x=0;x<=k;x++){
+
+					if(i==0 || j==0 || x==0){
+						dp[i][j][x]=0;
+					}
+
+					else if(A.charAt(i-1)== B.charAt(j-1) && A.charAt(i-1)==C.charAt(x-1)){
+						dp[i][j][x] = 1 + dp[i-1][j-1][x-1];
+					}
+
+					else
+					// xxy , xyx , yxx, yyx , xyy , yxy
+					  dp[i][j][x] = Math.max(dp[i-1][j][x] , Math.max(dp[i][j-1][x],dp[i][j][x-1]));
+				}
+			}
+		}
+
+		return dp[n][m][k];
+		
+	}
     public static void main(String[] args) {
 
     }
