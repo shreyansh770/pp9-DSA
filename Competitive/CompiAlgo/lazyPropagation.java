@@ -1,3 +1,4 @@
+// lazy prop for segment tree
 public class lazyPropagation {
 
     public static class SegmentTree {
