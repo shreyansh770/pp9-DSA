@@ -204,7 +204,7 @@ public class algoQues {
         boolean negCycle = false;
 
         for (int i = 1; i <= k + 1; i++) {
-            int[] ndis = new int[n];
+            int[] ndis = new int[n]; // we are maintaing a temp array so the values dont get update simultaneously in dist array => we have to maintain one array for each level
             for (int j = 0; j < n; j++) {
                 ndis[j] = dis[j];
             }
