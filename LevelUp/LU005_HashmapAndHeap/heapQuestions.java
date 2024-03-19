@@ -389,6 +389,55 @@ public class heapQuestions{
 
 
     // task scheduler
+    class Solution {
+        public int leastInterval(char[] tasks, int n) {
+            
+            // we are trying to fit as many non-repating task in a cycle 
+            
+            HashMap<Character,Integer> map = new HashMap<>();
+    
+            for(char ch : tasks){
+                map.put(ch,map.getOrDefault(ch,0)+1);
+            }
+    
+            PriorityQueue<Character> pq = new PriorityQueue<>((a,b)->{
+                 return map.get(b)-map.get(a);
+            });
+           for(Map.Entry<Character,Integer> mp : map.entrySet()) pq.add(mp.getKey());
+    
+            int tt=0;
+            // In one cycle on no repeat task can occur only unique task or ideal period
+            while(pq.size()!=0){
+                List<Character> repeat = new ArrayList<>();// task that are repeating in a cycle
+    
+                int cycleTime = n + 1; // because cycle or cool down will start after CPU has executed one task like if n=1 to when CPU will do task1 after that 1 sec timer in which some other task will be done so in total a cycle would of 2 sec
+                while(cycleTime>0 && pq.size()>0){
+                    char ch = pq.remove();
+                    if(map.get(ch)>1){
+                        int count = map.get(ch);
+                        count--;
+                        map.put(ch,count);
+                        repeat.add(ch);
+                    }
+    
+                    tt++;
+                    cycleTime--;
+                }
+    
+    
+                for(char rt : repeat){
+                    pq.add(rt);
+                }
+    
+    
+                if(pq.size()==0) break;
+    
+                tt+=cycleTime; // ideal period
+            }
+    
+            return tt;
+        }
+    }
 
 
 
